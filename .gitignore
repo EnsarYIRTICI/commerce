@@ -1,0 +1,15 @@
+client/node_modules
+client/.next/
+client/out/
+client/build
+
+client/.env*
+client/!.env.example
+
+
+server/dist
+server/node_modules
+server/build
+
+server/.env
+server/!.env.example
