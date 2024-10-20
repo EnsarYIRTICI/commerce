@@ -20,6 +20,7 @@
     "paths": {
       "@modules/*": ["src/modules/*"], 
       "@utils/*": ["src/utils/*"], 
+      "@decorators/*": ["src/decorators/*"], 
       "@database/*": ["src/database/*"],
       "@config/*": ["src/config/*"],   
       "@auth/*": ["src/auth/*"],

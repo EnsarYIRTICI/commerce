@@ -7,20 +7,20 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { JwtService } from '@nestjs/jwt'; // NestJS'in kendi JwtService'i
-import { Public } from './public.decorator';
+import { JwtService } from '@nestjs/jwt';
 import { errorMessages } from '@common/errorMessages';
 import { successMessages } from '@common/successMessages';
 import { RegisterDto } from './dto/register.dto';
+import { Roles } from '@decorators/role.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly jwtService: JwtService, // NestJS'in JwtService'ini kullanıyoruz
+    private readonly jwtService: JwtService,
   ) {}
 
-  @Public()
+  @Roles('public')
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.validateUser(
@@ -55,7 +55,7 @@ export class AuthController {
     };
   }
 
-  @Public()
+  @Roles('public')
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const user = await this.authService.create(registerDto, new Date());

@@ -10,8 +10,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity'; // User entity'si
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from './public.decorator';
 import { Reflector } from '@nestjs/core';
+import { ROLES_KEY } from '@decorators/role.decorator';
+import { errorMessages } from '@common/errorMessages';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -23,11 +24,12 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (requiredRoles && requiredRoles.includes('public')) {
       return true;
     }
 
@@ -57,17 +59,33 @@ export class JwtAuthGuard implements CanActivate {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    if (user.status && user.status.name === 'blocked') {
+    if (!user.status) {
+      return false;
+    }
+
+    if (user.status.name === 'blocked') {
       throw new HttpException('User is blocked', HttpStatus.FORBIDDEN);
     }
 
-    // if (
-    //   !this.compareDates(user.lastPasswordChange, decoded.lastPasswordChange)
-    // ) {
-    //   throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
-    // }
+    if (
+      !this.compareDates(user.lastPasswordChange, decoded.lastPasswordChange)
+    ) {
+      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
+    }
 
-    request['isAdmin'] = user.role && user.role.name === 'admin';
+    if (!requiredRoles) {
+      if (!user.role) {
+        return false;
+      }
+
+      if (user.role.name !== 'admin') {
+        throw new HttpException(
+          errorMessages.UNAUTHORIZED_ADMIN,
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    }
+
     request['user'] = user;
 
     return true;
@@ -78,7 +96,7 @@ export class JwtAuthGuard implements CanActivate {
     tokenLastPasswordChange: Date,
   ): boolean {
     if (!lastPasswordChange || !tokenLastPasswordChange) {
-      return false;
+      return true;
     }
 
     return (

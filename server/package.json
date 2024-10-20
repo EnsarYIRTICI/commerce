@@ -8,10 +8,12 @@
   "_moduleAliases": {
     "@modules": "dist/modules/*",
     "@utils": "dist/utils/*",
+    "@decorators": "dist/decorators/*",
     "@database": "dist/database/*",
     "@config": "dist/config/*",
     "@auth": "dist/auth/*",
     "@common": "dist/common/*"
+   
   },
   "scripts": {
     "build": "nest build",

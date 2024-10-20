@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@modules/user/user.entity'; // User entity
 import { RegisterDto } from './dto/register.dto';
+import { User } from '@modules/user/user.entity';
+import { Role } from '@modules/role/role.entity';
+import { Status } from '@modules/status/status.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
+
+    @InjectRepository(Status)
+    private readonly statusRepository: Repository<Status>,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -22,10 +30,25 @@ export class AuthService {
   }
 
   async create(registerDto: RegisterDto, date: Date) {
+    const role = await this.roleRepository.findOne({ where: { name: 'user' } });
+    if (!role) {
+      throw new Error('User role not found');
+    }
+
+    const status = await this.statusRepository.findOne({
+      where: { name: 'active' },
+    });
+    if (!status) {
+      throw new Error('Active status not found');
+    }
+
     const user = this.userRepository.create({
       ...registerDto,
       createdAt: date,
+      role,
+      status,
     });
+
     return await this.userRepository.save(user);
   }
 }

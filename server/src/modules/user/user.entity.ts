@@ -48,10 +48,10 @@ export class User {
 
   // Relationships for the entity
 
-  @ManyToOne(() => Role, (role) => role.users)
+  @ManyToOne(() => Role, (role) => role.users, { nullable: false })
   role: Role;
 
-  @ManyToOne(() => Status, (status) => status.users)
+  @ManyToOne(() => Status, (status) => status.users, { nullable: false })
   status: Status;
 
   @OneToMany(() => ProductReview, (productReview) => productReview.user)
