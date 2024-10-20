@@ -1,6 +1,5 @@
-
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
-import { Order } from "../order/order.entity"; // Additional imports for related entities
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Order } from '../order/order.entity';
 
 @Entity()
 export class PaymentDetail {
@@ -8,23 +7,24 @@ export class PaymentDetail {
   id: number;
 
   @Column({ unique: true })
-  name: string;
+  paymentMethod: string; // Ödeme yöntemi (örneğin, 'Credit Card', 'PayPal', 'Bank Transfer')
 
-  // Fields for the entity
-  
-        @Column()
-        cardNumber: string;
+  // Fields for payment details
 
-        @Column()
-        expirationDate: Date;
+  @Column()
+  cardHolderName: string; // Kart sahibinin adı
 
-        @Column()
-        securityCode: string;
-    
+  @Column()
+  maskedCardNumber: string; // Kart numarasının son 4 hanesi (örneğin, '**** **** **** 1234')
+
+  @Column({ type: 'date' })
+  expirationDate: Date; // Kartın son kullanma tarihi
+
+  @Column()
+  paymentStatus: string; // Ödeme durumu ('pending', 'completed', 'failed' gibi)
 
   // Relationships for the entity
-  
-        @ManyToOne(() => Order, order => order.paymentDetails)
-        order: Order;
-    
+
+  @ManyToOne(() => Order, (order) => order.paymentDetails)
+  order: Order;
 }

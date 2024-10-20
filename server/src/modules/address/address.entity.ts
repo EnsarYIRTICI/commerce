@@ -1,6 +1,11 @@
-
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
-import { User } from "../user/user.entity"; // Additional imports for related entities
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { User } from '../user/user.entity'; // Additional imports for related entities
 
 @Entity()
 export class Address {
@@ -11,23 +16,21 @@ export class Address {
   name: string;
 
   // Fields for the entity
-  
-        @Column()
-        street: string;
 
-        @Column()
-        city: string;
+  @Column()
+  street: string;
 
-        @Column()
-        state: string;
+  @Column()
+  city: string;
 
-        @Column()
-        postalCode: string;
-        
+  @Column()
+  state: string;
+
+  @Column()
+  postalCode: string;
 
   // Relationships for the entity
-  
-        @ManyToOne(() => User, user => user.addresses)
-        user: User;
-        
+
+  @ManyToOne(() => User, (user) => user.addresses, { nullable: false })
+  user: User;
 }

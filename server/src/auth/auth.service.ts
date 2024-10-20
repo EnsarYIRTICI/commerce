@@ -30,7 +30,9 @@ export class AuthService {
   }
 
   async create(registerDto: RegisterDto, date: Date) {
-    const role = await this.roleRepository.findOne({ where: { name: 'user' } });
+    const role = await this.roleRepository.findOne({
+      where: { name: 'user' },
+    });
     if (!role) {
       throw new Error('User role not found');
     }

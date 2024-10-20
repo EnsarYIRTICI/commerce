@@ -8,7 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@modules/user/user.entity'; // User entity'si
+import { User } from '@modules/user/user.entity';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@decorators/role.decorator';
@@ -37,7 +37,10 @@ export class JwtAuthGuard implements CanActivate {
 
     const token = request.headers['authorization']?.split(' ')[1];
     if (!token) {
-      throw new HttpException('Token not provided', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        errorMessages.NO_TOKEN_PROVIDED,
+        HttpStatus.FORBIDDEN,
+      );
     }
 
     let decoded;
@@ -45,7 +48,9 @@ export class JwtAuthGuard implements CanActivate {
       decoded = this.jwtService.verify(token);
     } catch (err) {
       throw new HttpException(
-        err.name === 'TokenExpiredError' ? 'Token expired' : 'Unauthorized',
+        err.name === 'TokenExpiredError'
+          ? errorMessages.TOKEN_EXPIRED
+          : errorMessages.UNAUTHORIZED,
         HttpStatus.UNAUTHORIZED,
       );
     }
@@ -56,7 +61,10 @@ export class JwtAuthGuard implements CanActivate {
     });
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        errorMessages.USER_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     if (!user.status) {
@@ -64,13 +72,16 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     if (user.status.name === 'blocked') {
-      throw new HttpException('User is blocked', HttpStatus.FORBIDDEN);
+      throw new HttpException(errorMessages.USER_BLOCKED, HttpStatus.FORBIDDEN);
     }
 
     if (
       !this.compareDates(user.lastPasswordChange, decoded.lastPasswordChange)
     ) {
-      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        errorMessages.TOKEN_INVALID,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     if (!requiredRoles) {

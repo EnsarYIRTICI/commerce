@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,6 +9,18 @@ export class OrderService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
   ) {}
+
+  findOrdersByUserId(userId: number) {
+    return this.orderRepository.find({
+      where: { user: { id: userId } },
+      relations: [
+        'items',
+        'shipmentDetails',
+        'paymentDetails',
+        'addressDetails',
+      ],
+    });
+  }
 
   findAll() {
     return this.orderRepository.find();

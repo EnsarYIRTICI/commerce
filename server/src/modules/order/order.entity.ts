@@ -2,16 +2,16 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
-
 import { User } from '../user/user.entity';
 import { OrderItem } from '../order_item/order_item.entity';
-import { ShipmentDetail } from '../shipment_detail/shipment_detail.entity';
 import { PaymentDetail } from '../payment_detail/payment_detail.entity';
 import { AddressDetail } from '../address_detail/address_detail.entity';
-// Additional imports for related entities
+import { ShipmentDetail } from '../shipment_detail/shipment_detail.entity';
+import { OrderStatus } from '../order_status/order_status.entity'; // OrderStatus modelini ekliyoruz
 
 @Entity()
 export class Order {
@@ -19,36 +19,45 @@ export class Order {
   id: number;
 
   @Column({ unique: true })
-  name: string;
+  orderNumber: string; // Sipariş numarası
 
-  // Fields for the entity
-
-  @Column()
-  totalPrice: number;
-
-  @Column()
-  status: string;
-
-  @Column()
+  @Column({ type: 'date' })
   createdAt: Date;
 
-  @Column()
+  @Column({ type: 'date' })
   updatedAt: Date;
 
   // Relationships for the entity
 
-  @ManyToOne(() => User, (user) => user.orders)
-  user: User;
+  @ManyToOne(() => User, (user) => user.orders, { nullable: false })
+  user: User; // Siparişin sahibi olan kullanıcı
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
-  items: OrderItem[];
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
+    nullable: false,
+  })
+  items: OrderItem[]; // Sipariş edilen ürünler
 
-  @OneToMany(() => ShipmentDetail, (shipmentDetail) => shipmentDetail.order)
-  shipmentDetails: ShipmentDetail[];
+  @ManyToOne(() => AddressDetail, { nullable: false })
+  @JoinColumn({ name: 'shippingAddressId' })
+  shippingAddress: AddressDetail;
 
-  @OneToMany(() => PaymentDetail, (paymentDetail) => paymentDetail.order)
-  paymentDetails: PaymentDetail[];
+  @ManyToOne(() => AddressDetail, { nullable: false })
+  @JoinColumn({ name: 'billingAddressId' })
+  billingAddress: AddressDetail;
 
-  @OneToMany(() => AddressDetail, (addressDetail) => addressDetail.order)
-  addressDetails: AddressDetail[];
+  @OneToMany(() => PaymentDetail, (paymentDetail) => paymentDetail.order, {
+    nullable: false,
+  })
+  paymentDetails: PaymentDetail[]; // Ödeme detayları
+
+  @OneToMany(() => ShipmentDetail, (shipmentDetail) => shipmentDetail.order, {
+    nullable: false,
+  })
+  shipmentDetails: ShipmentDetail[]; // Teslimat detayları
+
+  @ManyToOne(() => OrderStatus, (orderStatus) => orderStatus.orders, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'statusId' })
+  status: OrderStatus; // Sipariş durumu
 }
