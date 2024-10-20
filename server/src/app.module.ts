@@ -1,34 +1,38 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { PrismaService } from './prisma/prisma.service';
+import typeorm from './config/typeorm';
+
 import { RedisService } from './redis/redis.service';
-
-import { readdirSync } from 'fs';
-import { join } from 'path';
-
-const modules = readdirSync(join(__dirname, './modules')).map(
-  (dir) => require(`./modules/${dir}/${dir}.module`).default,
-);
+import { SeedService } from './seed/seed.service';
+import { Status } from './modules/status/status.entity';
 
 @Module({
   imports: [
-    ...modules,
-    ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL, // Veritabanı bağlantı URL'sini .env'den alıyoruz
-      autoLoadEntities: true, // Entity'leri otomatik olarak yükle
-      synchronize: true, // Sadece development aşamasında kullan
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeorm],
     }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.get('typeorm'),
+    }),
+    TypeOrmModule.forFeature([Status]),
   ],
 
   controllers: [AppController],
-  providers: [AppService, PrismaService, RedisService],
-  exports: [PrismaService, RedisService],
+  providers: [AppService, RedisService, SeedService],
+  exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly seedService: SeedService) {}
+
+  async onModuleInit() {
+    await this.seedService.seedStatuses();
+  }
+}

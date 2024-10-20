@@ -1,12 +1,9 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { createClient } from 'redis';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
   private client;
-
-  constructor(private prisma: PrismaService) {}
 
   async onModuleInit() {
     this.client = createClient({
