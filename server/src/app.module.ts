@@ -7,12 +7,13 @@ import { AppService } from './app.service';
 
 import typeorm from './config/typeorm';
 
-import { RedisService } from './redis/redis.service';
-import { SeedService } from './seed/seed.service';
-import { Status } from './modules/status/status.entity';
+import { ImportService } from './utils/import/import.service';
+import { RedisService } from './utils/redis/redis.service';
+import { SeedService } from './utils/seed/seed.service';
 
 @Module({
   imports: [
+    ...new ImportService().getModules(), // Dinamik modülleri ekliyoruz
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm],
@@ -22,17 +23,10 @@ import { Status } from './modules/status/status.entity';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    TypeOrmModule.forFeature([Status]),
+    TypeOrmModule.forFeature([...new ImportService().getEntities()]), // Dinamik entity'leri ekliyoruz
   ],
-
   controllers: [AppController],
   providers: [AppService, RedisService, SeedService],
   exports: [],
 })
-export class AppModule {
-  constructor(private readonly seedService: SeedService) {}
-
-  async onModuleInit() {
-    await this.seedService.seedStatuses();
-  }
-}
+export class AppModule {}

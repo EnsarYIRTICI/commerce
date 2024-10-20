@@ -3,7 +3,7 @@ import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common'
 import { StatusService } from './status.service';
 import { Status } from './status.entity';
 
-@Controller('statuss')
+@Controller('statuses')
 export class StatusController {
   constructor(private readonly statusService: StatusService) {}
 

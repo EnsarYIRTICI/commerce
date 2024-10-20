@@ -3,7 +3,7 @@ import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common'
 import { PriceHistoryService } from './price_history.service';
 import { PriceHistory } from './price_history.entity';
 
-@Controller('price_historys')
+@Controller('price_histories')
 export class PriceHistoryController {
   constructor(private readonly price_historyService: PriceHistoryService) {}
 

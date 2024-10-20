@@ -3,7 +3,7 @@ import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common'
 import { AddressService } from './address.service';
 import { Address } from './address.entity';
 
-@Controller('addresss')
+@Controller('addresses')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
