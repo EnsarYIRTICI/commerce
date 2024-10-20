@@ -16,6 +16,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@modules/*": ["src/modules/*"],  // src/modules için alias
+      "@utils/*": ["src/utils/*"], // src/services için alias
+      "@database/*": ["src/database/*"], // src/services için alias
+      "@config/*": ["src/config/*"]      // src/config için alias
+    }
   }
 }

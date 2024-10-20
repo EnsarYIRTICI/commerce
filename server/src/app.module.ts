@@ -5,15 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import typeorm from './config/typeorm';
+import typeorm from '@config/typeorm';
 
-import { ImportService } from './utils/import/import.service';
-import { RedisService } from './utils/redis/redis.service';
-import { SeedService } from './utils/seed/seed.service';
+import { ImportService } from '@utils/import/import.service';
+import { RedisService } from '@database/redis/redis.service';
+import { SeedService } from '@database/seed/seed.service';
+
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ...new ImportService().getModules(), // Dinamik modülleri ekliyoruz
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm],

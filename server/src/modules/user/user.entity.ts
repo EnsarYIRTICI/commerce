@@ -23,8 +23,11 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
+
+  @Column()
+  lastname: string;
 
   // Fields for the entity
 
@@ -39,6 +42,9 @@ export class User {
 
   @Column()
   updatedAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  lastPasswordChange: Date;
 
   // Relationships for the entity
 
