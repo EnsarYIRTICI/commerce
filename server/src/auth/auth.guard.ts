@@ -28,12 +28,11 @@ export class JwtAuthGuard implements CanActivate {
       context.getClass(),
     ]);
     if (isPublic) {
-      return true; // Eğer rota @Public olarak işaretlenmişse guard'dan geçiş yap
+      return true;
     }
 
     const request = context.switchToHttp().getRequest<Request>();
 
-    // Authorization header'dan JWT token'ını al
     const token = request.headers['authorization']?.split(' ')[1];
     if (!token) {
       throw new HttpException('Token not provided', HttpStatus.FORBIDDEN);
@@ -49,7 +48,6 @@ export class JwtAuthGuard implements CanActivate {
       );
     }
 
-    // User'ı TypeORM repository ile bul, Role ve Status ilişkilerini dahil et
     const user = await this.userRepository.findOne({
       where: { id: decoded.id },
       relations: ['role', 'status'],
@@ -59,30 +57,30 @@ export class JwtAuthGuard implements CanActivate {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    // Kullanıcının durumu "blocked" ise
     if (user.status && user.status.name === 'blocked') {
       throw new HttpException('User is blocked', HttpStatus.FORBIDDEN);
     }
 
-    // Şifre değişikliği sonrası token'ı geçersiz yap
-    if (
-      !this.compareDates(user.lastPasswordChange, decoded.lastPasswordChange)
-    ) {
-      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
-    }
+    // if (
+    //   !this.compareDates(user.lastPasswordChange, decoded.lastPasswordChange)
+    // ) {
+    //   throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
+    // }
 
-    // Kullanıcının admin olup olmadığını kontrol et
     request['isAdmin'] = user.role && user.role.name === 'admin';
     request['user'] = user;
 
-    return true; // Erişim izni veriliyor
+    return true;
   }
 
-  // Tarih karşılaştırma fonksiyonu
   private compareDates(
     lastPasswordChange: Date,
     tokenLastPasswordChange: Date,
   ): boolean {
+    if (!lastPasswordChange || !tokenLastPasswordChange) {
+      return false;
+    }
+
     return (
       lastPasswordChange.getTime() ===
       new Date(tokenLastPasswordChange).getTime()

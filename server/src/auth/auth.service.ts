@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity'; // User entity
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -11,10 +12,8 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
-    // Email ile kullanıcıyı buluyoruz
     const user = await this.userRepository.findOne({ where: { email } });
 
-    // Şifre kontrolü (şifre hash'li olmalı)
     if (!user || user.password !== password) {
       return null;
     }
@@ -22,8 +21,11 @@ export class AuthService {
     return user;
   }
 
-  async register(registerDto: any) {
-    const user = this.userRepository.create(registerDto);
+  async create(registerDto: RegisterDto, date: Date) {
+    const user = this.userRepository.create({
+      ...registerDto,
+      createdAt: date,
+    });
     return await this.userRepository.save(user);
   }
 }

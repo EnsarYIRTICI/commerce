@@ -22,7 +22,8 @@
       "@utils/*": ["src/utils/*"], 
       "@database/*": ["src/database/*"],
       "@config/*": ["src/config/*"],   
-      "@auth/*": ["src/auth/*"]     
+      "@auth/*": ["src/auth/*"],
+      "@common/*": ["src/common/*"]      
     }
   }
 }

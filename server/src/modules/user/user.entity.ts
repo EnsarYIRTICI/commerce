@@ -40,7 +40,7 @@ export class User {
   @Column()
   createdAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   updatedAt: Date;
 
   @Column({ type: 'timestamp', nullable: true })

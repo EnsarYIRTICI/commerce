@@ -10,7 +10,8 @@
     "@utils": "dist/utils/*",
     "@database": "dist/database/*",
     "@config": "dist/config/*",
-    "@auth": "dist/auth/*"
+    "@auth": "dist/auth/*",
+    "@common": "dist/common/*"
   },
   "scripts": {
     "build": "nest build",

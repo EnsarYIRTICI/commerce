@@ -9,6 +9,9 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt'; // NestJS'in kendi JwtService'i
 import { Public } from './public.decorator';
+import { errorMessages } from '@common/errorMessages';
+import { successMessages } from '@common/successMessages';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,17 +30,46 @@ export class AuthController {
 
     if (!user) {
       throw new HttpException(
-        'Kullanıcı veya şifre hatalı',
+        errorMessages.INVALID_CREDENTIALS,
         HttpStatus.UNAUTHORIZED,
       );
     }
 
-    // Kullanıcı bilgileriyle JWT token oluşturma
-    const payload = { id: user.id, email: user.email };
-    const token = this.jwtService.sign(payload); // NestJS JwtService kullanarak token oluşturma
+    const payload = {
+      id: user.id,
+      email: user.email,
+      lastPasswordChange: user.lastPasswordChange,
+    };
+
+    const token = this.jwtService.sign(payload);
 
     return {
-      message: 'Giriş başarılı',
+      message: successMessages.LOGIN_SUCCESS,
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+      },
+    };
+  }
+
+  @Public()
+  @Post('register')
+  async register(@Body() registerDto: RegisterDto) {
+    const user = await this.authService.create(registerDto, new Date());
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      lastPasswordChange: user.lastPasswordChange,
+    };
+
+    const token = this.jwtService.sign(payload);
+
+    return {
+      message: successMessages.LOGIN_SUCCESS,
       token,
       user: {
         id: user.id,

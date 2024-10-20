@@ -14,12 +14,10 @@ import { SeedService } from '@database/seed/seed.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
     AuthModule,
-    ...new ImportService().getModules(), // Dinamik modülleri ekliyoruz
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm],
@@ -29,7 +27,8 @@ import { JwtService } from '@nestjs/jwt';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    TypeOrmModule.forFeature([...new ImportService().getEntities()]), // Dinamik entity'leri ekliyoruz
+    TypeOrmModule.forFeature([...ImportService.getEntities()]),
+    ...ImportService.getModules(),
   ],
   controllers: [AppController],
   providers: [
@@ -38,7 +37,7 @@ import { JwtService } from '@nestjs/jwt';
     SeedService,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard, // JwtAuthGuard'ı global guard olarak ayarla
+      useClass: JwtAuthGuard,
     },
   ],
   exports: [],
