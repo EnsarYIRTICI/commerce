@@ -18,10 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@modules/*": ["src/modules/*"],  // src/modules için alias
-      "@utils/*": ["src/utils/*"], // src/services için alias
-      "@database/*": ["src/database/*"], // src/services için alias
-      "@config/*": ["src/config/*"]      // src/config için alias
+      "@modules/*": ["src/modules/*"], 
+      "@utils/*": ["src/utils/*"], 
+      "@database/*": ["src/database/*"],
+      "@config/*": ["src/config/*"],   
+      "@auth/*": ["src/auth/*"]     
     }
   }
 }

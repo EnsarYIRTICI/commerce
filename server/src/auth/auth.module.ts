@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { User } from '@modules/user/user.entity'; // User entity
-import { JwtModule } from '@nestjs/jwt';
-import { JwtService } from '@utils/jwt/jwt.service'; // JWT işlemleri için
+import { User } from '@modules/user/user.entity';
+import { JwtService, JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth.guard';
 
 @Module({
@@ -16,7 +15,7 @@ import { JwtAuthGuard } from './auth.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtService, JwtAuthGuard],
-  exports: [AuthService, JwtAuthGuard],
+  providers: [AuthService, JwtAuthGuard],
+  exports: [AuthService, JwtModule, JwtAuthGuard],
 })
 export class AuthModule {}

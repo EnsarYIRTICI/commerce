@@ -7,15 +7,17 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { JwtService } from '@utils/jwt/jwt.service';
+import { JwtService } from '@nestjs/jwt'; // NestJS'in kendi JwtService'i
+import { Public } from './public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly jwtService: JwtService, // JWT Servisi kullanıyoruz
+    private readonly jwtService: JwtService, // NestJS'in JwtService'ini kullanıyoruz
   ) {}
 
+  @Public()
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.validateUser(
@@ -30,8 +32,9 @@ export class AuthController {
       );
     }
 
-    // JWT token oluşturma
-    const token = this.jwtService.signToken(user);
+    // Kullanıcı bilgileriyle JWT token oluşturma
+    const payload = { id: user.id, email: user.email };
+    const token = this.jwtService.sign(payload); // NestJS JwtService kullanarak token oluşturma
 
     return {
       message: 'Giriş başarılı',

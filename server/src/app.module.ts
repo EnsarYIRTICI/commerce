@@ -12,11 +12,14 @@ import { RedisService } from '@database/redis/redis.service';
 import { SeedService } from '@database/seed/seed.service';
 
 import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ...new ImportService().getModules(), // Dinamik modülleri ekliyoruz
     AuthModule,
+    ...new ImportService().getModules(), // Dinamik modülleri ekliyoruz
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm],
@@ -29,7 +32,15 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forFeature([...new ImportService().getEntities()]), // Dinamik entity'leri ekliyoruz
   ],
   controllers: [AppController],
-  providers: [AppService, RedisService, SeedService],
+  providers: [
+    AppService,
+    RedisService,
+    SeedService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard, // JwtAuthGuard'ı global guard olarak ayarla
+    },
+  ],
   exports: [],
 })
 export class AppModule {}

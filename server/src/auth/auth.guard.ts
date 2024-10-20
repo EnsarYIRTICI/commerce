@@ -10,6 +10,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity'; // User entity'si
 import { Request } from 'express';
+import { IS_PUBLIC_KEY } from './public.decorator';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -17,9 +19,18 @@ export class JwtAuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true; // Eğer rota @Public olarak işaretlenmişse guard'dan geçiş yap
+    }
+
     const request = context.switchToHttp().getRequest<Request>();
 
     // Authorization header'dan JWT token'ını al
@@ -30,9 +41,7 @@ export class JwtAuthGuard implements CanActivate {
 
     let decoded;
     try {
-      decoded = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
-      });
+      decoded = this.jwtService.verify(token);
     } catch (err) {
       throw new HttpException(
         err.name === 'TokenExpiredError' ? 'Token expired' : 'Unauthorized',
