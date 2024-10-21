@@ -7,7 +7,7 @@ export class OrderStatus {
   id: number;
 
   @Column({ unique: true })
-  statusName: string; // Durum adı (örn: 'pending', 'shipped', 'delivered')
+  name: string; // Durum adı (örn: 'pending', 'shipped', 'delivered')
 
   @Column()
   description: string; // Durum açıklaması

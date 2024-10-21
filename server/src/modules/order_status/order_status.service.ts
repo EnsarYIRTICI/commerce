@@ -15,15 +15,22 @@ export class OrderStatusService {
   }
 
   findOne(id: number): Promise<OrderStatus> {
-    return this.orderStatusRepository.findOne(id);
+    return this.orderStatusRepository.findOne({ where: { id } });
   }
 
-  create(statusName: string, description: string): Promise<OrderStatus> {
-    const orderStatus = this.orderStatusRepository.create({ statusName, description });
+  create(name: string, description: string): Promise<OrderStatus> {
+    const orderStatus = this.orderStatusRepository.create({
+      name,
+      description,
+    });
     return this.orderStatusRepository.save(orderStatus);
   }
 
-  update(id: number, statusName: string, description: string): Promise<OrderStatus> {
+  update(
+    id: number,
+    statusName: string,
+    description: string,
+  ): Promise<OrderStatus> {
     return this.orderStatusRepository.save({ id, statusName, description });
   }
 

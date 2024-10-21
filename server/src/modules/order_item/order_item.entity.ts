@@ -10,13 +10,13 @@ import { Product } from '../product/product.entity'; // Additional imports for r
 
 @Entity()
 export class OrderItem {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
-
-  // Fields for the entity
 
   @Column()
   quantity: number;

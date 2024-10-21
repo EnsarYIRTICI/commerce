@@ -11,7 +11,7 @@ import { OrderItem } from '../order_item/order_item.entity';
 import { PaymentDetail } from '../payment_detail/payment_detail.entity';
 import { AddressDetail } from '../address_detail/address_detail.entity';
 import { ShipmentDetail } from '../shipment_detail/shipment_detail.entity';
-import { OrderStatus } from '../order_status/order_status.entity'; // OrderStatus modelini ekliyoruz
+import { OrderStatus } from '../order_status/order_status.entity';
 
 @Entity()
 export class Order {
@@ -19,23 +19,28 @@ export class Order {
   id: number;
 
   @Column({ unique: true })
-  orderNumber: string; // Sipariş numarası
+  orderNumber: string;
 
   @Column({ type: 'date' })
   createdAt: Date;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   updatedAt: Date;
 
   // Relationships for the entity
 
   @ManyToOne(() => User, (user) => user.orders, { nullable: false })
-  user: User; // Siparişin sahibi olan kullanıcı
+  user: User;
+
+  @ManyToOne(() => OrderStatus, (orderStatus) => orderStatus.orders, {
+    nullable: false,
+  })
+  status: OrderStatus;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
     nullable: false,
   })
-  items: OrderItem[]; // Sipariş edilen ürünler
+  items: OrderItem[];
 
   @ManyToOne(() => AddressDetail, { nullable: false })
   @JoinColumn({ name: 'shippingAddressId' })
@@ -48,16 +53,10 @@ export class Order {
   @OneToMany(() => PaymentDetail, (paymentDetail) => paymentDetail.order, {
     nullable: false,
   })
-  paymentDetails: PaymentDetail[]; // Ödeme detayları
+  paymentDetails: PaymentDetail[];
 
   @OneToMany(() => ShipmentDetail, (shipmentDetail) => shipmentDetail.order, {
     nullable: false,
   })
-  shipmentDetails: ShipmentDetail[]; // Teslimat detayları
-
-  @ManyToOne(() => OrderStatus, (orderStatus) => orderStatus.orders, {
-    nullable: false,
-  })
-  @JoinColumn({ name: 'statusId' })
-  status: OrderStatus; // Sipariş durumu
+  shipmentDetails: ShipmentDetail[];
 }

@@ -1,8 +1,18 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  Tree,
+  TreeChildren,
+  TreeParent,
+} from 'typeorm';
 
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
-import { Product } from "../product/product.entity"; // Additional imports for related entities
+import { Product } from '../product/product.entity';
 
 @Entity()
+@Tree('closure-table')
 export class Category {
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,15 +20,15 @@ export class Category {
   @Column({ unique: true })
   name: string;
 
-  // Fields for the entity
-  
-        @Column()
-        description: string;
-        
+  @Column()
+  description: string;
 
-  // Relationships for the entity
-  
-        @OneToMany(() => Product, product => product.category)
-        products: Product[];
-        
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
+
+  @TreeChildren()
+  children: Category[];
+
+  @TreeParent()
+  parent: Category;
 }

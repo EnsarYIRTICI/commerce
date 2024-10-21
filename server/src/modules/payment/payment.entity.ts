@@ -1,24 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Order } from '../order/order.entity'; // İlgili Order modelini import ediyoruz
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { User } from '../user/user.entity';
+import { Order } from '../order/order.entity'; // Additional imports for related entities
 
 @Entity()
-export class PaymentDetail {
+export class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  paymentType: string; // Ödeme türü (örneğin: 'Tek çekim', 'Taksit')
+  @Column({ unique: true })
+  name: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  cardType: string; // Kart türü (Visa, MasterCard, vb.)
+  // Fields for the entity
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  shippingFee: number; // Kargo ücreti
+  @Column()
+  amount: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  totalPrice: number; // Toplam tutar (ürünler + kargo)
+  @Column()
+  method: string;
 
   // Relationships for the entity
-  @ManyToOne(() => Order, (order) => order.paymentDetails, { nullable: false })
-  order: Order; // PaymentDetail ile Order ilişkisi
+
+  @ManyToOne(() => User, (user) => user.payments)
+  user: User;
 }

@@ -19,13 +19,13 @@ import { ActivityLog } from '../activity_log/activity_log.entity';
 
 @Entity()
 export class Product {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
-
-  // Fields for the entity
 
   @Column({ nullable: true })
   description: string;
@@ -39,12 +39,14 @@ export class Product {
   @Column()
   createdAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   updatedAt: Date;
 
   // Relationships for the entity
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products, {
+    nullable: false,
+  })
   category: Category;
 
   @OneToMany(() => ProductVariant, (productVariant) => productVariant.product)

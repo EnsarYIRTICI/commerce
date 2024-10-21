@@ -5,10 +5,12 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { AttributeValue } from '../attribute_value/attribute_value.entity'; // Additional imports for related entities
+import { AttributeValue } from '../attribute_value/attribute_value.entity';
 
 @Entity()
 export class ProductAttribute {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
