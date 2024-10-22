@@ -15,7 +15,6 @@ import { WishlistItem } from '../wishlist_item/wishlist_item.entity';
 import { CartItem } from '../cart_item/cart_item.entity';
 import { OrderItem } from '../order_item/order_item.entity';
 import { ActivityLog } from '../activity_log/activity_log.entity';
-// Additional imports for related entities
 
 @Entity()
 export class Product {
@@ -52,13 +51,17 @@ export class Product {
   @OneToMany(() => ProductVariant, (productVariant) => productVariant.product)
   variants: ProductVariant[];
 
-  @OneToMany(() => ProductImage, (productImage) => productImage.product)
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    nullable: false,
+  })
   images: ProductImage[];
 
   @OneToMany(() => ProductReview, (productReview) => productReview.product)
   reviews: ProductReview[];
 
-  @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.product)
+  @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.product, {
+    nullable: false,
+  })
   priceHistory: PriceHistory[];
 
   @OneToMany(() => WishlistItem, (wishlistItem) => wishlistItem.product)

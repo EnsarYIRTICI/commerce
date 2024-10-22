@@ -1,27 +1,29 @@
-
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
-import { Product } from "../product/product.entity"; // Additional imports for related entities
-
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { Product } from '../product/product.entity';
 @Entity()
 export class PriceHistory {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
 
-  // Fields for the entity
-  
-        @Column()
-        price: number;
+  @Column()
+  price: number;
 
-        @Column()
-        changeDate: Date;
-        
+  @Column()
+  createdAt: Date;
 
   // Relationships for the entity
-  
-        @ManyToOne(() => Product, product => product.priceHistory)
-        product: Product;
-        
+
+  @ManyToOne(() => Product, (product) => product.priceHistory)
+  product: Product;
 }

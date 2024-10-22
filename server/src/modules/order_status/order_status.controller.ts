@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { OrderStatusService } from './order_status.service';
 
-@Controller('order-status')
+@Controller('order_statuses')
 export class OrderStatusController {
   constructor(private readonly orderStatusService: OrderStatusService) {}
 
@@ -16,8 +16,13 @@ export class OrderStatusController {
   }
 
   @Post()
-  create(@Body() createOrderStatusDto: { statusName: string; description: string }) {
-    return this.orderStatusService.create(createOrderStatusDto.statusName, createOrderStatusDto.description);
+  create(
+    @Body() createOrderStatusDto: { statusName: string; description: string },
+  ) {
+    return this.orderStatusService.create(
+      createOrderStatusDto.statusName,
+      createOrderStatusDto.description,
+    );
   }
 
   @Delete(':id')

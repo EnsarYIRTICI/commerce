@@ -4,6 +4,8 @@ import {
   Post,
   HttpException,
   HttpStatus,
+  Req,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -78,5 +80,11 @@ export class AuthController {
         email: user.email,
       },
     };
+  }
+
+  @Roles('user')
+  @Get('user')
+  async user(@Req() request: Request) {
+    return request['user'];
   }
 }

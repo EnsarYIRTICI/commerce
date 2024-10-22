@@ -4,7 +4,7 @@ import { join } from 'path';
 
 @Injectable()
 export class ImportService {
-  static modulesPath = join(__dirname, '..', '..', 'modules');
+  static modulesPath = join(__dirname, '..', 'modules');
 
   static getModules() {
     return readdirSync(this.modulesPath)
