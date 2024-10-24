@@ -1,125 +1,63 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Status } from '@modules/status/status.entity';
-import { Role } from '@modules/role/role.entity';
-import { OrderStatus } from '@modules/order_status/order_status.entity';
-import { Category } from '@modules/category/category.entity';
-import { categoriesJson } from '@common/categories';
-
-interface SeedData {
-  repository: Repository<any>;
-  data: Array<{ [key: string]: any }>;
-  uniqueField: string;
-}
+import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
+import { Repository, TreeRepository } from 'typeorm';
+import { ModuleRef } from '@nestjs/core';
+import { TreeEntity } from '@entities/tree.entity';
+import { StaticEntity } from '@entities/static.entity';
 
 @Injectable()
-export class SeedService implements OnModuleInit {
-  constructor(
-    @InjectRepository(Status)
-    private readonly statusRepository: Repository<Status>,
-    @InjectRepository(Role)
-    private readonly roleRepository: Repository<Role>,
-    @InjectRepository(OrderStatus)
-    private readonly orderStatusRepository: Repository<OrderStatus>,
-    @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
-  ) {}
+export class SeedService {
+  constructor(private moduleRef: ModuleRef) {}
 
-  // Genel seed fonksiyonu
+  async getRepository(entityClass: any) {
+    const repositoryToken = getRepositoryToken(entityClass);
+    return this.moduleRef.get(repositoryToken, { strict: false });
+  }
 
   async seed<T>(
-    repository: Repository<T> | any,
+    entityClass: any,
     data: Array<{ [key: string]: any }>,
-    uniqueField: string,
   ): Promise<void> {
     for (const item of data) {
+      const repository: Repository<StaticEntity> =
+        await this.getRepository(entityClass);
+
       const existingItem = await repository.findOne({
-        where: { [uniqueField]: item[uniqueField] },
+        where: { name: item['name'] },
       });
+
       if (!existingItem) {
         await repository.save(item);
       }
     }
   }
 
-  async seedAll() {
-    // Veri kümelerini ve ilgili repository bilgilerini tutan yapı
+  async seedTree<T>(
+    entityClass: any,
+    treeData: any[],
+    parent: T = null,
+  ): Promise<void> {
+    const treeRepository: TreeRepository<TreeEntity> =
+      await this.getRepository(entityClass);
 
-    const seedData: SeedData[] = [
-      {
-        repository: this.statusRepository,
-        data: [
-          { name: 'active', description: 'User is active' },
-          {
-            name: 'blocked',
-            description: 'User is blocked from accessing the system',
-          },
-          {
-            name: 'pending',
-            description: 'User registration is pending approval',
-          },
-        ],
-        uniqueField: 'name',
-      },
-      {
-        repository: this.roleRepository,
-        data: [
-          { name: 'admin', description: 'Administrator role' },
-          { name: 'user', description: 'Default user role' },
-          { name: 'moderator', description: 'Moderator role' },
-        ],
-        uniqueField: 'name',
-      },
-      {
-        repository: this.orderStatusRepository,
-        data: [
-          { name: 'pending', description: 'Order is pending' },
-          { name: 'shipped', description: 'Order has been shipped' },
-          { name: 'delivered', description: 'Order has been delivered' },
-          { name: 'canceled', description: 'Order has been canceled' },
-        ],
-        uniqueField: 'name',
-      },
-    ];
-
-    // Her veri kümesi için genel seed fonksiyonunu çağırıyoruz
-
-    for (const seed of seedData) {
-      await this.seed(seed.repository, seed.data, seed.uniqueField);
-    }
-  }
-
-  async seedCategoriesFromJson(
-    jsonCategories: any[],
-    parentCategory: Category = null,
-  ) {
-    for (const categoryData of jsonCategories) {
-      // Kategori zaten var mı kontrol et
-      let category = await this.categoryRepository.findOne({
-        where: { name: categoryData.name },
+    for (const nodeData of treeData) {
+      let node = await treeRepository.findOne({
+        where: { name: nodeData.name },
       });
 
-      if (!category) {
-        // Eğer kategori mevcut değilse, kaydet
-        category = new Category();
-        category.name = categoryData.name;
-        category.description = categoryData.description;
-        category.parent = parentCategory;
+      if (!node) {
+        node = treeRepository.create({
+          name: nodeData.name,
+          description: nodeData.description,
+          parent: parent,
+        } as T);
 
-        // Kaydettiğimiz kategoriyi veritabanına ekliyoruz
-        category = await this.categoryRepository.save(category);
+        node = await treeRepository.save(node);
       }
 
-      // Alt kategoriler varsa recursive olarak çağırıyoruz
-      if (categoryData.subcategories && categoryData.subcategories.length > 0) {
-        await this.seedCategoriesFromJson(categoryData.subcategories, category);
+      if (nodeData.children && nodeData.children.length > 0) {
+        await this.seedTree(entityClass, nodeData.children, node);
       }
     }
-  }
-
-  async onModuleInit() {
-    await this.seedAll();
-    await this.seedCategoriesFromJson(categoriesJson);
   }
 }

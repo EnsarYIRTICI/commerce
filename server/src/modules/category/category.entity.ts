@@ -1,34 +1,9 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  Tree,
-  TreeChildren,
-  TreeParent,
-} from 'typeorm';
-
-import { Product } from '../product/product.entity';
+import { TreeEntity } from '@entities/tree.entity';
+import { Product } from '@modules/product/product.entity';
+import { Entity, OneToMany } from 'typeorm';
 
 @Entity()
-@Tree('closure-table')
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ unique: true })
-  name: string;
-
-  @Column()
-  description: string;
-
+export class Category extends TreeEntity {
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];
-
-  @TreeChildren()
-  children: Category[];
-
-  @TreeParent()
-  parent: Category;
 }

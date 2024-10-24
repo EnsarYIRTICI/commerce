@@ -20,6 +20,10 @@ import { OrderStatus } from '@modules/order_status/order_status.entity';
 import { Status } from '@modules/status/status.entity';
 import { Category } from '@modules/category/category.entity';
 import { User } from '@modules/user/user.entity';
+import { rolesJson } from '@common/roles';
+import { statusesJson } from '@common/statuses';
+import { order_statusesJson } from '@common/order_statuses';
+import { categoriesJson } from '@common/categories';
 
 @Module({
   imports: [
@@ -39,9 +43,8 @@ import { User } from '@modules/user/user.entity';
   controllers: [AppController],
   providers: [
     AppService,
-    RedisService,
     SeedService,
-
+    RedisService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
@@ -49,4 +52,36 @@ import { User } from '@modules/user/user.entity';
   ],
   exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly seedService: SeedService) {}
+
+  async onModuleInit() {
+    const seedData = [
+      {
+        entity: Role,
+        data: rolesJson,
+      },
+      {
+        entity: Status,
+        data: statusesJson,
+      },
+      {
+        entity: OrderStatus,
+        data: order_statusesJson,
+      },
+      {
+        entity: Category,
+        data: categoriesJson,
+        type: 'tree',
+      },
+    ];
+
+    for (const items of seedData) {
+      if (items.type === 'tree') {
+        await this.seedService.seedTree(items.entity, items.data);
+      } else {
+        await this.seedService.seed(items.entity, items.data);
+      }
+    }
+  }
+}

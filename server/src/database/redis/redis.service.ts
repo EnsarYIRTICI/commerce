@@ -11,15 +11,6 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     });
     await this.client.connect();
     console.log('--> Connected to Redis');
-
-    // const models = ['Role', 'Status'];
-
-    // for (const model of models) {
-    //   const data = await this.prisma[model.toLowerCase()].findMany();
-
-    //   await this.set(model.toLowerCase(), data);
-    //   console.log(`--> ${model} verileri Redis'e cache edildi`);
-    // }
   }
 
   async onModuleDestroy() {

@@ -7,12 +7,14 @@
   "license": "UNLICENSED",
   "_moduleAliases": {
     "@modules": "dist/modules/*",
+    "@entities": "dist/entities/*",
     "@utils": "dist/utils/*",
     "@decorators": "dist/decorators/*",
     "@database": "dist/database/*",
     "@config": "dist/config/*",
     "@auth": "dist/auth/*",
     "@common": "dist/common/*"
+
   },
   "scripts": {
     "build": "nest build",
