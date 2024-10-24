@@ -6,23 +6,12 @@ import { join } from 'path';
 export class ImportService {
   static modulesPath = join(__dirname, '..', 'modules');
 
-  static getModules() {
-    return readdirSync(this.modulesPath)
-      .filter((file) => !file.includes('.'))
-      .map((folder) => {
-        const module = require(
-          `${this.modulesPath}/${folder}/${folder}.module`,
-        );
-        return module[Object.keys(module)[0]];
-      });
-  }
-
-  static getEntities() {
+  static get(extname: 'entity' | 'module') {
     return readdirSync(this.modulesPath)
       .filter((file) => !file.includes('.'))
       .map((folder) => {
         const entityModule = require(
-          `${this.modulesPath}/${folder}/${folder}.entity`,
+          `${this.modulesPath}/${folder}/${folder}.${extname}`,
         );
         return entityModule[Object.keys(entityModule)[0]];
       });

@@ -24,6 +24,7 @@ import { rolesJson } from '@common/roles';
 import { statusesJson } from '@common/statuses';
 import { order_statusesJson } from '@common/order_statuses';
 import { categoriesJson } from '@common/categories';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -37,8 +38,12 @@ import { categoriesJson } from '@common/categories';
         configService.get('typeorm'),
     }),
     TypeOrmModule.forFeature([Role, Status, Category, OrderStatus, User]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'your-secret-key',
+      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
+    }),
     AuthModule,
-    ...ImportService.getModules(),
+    ...ImportService.get('module'),
   ],
   controllers: [AppController],
   providers: [
@@ -50,7 +55,7 @@ import { categoriesJson } from '@common/categories';
       useClass: JwtAuthGuard,
     },
   ],
-  exports: [],
+  exports: [JwtModule],
 })
 export class AppModule {
   constructor(private readonly seedService: SeedService) {}

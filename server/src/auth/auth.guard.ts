@@ -13,13 +13,14 @@ import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@decorators/role.decorator';
 import { errorMessages } from '@common/errorMessages';
+import { DateService } from '@utils/date.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -36,6 +37,9 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
 
     const token = request.headers['authorization']?.split(' ')[1];
+
+    console.log(token);
+
     if (!token) {
       throw new HttpException(
         errorMessages.NO_TOKEN_PROVIDED,
@@ -44,6 +48,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     let decoded;
+
     try {
       decoded = this.jwtService.verify(token);
     } catch (err) {
@@ -67,16 +72,15 @@ export class JwtAuthGuard implements CanActivate {
       );
     }
 
-    if (!user.status) {
-      return false;
-    }
-
-    if (user.status.name === 'blocked') {
+    if (!user.status || user.status.name === 'blocked') {
       throw new HttpException(errorMessages.USER_BLOCKED, HttpStatus.FORBIDDEN);
     }
 
     if (
-      !this.compareDates(user.lastPasswordChange, decoded.lastPasswordChange)
+      DateService.compareDates(
+        user.lastPasswordChange,
+        decoded.lastPasswordChange,
+      )
     ) {
       throw new HttpException(
         errorMessages.TOKEN_INVALID,
@@ -85,11 +89,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     if (!requiredRoles) {
-      if (!user.role) {
-        return false;
-      }
-
-      if (user.role.name !== 'admin') {
+      if (!user.role || user.role.name !== 'admin') {
         throw new HttpException(
           errorMessages.UNAUTHORIZED_ADMIN,
           HttpStatus.UNAUTHORIZED,
@@ -100,19 +100,5 @@ export class JwtAuthGuard implements CanActivate {
     request['user'] = user;
 
     return true;
-  }
-
-  private compareDates(
-    lastPasswordChange: Date,
-    tokenLastPasswordChange: Date,
-  ): boolean {
-    if (!lastPasswordChange || !tokenLastPasswordChange) {
-      return true;
-    }
-
-    return (
-      lastPasswordChange.getTime() ===
-      new Date(tokenLastPasswordChange).getTime()
-    );
   }
 }
