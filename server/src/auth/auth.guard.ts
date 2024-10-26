@@ -4,16 +4,18 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity';
-import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@decorators/role.decorator';
 import { errorMessages } from '@common/errorMessages';
-import { DateService } from '@utils/date.service';
+import { DateUtil } from '@utils/date.util';
+import { RedisService } from '@database/redis/redis.service';
+import { RequestUtil } from '@utils/request.util';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -22,6 +24,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
+    private readonly redisService: RedisService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -36,15 +39,18 @@ export class JwtAuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
 
-    const token = request.headers['authorization']?.split(' ')[1];
-
-    console.log(token);
+    const token = RequestUtil.getToken(request);
 
     if (!token) {
       throw new HttpException(
         errorMessages.NO_TOKEN_PROVIDED,
         HttpStatus.FORBIDDEN,
       );
+    }
+
+    const isBlacklisted = await this.redisService.isTokenBlacklisted(token);
+    if (isBlacklisted) {
+      throw new UnauthorizedException('Token is blacklisted');
     }
 
     let decoded;
@@ -77,7 +83,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     if (
-      DateService.compareDates(
+      !DateUtil.compareDates(
         user.lastPasswordChange,
         decoded.lastPasswordChange,
       )

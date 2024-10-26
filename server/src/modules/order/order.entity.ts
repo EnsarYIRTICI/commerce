@@ -27,8 +27,6 @@ export class Order {
   @Column({ type: 'date', nullable: true })
   updatedAt: Date;
 
-  // Relationships for the entity
-
   @ManyToOne(() => User, (user) => user.orders, { nullable: false })
   user: User;
 

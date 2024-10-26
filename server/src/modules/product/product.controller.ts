@@ -13,6 +13,7 @@ import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductDto } from './dto/product.dto';
+import { errorMessages } from '@common/errorMessages';
 
 @Controller('products')
 export class ProductController {
@@ -24,11 +25,20 @@ export class ProductController {
     @Body() productDto: ProductDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    const product = await this.productService.createProductWithImage(
-      productDto,
-      image.buffer,
-    );
-    return product;
+    try {
+      const product = await this.productService.createProductWithImage(
+        productDto,
+        image.buffer,
+      );
+      return product;
+    } catch (error) {
+      console.log(error);
+
+      return {
+        statusCode: 500,
+        message: errorMessages.INTERNAL_SERVER_ERROR,
+      };
+    }
   }
 
   @Get()

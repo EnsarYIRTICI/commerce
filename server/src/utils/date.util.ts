@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 
 @Injectable()
-export class DateService {
+export class DateUtil {
   static compareDates(firstDate: Date, seconDate: Date): boolean {
     if (!firstDate || !seconDate) {
       return true;

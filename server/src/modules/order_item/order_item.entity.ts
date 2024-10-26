@@ -6,7 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Order } from '../order/order.entity';
-import { Product } from '../product/product.entity'; // Additional imports for related entities
+import { Product } from '../product/product.entity';
 
 @Entity()
 export class OrderItem {

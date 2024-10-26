@@ -2,10 +2,10 @@ import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { createClient } from 'redis';
 
 @Injectable()
-export class RedisService implements OnModuleInit, OnModuleDestroy {
+export class RedisService {
   private client;
 
-  async onModuleInit() {
+  async connect() {
     this.client = createClient({
       url: process.env.REDIS_URL,
     });
@@ -13,7 +13,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     console.log('--> Connected to Redis');
   }
 
-  async onModuleDestroy() {
+  async disconnect() {
     await this.client.disconnect();
     console.log('--> Disconnected from Redis');
   }
@@ -29,5 +29,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   async del(key: string) {
     await this.client.del(key);
+  }
+
+  async addTokenToBlacklist(token: string, expiresIn: number): Promise<void> {
+    await this.client.set(token, 'blacklisted', 'EX', expiresIn);
+  }
+
+  async isTokenBlacklisted(token: string): Promise<boolean> {
+    const result = await this.client.get(token);
+    return result === 'blacklisted';
   }
 }

@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 
 import typeorm from '@config/typeorm';
 
-import { ImportService } from '@utils/import.service';
+import { ImportUtil } from '@utils/import.util';
 import { RedisService } from '@database/redis/redis.service';
 import { SeedService } from '@database/seed/seed.service';
 
@@ -43,13 +43,13 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
     }),
     AuthModule,
-    ...ImportService.get('module'),
+    ...ImportUtil.get('module'),
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    SeedService,
     RedisService,
+    SeedService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
@@ -58,7 +58,10 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
   exports: [JwtModule],
 })
 export class AppModule {
-  constructor(private readonly seedService: SeedService) {}
+  constructor(
+    private readonly seedService: SeedService,
+    private readonly redisService: RedisService,
+  ) {}
 
   async onModuleInit() {
     const seedData = [
@@ -87,6 +90,19 @@ export class AppModule {
       } else {
         await this.seedService.seed(items.entity, items.data);
       }
+
+      console.log('--> Seed', items.entity.name);
+    }
+
+    await this.redisService.connect();
+
+    for (const items of seedData) {
+      await this.redisService.set(
+        items.entity.name,
+        JSON.stringify(items.data),
+      );
+
+      console.log('--> Cache', items.entity.name);
     }
   }
 }

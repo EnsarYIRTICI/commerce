@@ -14,12 +14,15 @@ import { errorMessages } from '@common/errorMessages';
 import { successMessages } from '@common/successMessages';
 import { RegisterDto } from './dto/register.dto';
 import { Roles } from '@decorators/role.decorator';
+import { RedisService } from '@database/redis/redis.service';
+import { RequestUtil } from '@utils/request.util';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
+    private readonly redisService: RedisService,
   ) {}
 
   @Roles('public')
@@ -86,5 +89,19 @@ export class AuthController {
   @Get('user')
   async user(@Req() request: Request) {
     return request['user'];
+  }
+
+  @Roles('user')
+  @Get('logout')
+  async logout(@Req() request: Request) {
+    const token = RequestUtil.getToken(request);
+
+    const oneWeekInSeconds = 7 * 24 * 60 * 60;
+
+    await this.redisService.addTokenToBlacklist(token, oneWeekInSeconds);
+
+    return {
+      message: successMessages.LOGIN_SUCCESS,
+    };
   }
 }

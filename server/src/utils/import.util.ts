@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 
 @Injectable()
-export class ImportService {
+export class ImportUtil {
   static modulesPath = join(__dirname, '..', 'modules');
 
   static get(extname: 'entity' | 'module') {

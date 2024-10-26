@@ -19,16 +19,6 @@ export class AuthService {
     private readonly statusRepository: Repository<Status>,
   ) {}
 
-  async validateUser(email: string, password: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-
-    if (!user || user.password !== password) {
-      return null;
-    }
-
-    return user;
-  }
-
   async create(registerDto: RegisterDto, date: Date) {
     const role = await this.roleRepository.findOne({
       where: { name: 'user' },
@@ -52,5 +42,15 @@ export class AuthService {
     });
 
     return await this.userRepository.save(user);
+  }
+
+  async validateUser(email: string, password: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user || user.password !== password) {
+      return null;
+    }
+
+    return user;
   }
 }
