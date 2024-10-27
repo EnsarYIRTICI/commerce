@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { ProductAttribute } from '../product_attribute/product_attribute.entity';
 import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { VariantAttributeValueItem } from '@modules/variant_attribute_value_item/variant_attribute_value_item.entity';
 
 @Entity()
 export class AttributeValue {
@@ -30,9 +31,6 @@ export class AttributeValue {
   )
   productAttribute: ProductAttribute;
 
-  @ManyToMany(
-    () => ProductVariant,
-    (productVariant) => productVariant.attributeValues,
-  )
-  productVariants: ProductVariant[];
+  @OneToMany(() => VariantAttributeValueItem, (valueItem) => valueItem.value)
+  valueItem: VariantAttributeValueItem[];
 }

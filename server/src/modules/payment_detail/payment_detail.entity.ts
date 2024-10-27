@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Order } from '../order/order.entity'; // İlgili Order modelini import ediyoruz
+import { Order } from '../order/order.entity';
 
 @Entity()
 export class PaymentDetail {
@@ -7,18 +7,17 @@ export class PaymentDetail {
   id: number;
 
   @Column({ type: 'varchar', length: 255 })
-  paymentType: string; // Ödeme türü (örneğin: 'Tek çekim', 'Taksit')
+  paymentType: string;
 
   @Column({ type: 'varchar', length: 255 })
-  cardType: string; // Kart türü (Visa, MasterCard, vb.)
+  cardType: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  shippingFee: number; // Kargo ücreti
+  shippingFee: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  totalPrice: number; // Toplam tutar (ürünler + kargo)
+  totalPrice: number;
 
-  // Relationships for the entity
   @ManyToOne(() => Order, (order) => order.paymentDetails, { nullable: false })
-  order: Order; // PaymentDetail ile Order ilişkisi
+  order: Order;
 }

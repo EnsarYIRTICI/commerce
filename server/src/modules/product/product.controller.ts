@@ -8,12 +8,13 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  UploadedFiles,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ProductDto } from './dto/product.dto';
 import { errorMessages } from '@common/errorMessages';
+import { CreateProductDto } from './dto/create_product.dto';
 
 @Controller('products')
 export class ProductController {
@@ -22,13 +23,13 @@ export class ProductController {
   @Post('create')
   @UseInterceptors(FileInterceptor('image'))
   async createProduct(
-    @Body() productDto: ProductDto,
-    @UploadedFile() image: Express.Multer.File,
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() images: Express.Multer.File[],
   ) {
     try {
-      const product = await this.productService.createProductWithImage(
-        productDto,
-        image.buffer,
+      const product = await this.productService.createProduct(
+        createProductDto,
+        images,
       );
       return product;
     } catch (error) {

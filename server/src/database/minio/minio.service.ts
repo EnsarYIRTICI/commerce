@@ -39,4 +39,10 @@ export class MinioService {
       await this.minioClient.makeBucket(bucketName, 'us-east-1');
     }
   }
+
+  // Dosya silme
+
+  async deleteImage(bucketName: string, objectName: string) {
+    await this.minioClient.removeObject(bucketName, objectName);
+  }
 }

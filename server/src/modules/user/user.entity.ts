@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 
 import { Role } from '../role/role.entity';
@@ -16,7 +17,6 @@ import { Payment } from '../payment/payment.entity';
 import { Address } from '../address/address.entity';
 import { ActivityLog } from '../activity_log/activity_log.entity';
 import { Coupon } from '../coupon/coupon.entity';
-// Additional imports for related entities
 
 @Entity()
 export class User {
@@ -54,17 +54,17 @@ export class User {
   @ManyToOne(() => Status, (status) => status.users, { nullable: false })
   status: Status;
 
-  @OneToMany(() => ProductReview, (productReview) => productReview.user)
-  reviews: ProductReview[];
+  @OneToOne(() => Wishlist, (wishlist) => wishlist.user)
+  wishlists: Wishlist;
 
-  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
-  wishlists: Wishlist[];
-
-  @OneToMany(() => ShoppingCart, (shoppingCart) => shoppingCart.user)
-  shoppingCarts: ShoppingCart[];
+  @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.user)
+  shoppingCarts: ShoppingCart;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => ProductReview, (productReview) => productReview.user)
+  reviews: ProductReview[];
 
   @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[];

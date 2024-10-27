@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { CartItem } from '../cart_item/cart_item.entity';
 import { User } from '../user/user.entity';
@@ -15,9 +16,6 @@ export class ShoppingCart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  name: string;
-
   @Column()
   createdAt: Date;
 
@@ -26,6 +24,6 @@ export class ShoppingCart {
   @OneToMany(() => CartItem, (cartItem) => cartItem.shoppingCart)
   items: CartItem[];
 
-  @ManyToOne(() => User, (user) => user.shoppingCarts)
+  @OneToOne(() => User, (user) => user.shoppingCarts)
   user: User;
 }

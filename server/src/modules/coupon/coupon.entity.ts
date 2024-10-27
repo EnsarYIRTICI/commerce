@@ -1,27 +1,30 @@
-
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
-import { User } from "../user/user.entity"; // Additional imports for related entities
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Coupon {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
 
-  // Fields for the entity
-  
-        @Column()
-        code: string;
+  @Column()
+  code: string;
 
-        @Column()
-        discountPercentage: number;
-        
+  @Column()
+  discountPercentage: number;
 
   // Relationships for the entity
-  
-        @ManyToOne(() => User, user => user.coupons)
-        user: User;
-        
+
+  @ManyToOne(() => User, (user) => user.coupons)
+  user: User;
 }

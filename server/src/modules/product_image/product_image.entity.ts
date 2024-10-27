@@ -6,6 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Product } from '../product/product.entity';
+import { ProductVariant } from '@modules/product_variant/product_variant.entity';
 
 @Entity()
 export class ProductImage {
@@ -25,6 +26,6 @@ export class ProductImage {
 
   // Relationships for the entity
 
-  @ManyToOne(() => Product, (product) => product.images)
-  product: Product;
+  @ManyToOne(() => ProductVariant, (variant) => variant.images)
+  product: ProductVariant;
 }

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { ShoppingCart } from '../shopping_cart/shopping_cart.entity';
 import { Product } from '../product/product.entity';
+import { ProductVariant } from '@modules/product_variant/product_variant.entity';
 
 @Entity()
 export class CartItem {
@@ -14,9 +15,6 @@ export class CartItem {
 
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ unique: true })
-  name: string;
 
   @Column()
   quantity: number;
@@ -26,6 +24,6 @@ export class CartItem {
   @ManyToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.items)
   shoppingCart: ShoppingCart;
 
-  @ManyToOne(() => Product, (product) => product.cartItems)
-  product: Product;
+  @ManyToOne(() => ProductVariant, (variant) => variant.cartItems)
+  productVariant: ProductVariant;
 }

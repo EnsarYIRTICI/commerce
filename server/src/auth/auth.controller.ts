@@ -16,6 +16,7 @@ import { RegisterDto } from './dto/register.dto';
 import { Roles } from '@decorators/role.decorator';
 import { RedisService } from '@database/redis/redis.service';
 import { RequestUtil } from '@utils/request.util';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -87,6 +88,7 @@ export class AuthController {
 
   @Roles('user')
   @Get('user')
+  @ApiBearerAuth()
   async user(@Req() request: Request) {
     return request['user'];
   }

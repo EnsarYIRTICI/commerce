@@ -4,9 +4,11 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { Order } from '../order/order.entity';
 import { Product } from '../product/product.entity';
+import { ProductVariant } from '@modules/product_variant/product_variant.entity';
 
 @Entity()
 export class OrderItem {
@@ -29,6 +31,6 @@ export class OrderItem {
   @ManyToOne(() => Order, (order) => order.items)
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.orderItems)
-  product: Product;
+  @ManyToOne(() => ProductVariant, (variant) => variant.orderItems)
+  productVariant: ProductVariant;
 }

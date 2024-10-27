@@ -5,8 +5,11 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { Product } from '../product/product.entity';
-import { User } from '../user/user.entity';
+
+import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { Product } from '@modules/product/product.entity';
+import { User } from '@modules/user/user.entity';
+
 @Entity()
 export class ProductReview {
   // Fields for the entity
@@ -25,8 +28,10 @@ export class ProductReview {
 
   // Relationships for the entity
 
-  @ManyToOne(() => Product, (product) => product.reviews)
-  product: Product;
+  @ManyToOne(() => ProductVariant, (variant) => variant.reviews, {
+    nullable: true,
+  })
+  productVariant: ProductVariant;
 
   @ManyToOne(() => User, (user) => user.reviews)
   user: User;

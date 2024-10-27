@@ -5,17 +5,17 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { ActivityLog } from '../activity_log/activity_log.entity'; // Additional imports for related entities
+import { ActivityLog } from '../activity_log/activity_log.entity';
 
 @Entity()
 export class ActionType {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
-
-  // Fields for the entity
 
   @Column()
   description: string;

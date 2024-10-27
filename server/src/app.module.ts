@@ -25,6 +25,9 @@ import { statusesJson } from '@common/statuses';
 import { order_statusesJson } from '@common/order_statuses';
 import { categoriesJson } from '@common/categories';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { ProductAttribute } from '@modules/product_attribute/product_attribute.entity';
+import { AttributeValue } from '@modules/attribute_value/attribute_value.entity';
+import { productAttributesJson } from '@common/product_attributes';
 
 @Module({
   imports: [
@@ -66,32 +69,63 @@ export class AppModule {
   async onModuleInit() {
     const seedData = [
       {
-        entity: Role,
+        entity: {
+          entity: Role,
+          name: 'Role',
+        },
         data: rolesJson,
       },
       {
-        entity: Status,
+        entity: {
+          entity: Status,
+          name: 'Status',
+        },
         data: statusesJson,
       },
       {
-        entity: OrderStatus,
+        entity: {
+          entity: OrderStatus,
+          name: 'OrderStatus',
+        },
         data: order_statusesJson,
       },
       {
-        entity: Category,
+        entity: {
+          entity: Category,
+          name: 'Category',
+        },
         data: categoriesJson,
         type: 'tree',
+      },
+      {
+        entity: {
+          attribute: ProductAttribute,
+          value: AttributeValue,
+          name: 'ProductAttribute',
+        },
+        data: productAttributesJson,
+        type: 'attribute',
       },
     ];
 
     for (const items of seedData) {
-      if (items.type === 'tree') {
-        await this.seedService.seedTree(items.entity, items.data);
-      } else {
-        await this.seedService.seed(items.entity, items.data);
-      }
+      try {
+        if (items.type === 'tree') {
+          await this.seedService.seedTree(items.entity, items.data);
+        } else if (items.type === 'attribute') {
+          await this.seedService.seedAttribute(
+            items.entity.attribute,
+            items.entity.value,
+            items.data,
+          );
+        } else {
+          await this.seedService.seed(items.entity, items.data);
+        }
 
-      console.log('--> Seed', items.entity.name);
+        console.log('--> Seed', items.entity.name);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
 
     await this.redisService.connect();

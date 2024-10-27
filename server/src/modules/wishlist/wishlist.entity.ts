@@ -15,17 +15,14 @@ export class Wishlist {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  name: string;
-
   @Column()
-  title: string;
+  createdAt: Date;
 
   // Relationships for the entity
 
-  @ManyToOne(() => User, (user) => user.wishlists)
-  user: User;
-
   @OneToMany(() => WishlistItem, (wishlistItem) => wishlistItem.wishlist)
   items: WishlistItem[];
+
+  @ManyToOne(() => User, (user) => user.wishlists)
+  user: User;
 }

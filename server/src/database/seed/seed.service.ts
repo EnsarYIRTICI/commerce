@@ -1,13 +1,16 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
-import { Repository, TreeRepository } from 'typeorm';
+import { DataSource, Repository, TreeRepository } from 'typeorm';
 import { ModuleRef } from '@nestjs/core';
 import { TreeEntity } from '@entities/tree.entity';
 import { StaticEntity } from '@entities/static.entity';
 
 @Injectable()
 export class SeedService {
-  constructor(private moduleRef: ModuleRef) {}
+  constructor(
+    private readonly moduleRef: ModuleRef,
+    private readonly dataSource: DataSource,
+  ) {}
 
   async getRepository(entityClass: any) {
     const repositoryToken = getRepositoryToken(entityClass);
@@ -57,6 +60,53 @@ export class SeedService {
 
       if (nodeData.children && nodeData.children.length > 0) {
         await this.seedTree(entityClass, nodeData.children, node);
+      }
+    }
+  }
+
+  async seedAttribute(
+    attributeEntity: any,
+    valueEntity: any,
+    data: Array<{ [key: string]: any }>,
+  ) {
+    for (const attribute of data) {
+      const attributeRepository = await this.getRepository(attributeEntity);
+
+      const existingAttribute = await attributeRepository.findOne({
+        where: { name: attribute.name },
+      });
+
+      let savedAttribute;
+
+      if (!existingAttribute) {
+        const attributeEntity = attributeRepository.create({
+          name: attribute.name,
+        });
+        savedAttribute = await attributeRepository.save(attributeEntity);
+      } else {
+        savedAttribute = existingAttribute;
+      }
+
+      const valueRepository = await this.getRepository(valueEntity);
+
+      for (const value of attribute.values) {
+        const existingValue = await valueRepository.findOne({
+          where: {
+            name: value.name,
+            value: value.value,
+            productAttribute: savedAttribute,
+          },
+        });
+
+        if (!existingValue) {
+          const valueEntity = valueRepository.create({
+            name: value.name,
+            value: value.value,
+            productAttribute: savedAttribute,
+          });
+          await valueRepository.save(valueEntity);
+        } else {
+        }
       }
     }
   }

@@ -1,3 +1,4 @@
+import { User } from '@modules/user/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,18 +6,15 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { User } from '../user/user.entity';
-import { Order } from '../order/order.entity'; // Additional imports for related entities
 
 @Entity()
 export class Payment {
+  // Fields for the entity
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
-
-  // Fields for the entity
 
   @Column()
   amount: number;

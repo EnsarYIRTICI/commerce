@@ -5,17 +5,17 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { User } from '../user/user.entity'; // Additional imports for related entities
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Address {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   name: string;
-
-  // Fields for the entity
 
   @Column()
   street: string;

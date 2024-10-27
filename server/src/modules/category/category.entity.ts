@@ -1,6 +1,6 @@
 import { TreeEntity } from '@entities/tree.entity';
 import { Product } from '@modules/product/product.entity';
-import { Entity, OneToMany, Tree } from 'typeorm';
+import { Column, Entity, OneToMany, Tree } from 'typeorm';
 
 @Entity()
 @Tree('closure-table')

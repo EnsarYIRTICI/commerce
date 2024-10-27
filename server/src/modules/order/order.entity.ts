@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { OrderItem } from '../order_item/order_item.entity';
@@ -48,13 +49,13 @@ export class Order {
   @JoinColumn({ name: 'billingAddressId' })
   billingAddress: AddressDetail;
 
-  @OneToMany(() => PaymentDetail, (paymentDetail) => paymentDetail.order, {
+  @OneToOne(() => PaymentDetail, (paymentDetail) => paymentDetail.order, {
     nullable: false,
   })
-  paymentDetails: PaymentDetail[];
+  paymentDetails: PaymentDetail;
 
-  @OneToMany(() => ShipmentDetail, (shipmentDetail) => shipmentDetail.order, {
+  @OneToOne(() => ShipmentDetail, (shipmentDetail) => shipmentDetail.order, {
     nullable: false,
   })
-  shipmentDetails: ShipmentDetail[];
+  shipmentDetails: ShipmentDetail;
 }
