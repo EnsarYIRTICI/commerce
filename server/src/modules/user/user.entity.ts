@@ -74,7 +74,4 @@ export class User {
 
   @OneToMany(() => ActivityLog, (activityLog) => activityLog.user)
   activityLogs: ActivityLog[];
-
-  @OneToMany(() => Coupon, (coupon) => coupon.user)
-  coupons: Coupon[];
 }

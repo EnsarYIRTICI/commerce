@@ -1,8 +1,18 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { AttributeValueService } from './attribute_value.service';
 import { AttributeValue } from './attribute_value.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from '@decorators/role.decorator';
 
+@ApiBearerAuth()
 @Controller('attribute_values')
 export class AttributeValueController {
   constructor(private readonly attribute_valueService: AttributeValueService) {}

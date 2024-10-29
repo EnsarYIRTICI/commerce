@@ -1,11 +1,26 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ProductAttributeService } from './product_attribute.service';
 import { ProductAttribute } from './product_attribute.entity';
+import { Roles } from '@decorators/role.decorator';
 
 @Controller('product_attributes')
 export class ProductAttributeController {
-  constructor(private readonly product_attributeService: ProductAttributeService) {}
+  constructor(
+    private readonly product_attributeService: ProductAttributeService,
+  ) {}
+
+  @Get('/values')
+  findValues() {
+    return this.product_attributeService.findValues();
+  }
 
   @Get()
   findAll() {

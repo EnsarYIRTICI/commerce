@@ -4,6 +4,7 @@ import {
   IsArray,
   ValidateNested,
   IsNumber,
+  IsInt,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateProductVariantDto } from './create_product_variant.dto';
@@ -16,9 +17,9 @@ export class CreateProductDto {
   @IsString()
   description: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  category: number;
+  @IsArray()
+  @IsInt({ each: true })
+  categories: number[];
 
   @IsArray()
   @ValidateNested({ each: true })

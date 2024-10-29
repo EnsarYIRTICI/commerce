@@ -2,29 +2,37 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+
+import { CouponAttributeItem } from '@modules/coupon_attribute_item/coupon_attribute_item.entity';
 
 @Entity()
 export class Coupon {
-  // Fields for the entity
-
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  name: string;
-
-  @Column()
   code: string;
 
-  @Column()
-  discountPercentage: number;
+  @Column({ default: true })
+  isActive: boolean;
 
-  // Relationships for the entity
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.coupons)
-  user: User;
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @OneToMany(
+    () => CouponAttributeItem,
+    (attributeItem) => attributeItem.coupon,
+    { cascade: true },
+  )
+  attributeItems: CouponAttributeItem[];
 }

@@ -1,8 +1,8 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AttributeValue } from './attribute_value.entity';
+import { Roles } from '@decorators/role.decorator';
 
 @Injectable()
 export class AttributeValueService {

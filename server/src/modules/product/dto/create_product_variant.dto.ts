@@ -1,4 +1,12 @@
-import { IsString, IsNumber, IsNotEmpty, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsNotEmpty,
+  IsArray,
+  IsInt,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsNumberStringOrNumber } from 'src/validators/isNumberStringOrNumber';
 
 export class CreateProductVariantDto {
   @IsString()
@@ -6,14 +14,21 @@ export class CreateProductVariantDto {
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   sku: string;
 
-  @IsNumber()
+  // @IsNumberStringOrNumber({
+  //   message: 'Stock must be a number or numeric string',
+  // })
   stock: number;
 
-  @IsNumber()
+  // @IsNumberStringOrNumber({
+  //   message: 'Price must be a number or numeric string',
+  // })
   price: number;
 
   @IsArray()
   attributeValues: number[];
+
+  images: Express.Multer.File[];
 }

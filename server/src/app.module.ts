@@ -108,35 +108,35 @@ export class AppModule {
       },
     ];
 
-    for (const items of seedData) {
-      try {
-        if (items.type === 'tree') {
-          await this.seedService.seedTree(items.entity, items.data);
-        } else if (items.type === 'attribute') {
-          await this.seedService.seedAttribute(
-            items.entity.attribute,
-            items.entity.value,
-            items.data,
-          );
-        } else {
-          await this.seedService.seed(items.entity, items.data);
-        }
+    // for (const items of seedData) {
+    //   try {
+    //     if (items.type === 'attribute') {
+    //       await this.seedService.seedAttribute(
+    //         items.entity.attribute,
+    //         items.entity.value,
+    //         items.data,
+    //       );
+    //     } else if (items.type === 'tree') {
+    //       await this.seedService.seedTree(items.entity.entity, items.data);
+    //     } else {
+    //       await this.seedService.seed(items.entity.entity, items.data);
+    //     }
 
-        console.log('--> Seed', items.entity.name);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
+    //     console.log('--> Seed', items.entity.name);
+    //   } catch (error) {
+    //     console.log(error.message);
+    //   }
+    // }
 
     await this.redisService.connect();
 
-    for (const items of seedData) {
-      await this.redisService.set(
-        items.entity.name,
-        JSON.stringify(items.data),
-      );
+    // for (const items of seedData) {
+    //   await this.redisService.set(
+    //     items.entity.name,
+    //     JSON.stringify(items.data),
+    //   );
 
-      console.log('--> Cache', items.entity.name);
-    }
+    //   console.log('--> Cache', items.entity.name);
+    // }
   }
 }

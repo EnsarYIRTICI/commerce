@@ -58,8 +58,8 @@ export class SeedService {
         node = await treeRepository.save(node);
       }
 
-      if (nodeData.children && nodeData.children.length > 0) {
-        await this.seedTree(entityClass, nodeData.children, node);
+      if (nodeData.subcategories && nodeData.subcategories.length > 0) {
+        await this.seedTree(entityClass, nodeData.subcategories, node);
       }
     }
   }
