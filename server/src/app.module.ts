@@ -26,7 +26,7 @@ import { order_statusesJson } from '@common/order_statuses';
 import { categoriesJson } from '@common/categories';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ProductAttribute } from '@modules/product_attribute/product_attribute.entity';
-import { AttributeValue } from '@modules/attribute_value/attribute_value.entity';
+import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
 import { productAttributesJson } from '@common/product_attributes';
 
 @Module({
@@ -100,7 +100,7 @@ export class AppModule {
       {
         entity: {
           attribute: ProductAttribute,
-          value: AttributeValue,
+          value: ProductAttributeValue,
           name: 'ProductAttribute',
         },
         data: productAttributesJson,

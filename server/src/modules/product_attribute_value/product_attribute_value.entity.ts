@@ -8,10 +8,10 @@ import {
 } from 'typeorm';
 import { ProductAttribute } from '../product_attribute/product_attribute.entity';
 import { ProductVariant } from '@modules/product_variant/product_variant.entity';
-import { VariantAttributeValueItem } from '@modules/variant_attribute_value_item/variant_attribute_value_item.entity';
+import { ProductVariantValueSet } from '@modules/product_variant_value_set/product_variant_value_set.entity';
 
 @Entity()
-export class AttributeValue {
+export class ProductAttributeValue {
   // Fields for the entity
 
   @PrimaryGeneratedColumn()
@@ -31,6 +31,6 @@ export class AttributeValue {
   )
   productAttribute: ProductAttribute;
 
-  @OneToMany(() => VariantAttributeValueItem, (valueItem) => valueItem.value)
-  valueItem: VariantAttributeValueItem[];
+  @OneToMany(() => ProductVariantValueSet, (valueItem) => valueItem.value)
+  valueItem: ProductVariantValueSet[];
 }

@@ -7,7 +7,7 @@ import { ImageProcessingService } from '@utils/image-processing.service';
 import { MinioService } from '@database/minio/minio.service';
 import { ProductVariant } from '@modules/product_variant/product_variant.entity';
 import { ProductImage } from '@modules/product_image/product_image.entity';
-import { VariantAttributeValueItem } from '@modules/variant_attribute_value_item/variant_attribute_value_item.entity';
+import { ProductVariantValueSet } from '@modules/product_variant_value_set/product_variant_value_set.entity';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { VariantAttributeValueItem } from '@modules/variant_attribute_value_item
       Product,
       ProductVariant,
       ProductImage,
-      VariantAttributeValueItem,
+      ProductVariantValueSet,
     ]),
   ],
   providers: [ProductService, MinioService, ImageProcessingService],

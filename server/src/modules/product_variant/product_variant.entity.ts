@@ -7,11 +7,11 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { AttributeValue } from '@modules/attribute_value/attribute_value.entity';
+import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
 import { PriceHistory } from '@modules/price_history/price_history.entity';
 import { ProductReview } from '@modules/product_review/product_review.entity';
 import { Product } from '@modules/product/product.entity';
-import { VariantAttributeValueItem } from '@modules/variant_attribute_value_item/variant_attribute_value_item.entity';
+import { ProductVariantValueSet } from '@modules/product_variant_value_set/product_variant_value_set.entity';
 import { ProductImage } from '@modules/product_image/product_image.entity';
 import { WishlistItem } from '@modules/wishlist_item/wishlist_item.entity';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
@@ -43,14 +43,10 @@ export class ProductVariant {
   })
   images: ProductImage[];
 
-  @ManyToMany(
-    () => VariantAttributeValueItem,
-    (valueItem) => valueItem.variant,
-    {
-      nullable: false,
-    },
-  )
-  attributeValues: VariantAttributeValueItem[];
+  @ManyToMany(() => ProductVariantValueSet, (valueItem) => valueItem.variant, {
+    nullable: false,
+  })
+  attributeValues: ProductVariantValueSet[];
 
   @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.productVariant)
   priceHistory: PriceHistory[];

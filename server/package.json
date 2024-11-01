@@ -13,7 +13,8 @@
     "@database": "dist/database/*",
     "@config": "dist/config/*",
     "@auth": "dist/auth/*",
-    "@common": "dist/common/*"
+    "@common": "dist/common/*",
+    "@interface": "dist/interface/*"
   },
   "scripts": {
     "build": "nest build",

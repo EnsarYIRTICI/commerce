@@ -16,7 +16,6 @@ import { Order } from '../order/order.entity';
 import { Payment } from '../payment/payment.entity';
 import { Address } from '../address/address.entity';
 import { ActivityLog } from '../activity_log/activity_log.entity';
-import { Coupon } from '../coupon/coupon.entity';
 
 @Entity()
 export class User {

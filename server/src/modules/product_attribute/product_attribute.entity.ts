@@ -5,7 +5,7 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { AttributeValue } from '../attribute_value/attribute_value.entity';
+import { ProductAttributeValue } from '../product_attribute_value/product_attribute_value.entity';
 
 @Entity()
 export class ProductAttribute {
@@ -20,8 +20,8 @@ export class ProductAttribute {
   // Relationships for the entity
 
   @OneToMany(
-    () => AttributeValue,
+    () => ProductAttributeValue,
     (attributeValue) => attributeValue.productAttribute,
   )
-  values: AttributeValue[];
+  values: ProductAttributeValue[];
 }

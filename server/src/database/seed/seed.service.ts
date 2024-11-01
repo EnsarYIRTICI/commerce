@@ -2,8 +2,8 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository, TreeRepository } from 'typeorm';
 import { ModuleRef } from '@nestjs/core';
-import { TreeEntity } from '@entities/tree.entity';
-import { StaticEntity } from '@entities/static.entity';
+import { ITreeEntity } from '@interface/ITreeEntity';
+import { IStaticEntity } from '@interface/IStaticEntity';
 
 @Injectable()
 export class SeedService {
@@ -22,7 +22,7 @@ export class SeedService {
     data: Array<{ [key: string]: any }>,
   ): Promise<void> {
     for (const item of data) {
-      const repository: Repository<StaticEntity> =
+      const repository: Repository<IStaticEntity> =
         await this.getRepository(entityClass);
 
       const existingItem = await repository.findOne({
@@ -40,7 +40,7 @@ export class SeedService {
     treeData: any[],
     parent: T = null,
   ): Promise<void> {
-    const treeRepository: TreeRepository<TreeEntity> =
+    const treeRepository: TreeRepository<ITreeEntity> =
       await this.getRepository(entityClass);
 
     for (const nodeData of treeData) {
