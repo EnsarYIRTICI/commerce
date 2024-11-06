@@ -26,6 +26,6 @@ import { SharpService } from 'src/services/sharp.service';
 })
 export class ProductModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FormDataMiddleware).forRoutes('products');
+    consumer.apply(FormDataMiddleware).forRoutes('products/create');
   }
 }

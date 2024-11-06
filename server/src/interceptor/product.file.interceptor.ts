@@ -59,7 +59,7 @@ export class ProductFileInterceptor implements NestInterceptor {
                     image.buffer,
                     image.buffer.length,
                     bucketName,
-                    baseImageName + '_' + image.name,
+                    image.name,
                     file.mimetype,
                   );
                 }

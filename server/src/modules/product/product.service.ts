@@ -12,7 +12,6 @@ import { ProductAttributeValue } from '@modules/product_attribute_value/product_
 @Injectable()
 export class ProductService {
   constructor(
-    private minioService: MinioService,
     private dataSource: DataSource,
 
     @InjectRepository(Product)
@@ -132,6 +131,18 @@ export class ProductService {
 
       await queryRunner.release();
     }
+  }
+
+  async findProducts() {
+    return await this.productRepository.find({
+      relations: {
+        categories: true,
+        variants: {
+          images: true,
+          attributeValues: true,
+        },
+      },
+    });
   }
 
   findAll() {

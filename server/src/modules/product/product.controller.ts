@@ -22,7 +22,6 @@ import { Roles } from '@decorators/role.decorator';
 import { ProductFileInterceptor } from 'src/interceptor/product.file.interceptor';
 
 @ApiBearerAuth()
-@Roles('public')
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -40,6 +39,11 @@ export class ProductController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  @Get('all')
+  async findProducts() {
+    return await this.productService.findProducts();
   }
 
   @Get()
