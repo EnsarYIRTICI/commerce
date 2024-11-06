@@ -18,14 +18,8 @@ export class ProductImage {
   @Column({ unique: true })
   name: string;
 
-  @Column()
-  url: string;
-
-  @Column()
-  format: string;
-
   // Relationships for the entity
 
   @ManyToOne(() => ProductVariant, (variant) => variant.images)
-  product: ProductVariant;
+  productVariant: ProductVariant;
 }

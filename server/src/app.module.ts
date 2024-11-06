@@ -28,6 +28,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ProductAttribute } from '@modules/product_attribute/product_attribute.entity';
 import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
 import { productAttributesJson } from '@common/product_attributes';
+import { MinioService } from '@database/minio/minio.service';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { productAttributesJson } from '@common/product_attributes';
     AppService,
     RedisService,
     SeedService,
+    MinioService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
@@ -64,6 +66,7 @@ export class AppModule {
   constructor(
     private readonly seedService: SeedService,
     private readonly redisService: RedisService,
+    private readonly minioService: MinioService,
   ) {}
 
   async onModuleInit() {
@@ -128,15 +131,7 @@ export class AppModule {
     //   }
     // }
 
+    await this.minioService.testConnection();
     await this.redisService.connect();
-
-    // for (const items of seedData) {
-    //   await this.redisService.set(
-    //     items.entity.name,
-    //     JSON.stringify(items.data),
-    //   );
-
-    //   console.log('--> Cache', items.entity.name);
-    // }
   }
 }

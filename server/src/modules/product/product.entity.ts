@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToOne,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 import { Category } from '../category/category.entity';
@@ -31,13 +32,10 @@ export class Product {
 
   // Relationships for the entity
 
-  @ManyToOne(() => Category, (category) => category.products, {
-    nullable: false,
-  })
-  category: Category;
+  @ManyToMany(() => Category, { cascade: true })
+  @JoinTable({ name: 'product_category_set' })
+  categories: Category[];
 
-  @OneToMany(() => ProductVariant, (productVariant) => productVariant.product, {
-    nullable: false,
-  })
+  @OneToMany(() => ProductVariant, (productVariant) => productVariant.product)
   variants: ProductVariant[];
 }

@@ -3,21 +3,37 @@ import { Client } from 'minio';
 
 @Injectable()
 export class MinioService {
-  private minioClient: Client;
+  private minioClient = new Client({
+    endPoint: process.env.MINIO_ENDPOINT,
+    port: parseInt(process.env.MINIO_PORT, 10),
+    useSSL: process.env.MINIO_USE_SSL === 'true',
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+  });
 
-  constructor() {
-    this.minioClient = new Client({
-      endPoint: process.env.MINIO_ENDPOINT,
-      port: parseInt(process.env.MINIO_PORT, 10),
-      useSSL: process.env.MINIO_USE_SSL === 'true',
-      accessKey: process.env.MINIO_ACCESS_KEY,
-      secretKey: process.env.MINIO_SECRET_KEY,
-    });
+  async testConnection() {
+    try {
+      const buckets = await this.minioClient.listBuckets();
+
+      for (const bucket of buckets) {
+        console.log('--> Bucket', bucket.name);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  // Dosya yükleme
+  async ensureBucketExists(bucketName: string) {
+    const bucketExists = await this.minioClient.bucketExists(bucketName);
 
-  async uploadImage(
+    console.log('Bucket Exist: ', bucketExists);
+
+    if (!bucketExists) {
+      await this.minioClient.makeBucket(bucketName, 'us-east-1');
+    }
+  }
+
+  async uploadFile(
     buffer: Buffer,
     size: number,
     bucketName: string,
@@ -28,21 +44,10 @@ export class MinioService {
       'Content-Type': mimeType,
     });
 
-    return `${bucketName}/${objectName}`;
+    return objectName;
   }
 
-  // Bucket oluşturma
-
-  async ensureBucketExists(bucketName: string) {
-    const bucketExists = await this.minioClient.bucketExists(bucketName);
-    if (!bucketExists) {
-      await this.minioClient.makeBucket(bucketName, 'us-east-1');
-    }
-  }
-
-  // Dosya silme
-
-  async deleteImage(bucketName: string, objectName: string) {
+  async deleteFile(bucketName: string, objectName: string) {
     await this.minioClient.removeObject(bucketName, objectName);
   }
 }

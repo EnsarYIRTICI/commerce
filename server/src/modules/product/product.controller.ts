@@ -9,14 +9,17 @@ import {
   UseInterceptors,
   UploadedFile,
   UploadedFiles,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { errorMessages } from '@common/errorMessages';
 import { CreateProductDto } from './dto/create_product.dto';
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { Roles } from '@decorators/role.decorator';
+import { ProductFileInterceptor } from 'src/interceptor/product.file.interceptor';
 
 @ApiBearerAuth()
 @Roles('public')
@@ -25,18 +28,17 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post('create')
-  @ApiBody({ type: CreateProductDto })
+  @UseInterceptors(ProductFileInterceptor)
   async createProduct(@Body() createProductDto: CreateProductDto) {
     try {
-      const product = await this.productService.createProduct(createProductDto);
-      return product;
+      return await this.productService.createProduct(createProductDto);
     } catch (error) {
       console.log(error);
 
-      return {
-        statusCode: 500,
-        message: errorMessages.INTERNAL_SERVER_ERROR,
-      };
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

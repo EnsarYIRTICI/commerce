@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,12 +13,18 @@ async function bootstrap() {
   app.enableCors({
     origin: configService.get('CORS_ORIGIN'),
     methods: configService.get('CORS_METHODS'),
-    credentials: configService.get<boolean>('CORS_CREDENTIALS'),
+    credentials: configService.get('CORS_CREDENTIALS') === 'true',
   });
 
   app.setGlobalPrefix('api');
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.use(cookieParser());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')

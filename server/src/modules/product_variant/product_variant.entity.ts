@@ -11,7 +11,6 @@ import { ProductAttributeValue } from '@modules/product_attribute_value/product_
 import { PriceHistory } from '@modules/price_history/price_history.entity';
 import { ProductReview } from '@modules/product_review/product_review.entity';
 import { Product } from '@modules/product/product.entity';
-import { ProductVariantValueSet } from '@modules/product_variant_value_set/product_variant_value_set.entity';
 import { ProductImage } from '@modules/product_image/product_image.entity';
 import { WishlistItem } from '@modules/wishlist_item/wishlist_item.entity';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
@@ -38,15 +37,12 @@ export class ProductVariant {
 
   // Relationships for the entity
 
-  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
-    nullable: false,
-  })
+  @OneToMany(() => ProductImage, (productImage) => productImage.productVariant)
   images: ProductImage[];
 
-  @ManyToMany(() => ProductVariantValueSet, (valueItem) => valueItem.variant, {
-    nullable: false,
-  })
-  attributeValues: ProductVariantValueSet[];
+  @ManyToMany(() => ProductAttributeValue, { cascade: true })
+  @JoinTable({ name: 'product_variant_value_set' })
+  attributeValues: ProductAttributeValue[];
 
   @OneToMany(() => PriceHistory, (priceHistory) => priceHistory.productVariant)
   priceHistory: PriceHistory[];

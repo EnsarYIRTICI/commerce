@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Req,
   Get,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -18,6 +19,8 @@ import { RedisService } from '@database/redis/redis.service';
 import { RequestUtil } from '@utils/request.util';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
+import { Response } from 'express';
+
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -28,7 +31,10 @@ export class AuthController {
 
   @Roles('public')
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const user = await this.authService.validateUser(
       loginDto.email,
       loginDto.password,
@@ -48,6 +54,13 @@ export class AuthController {
     };
 
     const token = this.jwtService.sign(payload);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: 'strict',
+    });
 
     return {
       message: successMessages.LOGIN_SUCCESS,

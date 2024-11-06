@@ -26,7 +26,4 @@ export class Category {
 
   @TreeParent()
   parent: Category;
-
-  @OneToMany(() => Product, (product) => product.category)
-  products: Product[];
 }
