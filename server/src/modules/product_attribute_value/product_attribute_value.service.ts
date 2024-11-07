@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProductAttributeValue } from './product_attribute_value.entity';
 import { Roles } from '@decorators/role.decorator';
 
@@ -10,6 +10,14 @@ export class ProductAttributeValueService {
     @InjectRepository(ProductAttributeValue)
     private product_attribute_valueRepository: Repository<ProductAttributeValue>,
   ) {}
+
+  async findByIds(ids: number[]) {
+    return await this.product_attribute_valueRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
+  }
 
   findAll() {
     return this.product_attribute_valueRepository.find();

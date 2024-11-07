@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, TreeRepository } from 'typeorm';
+import { In, Repository, TreeRepository } from 'typeorm';
 import { Category } from './category.entity';
 
 @Injectable()
@@ -12,6 +12,13 @@ export class CategoryService {
     private readonly categoryTreeRepository: TreeRepository<Category>,
   ) {}
 
+  async findByIds(ids: number[]) {
+    return await this.categoryRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
+  }
   async getCategoryTree() {
     return await this.categoryTreeRepository.findTrees();
   }

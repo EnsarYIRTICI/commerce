@@ -26,6 +26,9 @@ export class ProductVariant {
   @Column({ unique: true })
   name: string;
 
+  @Column({ unique: true })
+  slug: string;
+
   @Column()
   sku: string;
 

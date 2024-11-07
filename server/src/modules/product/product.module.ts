@@ -10,6 +10,9 @@ import { Category } from '@modules/category/category.entity';
 import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
 import { FormDataMiddleware } from 'src/middleware/formdata.middleware';
 import { SharpService } from 'src/services/sharp.service';
+import { SlugService } from 'src/services/slug.service';
+import { CategoryService } from '@modules/category/category.service';
+import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
 
 @Module({
   imports: [
@@ -21,7 +24,14 @@ import { SharpService } from 'src/services/sharp.service';
       ProductAttributeValue,
     ]),
   ],
-  providers: [ProductService, MinioService, SharpService],
+  providers: [
+    ProductService,
+    CategoryService,
+    ProductAttributeValueService,
+    MinioService,
+    SharpService,
+    SlugService,
+  ],
   controllers: [ProductController],
 })
 export class ProductModule implements NestModule {

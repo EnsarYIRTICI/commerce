@@ -10,12 +10,11 @@ export class SharpService {
 
   async processImage(buffer: Buffer) {
     const sizes = [
-      { name: 'xs', width: 24 },
-      { name: 's', width: 32 },
-      { name: 'm', width: 64 },
-      { name: 'l', width: 128 },
-      { name: 'xl', width: 256 },
-      { name: 'xxl', width: 512 },
+      { name: 'xs', width: 32 },
+      { name: 's', width: 64 },
+      { name: 'm', width: 128 },
+      { name: 'l', width: 256 },
+      { name: 'xl', width: 512 },
     ];
 
     const baseImageName = uuidv4();
