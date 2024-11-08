@@ -13,9 +13,9 @@ import { User } from '@modules/user/user.entity';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@decorators/role.decorator';
 import { errorMessages } from '@common/errorMessages';
-import { DateUtil } from '@utils/date.util';
-import { RedisService } from '@database/redis/redis.service';
-import { RequestUtil } from '@utils/request.util';
+import { RedisService } from 'src/services/redis.service';
+import { getToken } from '@utils/request.util';
+import { compareDates } from '@utils/date.util';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -39,7 +39,7 @@ export class JwtAuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
 
-    const token = RequestUtil.getToken(request);
+    const token = getToken(request);
 
     if (!token) {
       throw new HttpException(
@@ -82,12 +82,7 @@ export class JwtAuthGuard implements CanActivate {
       throw new HttpException(errorMessages.USER_BLOCKED, HttpStatus.FORBIDDEN);
     }
 
-    if (
-      !DateUtil.compareDates(
-        user.lastPasswordChange,
-        decoded.lastPasswordChange,
-      )
-    ) {
+    if (!compareDates(user.lastPasswordChange, decoded.lastPasswordChange)) {
       throw new HttpException(
         errorMessages.TOKEN_INVALID,
         HttpStatus.UNAUTHORIZED,

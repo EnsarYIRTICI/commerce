@@ -6,19 +6,15 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
-import { MinioService } from '@database/minio/minio.service';
-import { v4 as uuidv4 } from 'uuid';
-import * as fs from 'fs';
-import { SharpService } from 'src/services/sharp.service';
-import { plainToInstance } from 'class-transformer';
-import { CreateProductDto } from '@modules/product/dto/create_product.dto';
+import { MinioService } from 'src/services/minio.service';
+
+import { processImage } from '@utils/sharp.util';
+
+import fs from 'fs';
 
 @Injectable()
 export class ProductFileInterceptor implements NestInterceptor {
-  constructor(
-    private readonly minioService: MinioService,
-    private readonly sharpService: SharpService,
-  ) {}
+  constructor(private readonly minioService: MinioService) {}
 
   async intercept(
     context: ExecutionContext,
@@ -52,7 +48,7 @@ export class ProductFileInterceptor implements NestInterceptor {
                 // console.log('Interceptor Buffer Length', buffer.length);
 
                 const { processedImages, baseImageName } =
-                  await this.sharpService.processImage(buffer);
+                  await processImage(buffer);
 
                 for (const image of processedImages) {
                   await this.minioService.uploadFile(

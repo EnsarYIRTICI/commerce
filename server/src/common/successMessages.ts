@@ -1,4 +1,4 @@
 export const successMessages = {
-  LOGIN_SUCCESS: 'Giriş başarılı',
-  REGISTRATION_SUCCESS: 'Kayıt başarılı',
+  LOGIN_SUCCESS: 'Login successful',
+  REGISTRATION_SUCCESS: 'Registration successful',
 };

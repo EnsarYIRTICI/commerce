@@ -1,14 +1,17 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { createClient } from 'redis';
+import { createClient, RedisClientType } from 'redis';
 
 @Injectable()
 export class RedisService {
-  private client;
+  private readonly client: RedisClientType;
 
-  async connect() {
+  constructor() {
     this.client = createClient({
       url: process.env.REDIS_URL,
     });
+  }
+
+  async connect() {
     await this.client.connect();
     console.log('--> Connected to Redis');
   }
@@ -32,7 +35,7 @@ export class RedisService {
   }
 
   async addTokenToBlacklist(token: string, expiresIn: number): Promise<void> {
-    await this.client.set(token, 'blacklisted', 'EX', expiresIn);
+    await this.client.set(token, 'blacklisted', {});
   }
 
   async isTokenBlacklisted(token: string): Promise<boolean> {

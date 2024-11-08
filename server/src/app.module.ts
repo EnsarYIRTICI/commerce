@@ -7,9 +7,8 @@ import { AppService } from './app.service';
 
 import typeorm from '@config/typeorm';
 
-import { ImportUtil } from '@utils/import.util';
-import { RedisService } from '@database/redis/redis.service';
-import { SeedService } from '@database/seed/seed.service';
+import { RedisService } from 'src/services/redis.service';
+import { SeedService } from 'src/services/seed.service';
 
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/auth.guard';
@@ -28,7 +27,8 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ProductAttribute } from '@modules/product_attribute/product_attribute.entity';
 import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
 import { productAttributesJson } from '@common/product_attributes';
-import { MinioService } from '@database/minio/minio.service';
+import { MinioService } from 'src/services/minio.service';
+import { getImports } from '@utils/import.util';
 
 @Module({
   imports: [
@@ -47,7 +47,7 @@ import { MinioService } from '@database/minio/minio.service';
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
     }),
     AuthModule,
-    ...ImportUtil.get('module'),
+    ...getImports('module'),
   ],
   controllers: [AppController],
   providers: [

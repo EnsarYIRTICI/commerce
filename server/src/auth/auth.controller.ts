@@ -15,11 +15,11 @@ import { errorMessages } from '@common/errorMessages';
 import { successMessages } from '@common/successMessages';
 import { RegisterDto } from './dto/register.dto';
 import { Roles } from '@decorators/role.decorator';
-import { RedisService } from '@database/redis/redis.service';
-import { RequestUtil } from '@utils/request.util';
+import { RedisService } from 'src/services/redis.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { Response } from 'express';
+import { getToken } from '@utils/request.util';
 
 @Controller('auth')
 export class AuthController {
@@ -109,7 +109,7 @@ export class AuthController {
   @Roles('user')
   @Get('logout')
   async logout(@Req() request: Request) {
-    const token = RequestUtil.getToken(request);
+    const token = getToken(request);
 
     const oneWeekInSeconds = 7 * 24 * 60 * 60;
 

@@ -11,6 +11,7 @@ import {
   UploadedFiles,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
@@ -25,9 +26,9 @@ import { Category } from '@modules/category/category.entity';
 import { ProductVariant } from '@modules/product_variant/product_variant.entity';
 import { ProductImage } from '@modules/product_image/product_image.entity';
 import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
-import { SlugService } from 'src/services/slug.service';
 import { CategoryService } from '@modules/category/category.service';
 import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
+import { createSlug } from '@utils/string.util';
 
 @ApiBearerAuth()
 @Controller('products')
@@ -37,7 +38,6 @@ export class ProductController {
     private readonly categoryService: CategoryService,
     private readonly product_attribute_valueService: ProductAttributeValueService,
     private readonly dataSource: DataSource,
-    private readonly slugService: SlugService,
   ) {}
 
   @Post('create')
@@ -60,7 +60,7 @@ export class ProductController {
 
         // Product
 
-        const slug = this.slugService.createSlug(createProductDto.name);
+        const slug = createSlug(createProductDto.name);
 
         let product = queryRunner.manager.create(Product, {
           categories,
@@ -84,7 +84,7 @@ export class ProductController {
 
           // Variant
 
-          const slug = this.slugService.createSlug(createVariantDto.name);
+          const slug = createSlug(createVariantDto.name);
 
           let productVariant = queryRunner.manager.create(ProductVariant, {
             name: createVariantDto.name,
@@ -168,13 +168,20 @@ export class ProductController {
     return await this.productService.findAllDetails();
   }
 
+  @Get('detail/:slug')
+  async findBySlug(@Param('slug') slug: string) {
+    return await this.productService.findBySlug(slug);
+  }
+
   @Get()
   findAll() {
     return this.productService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log('ÇALIŞTI');
+
     return this.productService.findOne(id);
   }
 

@@ -22,10 +22,10 @@ export class Order {
   @Column({ unique: true })
   orderNumber: string;
 
-  @Column({ type: 'date' })
+  @Column()
   createdAt: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ nullable: true })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.orders, { nullable: false })

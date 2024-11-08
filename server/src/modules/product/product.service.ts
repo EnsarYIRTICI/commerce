@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { Product } from './product.entity';
-import { MinioService } from '@database/minio/minio.service';
+import { MinioService } from 'src/services/minio.service';
 import { CreateProductDto } from './dto/create_product.dto';
 import { ProductVariant } from '@modules/product_variant/product_variant.entity';
 import { ProductImage } from '@modules/product_image/product_image.entity';
@@ -20,6 +20,20 @@ export class ProductService {
 
   async findAllDetails() {
     return await this.productRepository.find({
+      relations: {
+        categories: true,
+        variants: {
+          images: true,
+        },
+      },
+    });
+  }
+
+  async findBySlug(slug: string) {
+    return await this.productRepository.findOne({
+      where: {
+        slug: slug,
+      },
       relations: {
         categories: true,
         variants: {
