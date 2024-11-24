@@ -9,13 +9,15 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { OrderItem } from '../order_item/order_item.entity';
-import { PaymentDetail } from '../payment_detail/payment_detail.entity';
 import { AddressDetail } from '../address_detail/address_detail.entity';
-import { ShipmentDetail } from '../shipment_detail/shipment_detail.entity';
 import { OrderStatus } from '../order_status/order_status.entity';
+import { Payment } from '@modules/payment/payment.entity';
+import { Shipment } from '@modules/shipment/shipment.entity';
 
 @Entity()
 export class Order {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,6 +30,8 @@ export class Order {
   @Column({ nullable: true })
   updatedAt: Date;
 
+  // Relationships for the entity
+
   @ManyToOne(() => User, (user) => user.orders, { nullable: false })
   user: User;
 
@@ -39,7 +43,17 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
     nullable: false,
   })
-  items: OrderItem[];
+  orderItems: OrderItem[];
+
+  @OneToOne(() => Payment, (entity) => entity.order, {
+    nullable: false,
+  })
+  paymentDetails: Payment[];
+
+  @OneToOne(() => Shipment, (entity) => entity.order, {
+    nullable: false,
+  })
+  shipmentDetails: Shipment;
 
   @ManyToOne(() => AddressDetail, { nullable: false })
   @JoinColumn({ name: 'shippingAddressId' })
@@ -48,14 +62,4 @@ export class Order {
   @ManyToOne(() => AddressDetail, { nullable: false })
   @JoinColumn({ name: 'billingAddressId' })
   billingAddress: AddressDetail;
-
-  @OneToOne(() => PaymentDetail, (paymentDetail) => paymentDetail.order, {
-    nullable: false,
-  })
-  paymentDetails: PaymentDetail;
-
-  @OneToOne(() => ShipmentDetail, (shipmentDetail) => shipmentDetail.order, {
-    nullable: false,
-  })
-  shipmentDetails: ShipmentDetail;
 }

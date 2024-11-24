@@ -1,4 +1,6 @@
-import { User } from '@modules/user/user.entity';
+import { Order } from '@modules/order/order.entity';
+import { PaymentMethod } from '@modules/payment_method/payment_method.entity';
+import { Refund } from '@modules/refund/refund.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,21 +11,42 @@ import {
 
 @Entity()
 export class Payment {
-  // Fields for the entity
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ unique: true })
-  name: string;
 
   @Column()
   amount: number;
 
   @Column()
-  method: string;
+  currencyCode: string;
 
-  // Relationships for the entity
+  @Column()
+  referenceNumber: string;
 
-  @ManyToOne(() => User, (user) => user.payments)
-  user: User;
+  @Column()
+  paymentGatewayType?: string;
+
+  @Column()
+  paymentProviderType?: string;
+
+  @Column()
+  confirmed: boolean;
+
+  @Column()
+  status: string;
+
+  @Column()
+  createdDate: Date;
+
+  @Column()
+  archivedDate?: Date;
+
+  @ManyToOne(() => PaymentMethod, (method) => method.paymentDetail)
+  paymentMethod: PaymentMethod;
+
+  @ManyToOne(() => Order, (order) => order.paymentDetails, { nullable: false })
+  order: Order;
+
+  @OneToMany(() => Refund, (refund) => refund.payment, { cascade: true })
+  refunds: Refund[];
 }

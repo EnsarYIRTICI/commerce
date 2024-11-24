@@ -7,26 +7,52 @@ import {
   Put,
   Delete,
   Req,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './order.entity';
 import { Roles } from '@decorators/role.decorator';
+import { DataSource, QueryFailedError } from 'typeorm';
+import { CreateOrderDto } from './dto/createOrderDto';
+import { OrderDomain } from 'src/domain/order.domain';
+import { errorMessages } from '@common/errorMessages';
 
 @Controller('orders')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly orderDomain: OrderDomain,
+    private readonly dataSource: DataSource,
+  ) {}
 
-  @Roles('user')
-  @Get('my-orders')
-  findMyOrders(@Req() request: Request) {
-    const userId = request['user'].id;
-    return this.orderService.findOrdersByUserId(userId);
+  @Post()
+  async createFull(
+    @Req() request: Request,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
+    try {
+      return await this.orderDomain.create(request, createOrderDto);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        console.log(error.message);
+
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+
+      console.error(error);
+
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  @Get('user/:userId')
-  findOrdersByUser(@Param('userId') userId: number) {
-    return this.orderService.findOrdersByUserId(userId);
-  }
+  // CRUD
 
   @Get()
   findAll() {

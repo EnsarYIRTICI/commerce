@@ -1,7 +1,6 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProductVariant } from './product_variant.entity';
 
 @Injectable()
@@ -10,6 +9,14 @@ export class ProductVariantService {
     @InjectRepository(ProductVariant)
     private product_variantRepository: Repository<ProductVariant>,
   ) {}
+
+  async findByIds(ids: number[]): Promise<ProductVariant[]> {
+    return await this.product_variantRepository.find({
+      where: {
+        id: In(ids),
+      },
+    });
+  }
 
   findAll() {
     return this.product_variantRepository.find();

@@ -29,6 +29,8 @@ import { ProductAttributeValue } from '@modules/product_attribute_value/product_
 import { productAttributesJson } from '@common/product_attributes';
 import { MinioService } from 'src/services/minio.service';
 import { getImports } from '@utils/import.util';
+import { Subscription } from '@modules/subscription/subscription.entity';
+import { StripeService } from 'src/services/stripe.service';
 
 @Module({
   imports: [
@@ -55,6 +57,7 @@ import { getImports } from '@utils/import.util';
     RedisService,
     SeedService,
     MinioService,
+    StripeService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

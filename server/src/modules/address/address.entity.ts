@@ -15,19 +15,25 @@ export class Address {
   id: number;
 
   @Column({ unique: true })
-  name: string;
+  name: string; // Adresin adı (örneğin, "Home", "Work" gibi)
 
   @Column()
-  street: string;
+  country: string; // Ülke
 
   @Column()
-  city: string;
+  region: string; // Bölge (örneğin, eyalet veya il)
 
   @Column()
-  state: string;
+  city: string; // Şehir
 
   @Column()
-  postalCode: string;
+  postalCode: string; // Posta kodu
+
+  @Column()
+  addressLine1: string; // Adres satırı 1
+
+  @Column({ nullable: true })
+  addressLine2: string; // Adres satırı 2 (Opsiyonel)
 
   // Relationships for the entity
 

@@ -1,7 +1,6 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { OrderItem } from './order_item.entity';
 
 @Injectable()
@@ -10,6 +9,10 @@ export class OrderItemService {
     @InjectRepository(OrderItem)
     private order_itemRepository: Repository<OrderItem>,
   ) {}
+
+  async findByIds(ids: number[]) {
+    return await this.order_itemRepository.find({ where: { id: In(ids) } });
+  }
 
   findAll() {
     return this.order_itemRepository.find();

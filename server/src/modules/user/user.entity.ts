@@ -16,6 +16,7 @@ import { Order } from '../order/order.entity';
 import { Payment } from '../payment/payment.entity';
 import { Address } from '../address/address.entity';
 import { ActivityLog } from '../activity_log/activity_log.entity';
+import { Subscription } from '@modules/subscription/subscription.entity';
 
 @Entity()
 export class User {
@@ -45,6 +46,9 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   lastPasswordChange: Date;
 
+  @Column({ nullable: true })
+  stripeCustomerId: string;
+
   // Relationships for the entity
 
   @ManyToOne(() => Role, (role) => role.users, { nullable: false })
@@ -65,12 +69,12 @@ export class User {
   @OneToMany(() => ProductReview, (productReview) => productReview.user)
   reviews: ProductReview[];
 
-  @OneToMany(() => Payment, (payment) => payment.user)
-  payments: Payment[];
-
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
 
   @OneToMany(() => ActivityLog, (activityLog) => activityLog.user)
   activityLogs: ActivityLog[];
+
+  @OneToMany(() => Subscription, (subscription) => subscription.user)
+  subscriptions: Subscription[];
 }
