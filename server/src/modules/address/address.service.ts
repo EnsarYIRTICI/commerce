@@ -1,8 +1,8 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from './address.entity';
+import { User } from '@modules/user/user.entity';
 
 @Injectable()
 export class AddressService {
@@ -10,6 +10,17 @@ export class AddressService {
     @InjectRepository(Address)
     private addressRepository: Repository<Address>,
   ) {}
+
+  async validateUserAddressById(user: User, addressId: number) {
+    return await this.addressRepository.findOne({
+      where: {
+        id: addressId,
+        user: {
+          id: user.id,
+        },
+      },
+    });
+  }
 
   findAll() {
     return this.addressRepository.find();

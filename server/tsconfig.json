@@ -20,14 +20,15 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@modules/*": ["src/modules/*"], 
-      "@entities/*": ["src/entities/*"], 
-      "@utils/*": ["src/utils/*"], 
       "@decorators/*": ["src/decorators/*"], 
-      "@database/*": ["src/database/*"],
       "@config/*": ["src/config/*"],   
       "@auth/*": ["src/auth/*"],
       "@common/*": ["src/common/*"],   
-      "@interface/*": ["src/interface/*"]      
+      "@interface/*": ["src/interface/*"],
+      "@utils/*": ["src/utils/*"], 
+      "@services/*": ["src/services/*"],
+      "@middleware/*": ["src/middleware/*"],
+      "@interceptor/*": ["src/interceptor/*"],
     }
   }
 }

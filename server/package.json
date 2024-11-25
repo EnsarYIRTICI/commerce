@@ -6,15 +6,16 @@
   "private": true,
   "license": "UNLICENSED",
   "_moduleAliases": {
-    "@modules": "dist/modules/*",
-    "@entities": "dist/entities/*",
-    "@utils": "dist/utils/*",
-    "@decorators": "dist/decorators/*",
-    "@database": "dist/database/*",
-    "@config": "dist/config/*",
-    "@auth": "dist/auth/*",
-    "@common": "dist/common/*",
-    "@interface": "dist/interface/*"
+    "@modules": "dist/modules",
+    "@decorators": "dist/decorators",
+    "@config": "dist/config",
+    "@auth": "dist/auth",
+    "@common": "dist/common",
+    "@interface": "dist/interface",
+    "@utils": "dist/utils",
+    "@services": "dist/services",
+    "@middleware": "dist/middleware",
+    "@interceptor": "dist/interceptor"
   },
   "scripts": {
     "build": "nest build",

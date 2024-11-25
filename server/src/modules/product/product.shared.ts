@@ -11,16 +11,22 @@ import { ProductAttributeValue } from '@modules/product_attribute_value/product_
 import { FormDataMiddleware } from 'src/middleware/formdata.middleware';
 import { CategoryService } from '@modules/category/category.service';
 import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
-import { ProductSharedModule } from './product.shared';
-import { ProductDomainService } from '@modules/product/product.domain';
 
 @Module({
-  imports: [ProductSharedModule, TypeOrmModule.forFeature([Product])],
-  providers: [ProductService, ProductDomainService],
-  controllers: [ProductController],
+  imports: [
+    TypeOrmModule.forFeature([
+      Category,
+      ProductVariant,
+      ProductImage,
+      ProductAttributeValue,
+    ]),
+  ],
+  providers: [CategoryService, ProductAttributeValueService, MinioService],
+  exports: [
+    CategoryService,
+    ProductAttributeValueService,
+    MinioService,
+    TypeOrmModule,
+  ],
 })
-export class ProductModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FormDataMiddleware).forRoutes('products/create');
-  }
-}
+export class ProductSharedModule {}

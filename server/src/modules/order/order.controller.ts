@@ -15,19 +15,21 @@ import { Order } from './order.entity';
 import { Roles } from '@decorators/role.decorator';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { CreateOrderDto } from './dto/createOrderDto';
-import { OrderDomain } from 'src/domain/order.domain';
+import { OrderDomainService } from '@modules/order/order.domain';
 import { errorMessages } from '@common/errorMessages';
+
+import { Request } from 'express';
 
 @Controller('orders')
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
-    private readonly orderDomain: OrderDomain,
+    private readonly orderDomain: OrderDomainService,
     private readonly dataSource: DataSource,
   ) {}
 
   @Post()
-  async createFull(
+  async domainCreate(
     @Req() request: Request,
     @Body() createOrderDto: CreateOrderDto,
   ) {

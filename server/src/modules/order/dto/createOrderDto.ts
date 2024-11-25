@@ -7,9 +7,13 @@ import {
   IsInt,
   IsBoolean,
   IsOptional,
+  MinLength,
+  IsNumberString,
+  Length,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 
 export class CreateOrderDto {
   @IsNumber()
@@ -22,6 +26,8 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => CreateOrderItemDto)
   orderItems: CreateOrderItemDto[];
+
+  paymentCard: PaymentCardDto;
 }
 
 export class CreateOrderItemDto {

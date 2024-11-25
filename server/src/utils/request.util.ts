@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 function getToken(request: Request): string | null {
   const authHeader = request.headers['authorization'];
 

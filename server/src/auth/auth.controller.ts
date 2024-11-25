@@ -18,7 +18,7 @@ import { Roles } from '@decorators/role.decorator';
 import { RedisService } from 'src/services/redis.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { getToken } from '@utils/request.util';
 
 @Controller('auth')

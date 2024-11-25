@@ -43,11 +43,20 @@ export class User {
   @Column({ nullable: true })
   updatedAt: Date;
 
+  @Column({ nullable: true })
+  lastLogin: Date;
+
   @Column({ type: 'timestamp', nullable: true })
   lastPasswordChange: Date;
 
   @Column({ nullable: true })
-  stripeCustomerId: string;
+  iyzipayId: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
+
+  @Column({ nullable: true })
+  identityNumber: string;
 
   // Relationships for the entity
 

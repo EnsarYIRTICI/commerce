@@ -29,12 +29,14 @@ import { ProductAttributeValue } from '@modules/product_attribute_value/product_
 import { CategoryService } from '@modules/category/category.service';
 import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
 import { createSlug } from '@utils/string.util';
+import { ProductDomainService } from '@modules/product/product.domain';
 
 @ApiBearerAuth()
 @Controller('products')
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
+    private readonly productDomain: ProductDomainService,
     private readonly categoryService: CategoryService,
     private readonly product_attribute_valueService: ProductAttributeValueService,
     private readonly dataSource: DataSource,
@@ -44,9 +46,9 @@ export class ProductController {
 
   @Post('create')
   @UseInterceptors(ProductFileInterceptor)
-  async createFull(@Body() createProductDto: CreateProductDto) {
+  async domainCreate(@Body() createProductDto: CreateProductDto) {
     try {
-      return await this.productService.createFull(createProductDto);
+      return await this.productDomain.create(createProductDto);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         console.log(error.message);

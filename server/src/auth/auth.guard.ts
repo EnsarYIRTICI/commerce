@@ -17,6 +17,8 @@ import { RedisService } from 'src/services/redis.service';
 import { getToken } from '@utils/request.util';
 import { compareDates } from '@utils/date.util';
 
+import { Response, Request } from 'express';
+
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
