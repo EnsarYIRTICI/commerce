@@ -3,19 +3,35 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
-import { MinioService } from 'src/services/minio.service';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
-import { ProductImage } from '@modules/product_image/product_image.entity';
-import { Category } from '@modules/category/category.entity';
-import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
+import { MinioService } from 'src/storage/minio.service';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { Category } from '@modules/product/category/category.entity';
+import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
 import { FormDataMiddleware } from 'src/middleware/formdata.middleware';
-import { CategoryService } from '@modules/category/category.service';
-import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
+import { CategoryService } from '@modules/product/category/category.service';
+import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 import { ProductSharedModule } from './product.shared';
 import { ProductDomainService } from '@modules/product/product.domain';
+import { ProductVariantModule } from './product_variant/product_variant.module';
+import { ProductImageModule } from './product_image/product_image.module';
+import { CategoryModule } from './category/category.module';
+import { PriceHistoryModule } from './price_history/price_history.module';
+import { ProductReviewModule } from './product_review/product_review.module';
+import { ProductAttributeModule } from './product_attribute/product_attribute.module';
+import { ProductAttributeValueModule } from './product_attribute_value/product_attribute_value.module';
 
 @Module({
-  imports: [ProductSharedModule, TypeOrmModule.forFeature([Product])],
+  imports: [
+    CategoryModule,
+    PriceHistoryModule,
+    ProductReviewModule,
+    ProductVariantModule,
+    ProductImageModule,
+    ProductAttributeModule,
+    ProductAttributeValueModule,
+    TypeOrmModule.forFeature([Product]),
+    ProductSharedModule,
+  ],
   providers: [ProductService, ProductDomainService],
   controllers: [ProductController],
 })

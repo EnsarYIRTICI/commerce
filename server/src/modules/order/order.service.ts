@@ -4,10 +4,11 @@ import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { CreateOrderDto } from './dto/createOrderDto';
 import { User } from '@modules/user/user.entity';
-import { OrderItem } from '@modules/order_item/order_item.entity';
-import { OrderItemService } from '@modules/order_item/order_item.service';
-import { ProductVariantService } from '@modules/product_variant/product_variant.service';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+
+import { OrderItem } from './order_item/order_item.entity';
+
+import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { errorMessages } from '@common/errorMessages';
 
 @Injectable()

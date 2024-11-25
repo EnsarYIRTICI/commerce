@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '@modules/user/user.entity'; // Kullanıcı ile ilişki
-import { Invoice } from '@modules/invoice/invoice.entity'; // Fatura ile ilişki
+import { Invoice } from '@modules/payment/invoice/invoice.entity'; // Fatura ile ilişki
 
 @Entity()
 export class Subscription {

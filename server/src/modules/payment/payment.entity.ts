@@ -1,6 +1,6 @@
 import { Order } from '@modules/order/order.entity';
 import { PaymentMethod } from '@modules/payment_method/payment_method.entity';
-import { Refund } from '@modules/refund/refund.entity';
+import { Refund } from '@modules/payment/refund/refund.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

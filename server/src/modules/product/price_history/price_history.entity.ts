@@ -5,7 +5,7 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Product } from '@modules/product/product.entity';
 
 @Entity()

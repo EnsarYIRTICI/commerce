@@ -6,8 +6,8 @@ import {
   ManyToOne,
   OneToOne,
 } from 'typeorm';
-import { CartItem } from '../cart_item/cart_item.entity';
 import { User } from '../user/user.entity';
+import { CartItem } from './cart_item/cart_item.entity';
 
 @Entity()
 export class ShoppingCart {

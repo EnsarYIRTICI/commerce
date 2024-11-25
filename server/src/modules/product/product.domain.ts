@@ -1,23 +1,22 @@
 import { Order } from '@modules/order/order.entity';
-import { OrderItem } from '@modules/order_item/order_item.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 
-import { ProductVariantService } from '@modules/product_variant/product_variant.service';
+import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { User } from '@modules/user/user.entity';
 import { CreateOrderDto } from '@modules/order/dto/createOrderDto';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { errorMessages } from '@common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
-import { CategoryService } from '@modules/category/category.service';
-import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
-import { Category } from '@modules/category/category.entity';
+import { CategoryService } from '@modules/product/category/category.service';
+import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
+import { Category } from '@modules/product/category/category.entity';
 import { CreateProductDto } from '@modules/product/dto/create_product.dto';
 import { createSlug } from '@utils/string.util';
 import { Product } from '@modules/product/product.entity';
-import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
-import { ProductImage } from '@modules/product_image/product_image.entity';
+import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
+import { ProductImage } from './product_image/product_image.entity';
 
 @Injectable()
 export class ProductDomainService {

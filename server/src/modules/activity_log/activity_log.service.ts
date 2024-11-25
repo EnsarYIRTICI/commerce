@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ActivityLog } from './activity_log.entity';
-import { ActionType } from '@modules/action_type/action_type.entity';
 import { User } from '@modules/user/user.entity';
+import { ActionType } from './action_type/action_type.entity';
 
 @Injectable()
 export class ActivityLogService {

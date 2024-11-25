@@ -2,16 +2,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { Product } from './product.entity';
-import { MinioService } from 'src/services/minio.service';
+import { MinioService } from 'src/storage/minio.service';
 import { CreateProductDto } from './dto/create_product.dto';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
-import { ProductImage } from '@modules/product_image/product_image.entity';
-import { Category } from '@modules/category/category.entity';
-import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { Category } from '@modules/product/category/category.entity';
+import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
 import { createSlug } from '@utils/string.util';
-import { CategoryService } from '@modules/category/category.service';
+import { CategoryService } from '@modules/product/category/category.service';
 import { errorMessages } from '@common/errorMessages';
-import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
+import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 
 @Injectable()
 export class ProductService {

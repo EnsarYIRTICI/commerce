@@ -1,13 +1,12 @@
 import { Order } from '@modules/order/order.entity';
-import { OrderItem } from '@modules/order_item/order_item.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 
-import { ProductVariantService } from '@modules/product_variant/product_variant.service';
+import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { User } from '@modules/user/user.entity';
 import { CreateOrderDto } from '@modules/order/dto/createOrderDto';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { errorMessages } from '@common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
 import { IyzicoService } from '@modules/payment/iyzico.service';
@@ -17,6 +16,7 @@ import { Request } from 'express';
 
 import { v4 as uuidv4 } from 'uuid';
 import { getOrderPaymentRequest } from '@utils/payment.util';
+import { OrderItem } from './order_item/order_item.entity';
 
 @Injectable()
 export class OrderDomainService {

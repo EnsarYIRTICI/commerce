@@ -7,14 +7,14 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
-import { PriceHistory } from '@modules/price_history/price_history.entity';
-import { ProductReview } from '@modules/product_review/product_review.entity';
+import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
+import { PriceHistory } from '@modules/product/price_history/price_history.entity';
+import { ProductReview } from '@modules/product/product_review/product_review.entity';
 import { Product } from '@modules/product/product.entity';
-import { ProductImage } from '@modules/product_image/product_image.entity';
-import { WishlistItem } from '@modules/wishlist_item/wishlist_item.entity';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
-import { OrderItem } from '@modules/order_item/order_item.entity';
+import { ProductImage } from '../product_image/product_image.entity';
+import { WishlistItem } from '@modules/wishlist/wishlist_item/wishlist_item.entity';
+import { OrderItem } from '@modules/order/order_item/order_item.entity';
+import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 
 @Entity()
 export class ProductVariant {

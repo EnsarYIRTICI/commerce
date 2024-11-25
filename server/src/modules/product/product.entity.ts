@@ -8,8 +8,8 @@ import {
   JoinTable,
 } from 'typeorm';
 
-import { Category } from '../category/category.entity';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { Category } from './category/category.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 
 @Entity()
 export class Product {

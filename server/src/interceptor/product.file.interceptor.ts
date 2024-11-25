@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
-import { MinioService } from 'src/services/minio.service';
+import { MinioService } from 'src/storage/minio.service';
 
 import { processImage } from '@utils/sharp.util';
 

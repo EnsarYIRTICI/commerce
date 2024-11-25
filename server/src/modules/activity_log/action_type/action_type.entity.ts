@@ -5,7 +5,7 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { ActivityLog } from '../activity_log/activity_log.entity';
+import { ActivityLog } from '../activity_log.entity';
 
 @Entity()
 export class ActionType {

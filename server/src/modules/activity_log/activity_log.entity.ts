@@ -6,7 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { ActionType } from '../action_type/action_type.entity';
+import { ActionType } from './action_type/action_type.entity';
 
 @Entity()
 export class ActivityLog {

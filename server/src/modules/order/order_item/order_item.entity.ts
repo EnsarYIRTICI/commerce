@@ -6,9 +6,8 @@ import {
   ManyToOne,
   OneToOne,
 } from 'typeorm';
-import { Order } from '../order/order.entity';
-import { Product } from '../product/product.entity';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { Order } from '../order.entity';
 
 @Entity()
 export class OrderItem {

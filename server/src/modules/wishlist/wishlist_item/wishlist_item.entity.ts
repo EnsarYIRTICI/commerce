@@ -5,9 +5,9 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { Wishlist } from '../wishlist/wishlist.entity';
-import { Product } from '../product/product.entity';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { Wishlist } from '../wishlist.entity';
 
 @Entity()
 export class WishlistItem {

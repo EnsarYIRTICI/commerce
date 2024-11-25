@@ -8,11 +8,11 @@ import {
   OneToOne,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { OrderItem } from '../order_item/order_item.entity';
-import { AddressDetail } from '../address_detail/address_detail.entity';
-import { OrderStatus } from '../order_status/order_status.entity';
+import { OrderStatus } from './order_status/order_status.entity';
 import { Payment } from '@modules/payment/payment.entity';
 import { Shipment } from '@modules/shipment/shipment.entity';
+import { OrderItem } from './order_item/order_item.entity';
+import { AddressDetail } from './address_detail/address_detail.entity';
 
 @Entity()
 export class Order {

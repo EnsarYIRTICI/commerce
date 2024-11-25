@@ -22,12 +22,11 @@ import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { Roles } from '@decorators/role.decorator';
 import { ProductFileInterceptor } from 'src/interceptor/product.file.interceptor';
 import { DataSource, QueryFailedError } from 'typeorm';
-import { Category } from '@modules/category/category.entity';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
-import { ProductImage } from '@modules/product_image/product_image.entity';
-import { ProductAttributeValue } from '@modules/product_attribute_value/product_attribute_value.entity';
-import { CategoryService } from '@modules/category/category.service';
-import { ProductAttributeValueService } from '@modules/product_attribute_value/product_attribute_value.service';
+import { Category } from '@modules/product/category/category.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
+import { CategoryService } from '@modules/product/category/category.service';
+import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 import { createSlug } from '@utils/string.util';
 import { ProductDomainService } from '@modules/product/product.domain';
 

@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Subscription } from '@modules/subscription/subscription.entity';
+import { Subscription } from '@modules/payment/subscription/subscription.entity';
 
 @Entity()
 export class Invoice {

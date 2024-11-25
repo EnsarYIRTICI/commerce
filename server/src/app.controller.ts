@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { successMessages } from '@common/successMessages';
 import { RegisterDto } from '@auth/dto/register.dto';
@@ -7,12 +14,27 @@ import { Roles } from '@decorators/role.decorator';
 import { errorMessages } from '@common/errorMessages';
 import { QueryFailedError } from 'typeorm';
 
-@Controller()
+@Controller('app')
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly jwtService: JwtService,
   ) {}
+
+  @Roles('public')
+  @Get('/seedData')
+  async seedData() {
+    try {
+      this.appService.seedData();
+    } catch (error) {
+      console.log(error);
+
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
   @Roles('public')
   @Get('/createAdmin')
@@ -61,10 +83,10 @@ export class AppController {
     } catch (error) {
       console.log(error);
 
-      return {
-        statusCode: 500,
-        message: errorMessages.INTERNAL_SERVER_ERROR,
-      };
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

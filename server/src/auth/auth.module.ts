@@ -5,9 +5,9 @@ import { AuthService } from './auth.service';
 import { User } from '@modules/user/user.entity';
 import { JwtService, JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth.guard';
-import { Role } from '@modules/role/role.entity';
-import { Status } from '@modules/status/status.entity';
-import { RedisService } from 'src/services/redis.service';
+import { Role } from '@modules/user/role/role.entity';
+import { Status } from '@modules/user/status/status.entity';
+import { RedisService } from 'src/cache/redis.service';
 
 @Module({
   imports: [

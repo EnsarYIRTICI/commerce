@@ -5,9 +5,9 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { ShoppingCart } from '../shopping_cart/shopping_cart.entity';
-import { Product } from '../product/product.entity';
-import { ProductVariant } from '@modules/product_variant/product_variant.entity';
+
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { ShoppingCart } from '../shopping_cart.entity';
 
 @Entity()
 export class CartItem {
