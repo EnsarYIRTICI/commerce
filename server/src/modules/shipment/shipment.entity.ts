@@ -32,9 +32,9 @@ export class Shipment {
 
   // Relationships for the entity
 
-  @ManyToOne(() => Carrier, (carrier) => carrier.shipmentDetails)
+  @ManyToOne(() => Carrier, (carrier) => carrier.shipment)
   carrier: Carrier;
 
-  @ManyToOne(() => Order, (order) => order.shipmentDetails)
+  @ManyToOne(() => Order, (order) => order.shipment)
   order: Order;
 }

@@ -22,6 +22,8 @@ import { getBasketItem, getOrderPaymentRequest } from '@utils/payment.util';
 import { PaymentRequestData } from 'iyzipay';
 
 import { Request } from 'express';
+import { PaymentService } from '@modules/payment/payment.service';
+import { ShoppingCartService } from '@modules/shopping_cart/shopping_cart.service';
 
 @Injectable()
 export class OrderService {
@@ -29,13 +31,11 @@ export class OrderService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
 
-    @InjectRepository(OrderItem)
-    private order_itemRepository: Repository<OrderItem>,
-
+    private readonly dataSource: DataSource,
     private readonly addressService: AddressService,
     private readonly productVariantService: ProductVariantService,
-    private readonly iyzicoService: IyzicoService,
-    private readonly dataSource: DataSource,
+    private readonly paymentService: PaymentService,
+    private readonly shoppingCartService: ShoppingCartService,
   ) {}
 
   findAll() {
@@ -76,15 +76,14 @@ export class OrderService {
 
       console.log('Billing Address: ', billingAddress);
 
-      for (const item of createOrderDto.orderItems) {
-        const productVariant: ProductVariant =
-          await this.productVariantService.findOne(item.productVariantId);
+      const shoppingCart = await this.shoppingCartService.findOneByUser(user);
 
-        if (!productVariant) {
-          throw new NotFoundException(
-            `ProductVariant with ID ${item.productVariantId} not found.`,
-          );
-        }
+      if (!shoppingCart.items.length) {
+        throw new BadRequestException('No item found in cart.');
+      }
+
+      for (const item of shoppingCart.items) {
+        const productVariant: ProductVariant = item.productVariant;
 
         if (productVariant.stock < 1) {
           throw new BadRequestException('The product variant is out of stock.');
@@ -109,12 +108,7 @@ export class OrderService {
       console.log('Order Items: ', orderItems);
       console.log('Basket Items: ', basketItems);
 
-      let order = queryRunner.manager.create(Order, {
-        createdAt: new Date(),
-        shippingAddress,
-        billingAddress,
-        orderItems,
-      });
+      let date = new Date();
 
       let paymentRequest: PaymentRequestData = getOrderPaymentRequest(
         user,
@@ -126,21 +120,17 @@ export class OrderService {
         basketItems,
       );
 
-      const result = await this.iyzicoService.createPayment(paymentRequest);
+      const payment = await this.paymentService.create(paymentRequest);
 
-      console.log('Payment Result: ', result);
+      let order = queryRunner.manager.create(Order, {
+        createdAt: date,
+        payments: [payment],
+        shippingAddress,
+        billingAddress,
+        orderItems,
+      });
 
-      if (result.status === 'success') {
-        order = await queryRunner.manager.save(order);
-
-        await queryRunner.commitTransaction();
-
-        console.log('Order: ', order);
-
-        return order;
-      } else {
-        throw new BadRequestException('Payment failed.');
-      }
+      order = await queryRunner.manager.save(order);
     } catch (error) {
       await queryRunner.rollbackTransaction();
 

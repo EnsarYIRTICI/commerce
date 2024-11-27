@@ -40,20 +40,16 @@ export class Order {
   })
   status: OrderStatus;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
-    nullable: false,
-  })
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   orderItems: OrderItem[];
 
-  @OneToOne(() => Payment, (entity) => entity.order, {
-    nullable: false,
-  })
-  paymentDetails: Payment[];
+  @OneToMany(() => Payment, (entity) => entity.order, { cascade: true })
+  payments: Payment[];
 
   @OneToOne(() => Shipment, (entity) => entity.order, {
     nullable: false,
   })
-  shipmentDetails: Shipment;
+  shipment: Shipment;
 
   @ManyToOne(() => AddressDetail, { nullable: false })
   @JoinColumn({ name: 'shippingAddressId' })

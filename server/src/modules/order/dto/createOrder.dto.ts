@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsInt, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
-import { CreateOrderItemDto } from './createOrderItem.dto';
 
 export class CreateOrderDto {
   @ApiProperty({
@@ -13,25 +12,13 @@ export class CreateOrderDto {
   shippingAddressId: number;
 
   @ApiProperty({
-    example: 2,
+    example: null,
     description: 'Billing address ID (opsiyonel alan)',
     required: false,
   })
   @IsOptional()
   @IsNumber()
   billingAddressId: number;
-
-  @ApiProperty({
-    type: [CreateOrderItemDto],
-    description: 'Sipariş içeriğindeki ürünler',
-    example: [
-      { quantity: 2, productVariantId: 39 },
-      { quantity: 1, productVariantId: 38 },
-    ],
-  })
-  @ValidateNested({ each: true })
-  @Type(() => CreateOrderItemDto)
-  orderItems: CreateOrderItemDto[];
 
   @ApiProperty({
     type: PaymentCardDto,

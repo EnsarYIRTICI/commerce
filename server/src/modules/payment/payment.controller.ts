@@ -24,9 +24,8 @@ export class PaymentController {
     private readonly iyzicoService: IyzicoService,
   ) {}
 
-  @Post('/test/iyzico')
-  @ApiBody({ type: IyzicoTestDto })
-  async testIyzico(@Body() iyzicoTestDto: IyzicoTestDto) {
+  @Get('/test/iyzico')
+  async testIyzico() {
     return await this.iyzicoService.test();
   }
 
@@ -38,11 +37,6 @@ export class PaymentController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.paymentService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() payment: Payment) {
-    return this.paymentService.create(payment);
   }
 
   @Put(':id')

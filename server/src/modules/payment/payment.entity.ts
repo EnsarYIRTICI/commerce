@@ -8,20 +8,24 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { PaymentMethod } from './payment_method/payment_method.entity';
+import { PaymentStatus } from './payment_status/payment_status.entity';
 
 @Entity()
 export class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ unique: true })
+  basketId: string;
+
   @Column()
   amount: number;
 
   @Column()
-  currencyCode: string;
+  currencyCode?: string;
 
   @Column()
-  referenceNumber: string;
+  referenceNumber?: string;
 
   @Column()
   paymentGatewayType?: string;
@@ -33,20 +37,24 @@ export class Payment {
   confirmed: boolean;
 
   @Column()
-  status: string;
-
-  @Column()
   createdDate: Date;
 
   @Column()
   archivedDate?: Date;
 
-  @ManyToOne(() => PaymentMethod, (method) => method.paymentDetail)
-  paymentMethod: PaymentMethod;
+  @ManyToOne(() => PaymentStatus, (status) => status.payments, {
+    nullable: false,
+  })
+  status: PaymentStatus;
 
-  @ManyToOne(() => Order, (order) => order.paymentDetails, { nullable: false })
-  order: Order;
+  @ManyToOne(() => PaymentMethod, (method) => method.paymentDetail, {
+    nullable: false,
+  })
+  paymentMethod: PaymentMethod;
 
   @OneToMany(() => Refund, (refund) => refund.payment, { cascade: true })
   refunds: Refund[];
+
+  @ManyToOne(() => Order, (order) => order.payments, { nullable: false })
+  order: Order;
 }

@@ -10,6 +10,14 @@ export class ProductVariantService {
     private product_variantRepository: Repository<ProductVariant>,
   ) {}
 
+  async findOneBySlug(slug: string) {
+    return await this.product_variantRepository.findOne({
+      where: {
+        slug: slug,
+      },
+    });
+  }
+
   async findByIds(ids: number[]): Promise<ProductVariant[]> {
     return await this.product_variantRepository.find({
       where: {

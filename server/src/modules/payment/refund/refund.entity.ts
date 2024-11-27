@@ -1,3 +1,4 @@
+import { RefundStatus } from '@modules/payment/refund_status/refund-status.entity';
 import { Payment } from '@modules/payment/payment.entity';
 import {
   Entity,
@@ -13,13 +14,10 @@ export class Refund {
   id: number; // Sistem içindeki benzersiz ID
 
   @Column()
-  stripeRefundId: string; // Stripe'tan dönen benzersiz iade kimliği (örneğin: "re_1JhxF2Ll35nq5e2j6x")
+  iyzicoRefundId: string; // Iyzico'dan dönen benzersiz iade kimliği (örneğin: "123456789")
 
   @Column()
   amount: number; // İade edilen tutar (örneğin: 5000)
-
-  @Column({ default: 'pending' })
-  status: string; // Stripe refund status (örneğin: "succeeded", "failed", "canceled")
 
   @Column({ nullable: true })
   reason: string; // İade nedeni (örneğin: "requested_by_customer", "duplicate")
@@ -31,6 +29,11 @@ export class Refund {
     onDelete: 'CASCADE',
   })
   payment: Payment; // Hangi ödeme ile ilişkili olduğu
+
+  @ManyToOne(() => RefundStatus, (status) => status.refunds, {
+    nullable: false,
+  })
+  status: RefundStatus; // İade durumu (örneğin: "pending", "succeeded", "failed")
 
   @CreateDateColumn()
   createdAt: Date; // İadenin oluşturulma tarihi

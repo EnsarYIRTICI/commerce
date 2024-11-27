@@ -25,5 +25,5 @@ export class Carrier {
   @OneToMany(() => Shipment, (entity) => entity.carrier, {
     nullable: false,
   })
-  shipmentDetails: Shipment;
+  shipment: Shipment;
 }

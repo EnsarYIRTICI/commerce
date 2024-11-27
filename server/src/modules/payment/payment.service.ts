@@ -1,14 +1,18 @@
-
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payment } from './payment.entity';
+import { Order } from '@modules/order/order.entity';
+import { IyzicoService } from './iyzico.service';
+import { PaymentRequestData } from 'iyzipay';
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectRepository(Payment)
-    private paymentRepository: Repository<Payment>,
+    private readonly paymentRepository: Repository<Payment>,
+
+    private readonly iyzicoService: IyzicoService,
   ) {}
 
   findAll() {
@@ -19,8 +23,20 @@ export class PaymentService {
     return this.paymentRepository.findOne({ where: { id } });
   }
 
-  create(payment: Payment) {
-    return this.paymentRepository.save(payment);
+  async create(paymentRequest: PaymentRequestData) {
+    const payment = this.paymentRepository.create({
+      basketId: paymentRequest.basketId,
+      amount: paymentRequest.price as number,
+      createdDate: new Date(),
+    });
+
+    const result = await this.iyzicoService.createPayment(paymentRequest);
+
+    if (result.status !== 'success') {
+      throw new BadRequestException('Payment failed.');
+    }
+
+    return payment;
   }
 
   update(id: number, payment: Payment) {

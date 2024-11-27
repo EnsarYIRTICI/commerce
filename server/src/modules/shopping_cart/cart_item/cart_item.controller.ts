@@ -1,8 +1,22 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { CartItemService } from './cart_item.service';
 import { CartItem } from './cart_item.entity';
+import { Request } from 'express';
+import { User } from '@modules/user/user.entity';
+import { CreateCartItemDto } from './dto/create_cart_item.dto';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Cart Item')
 @Controller('cart_items')
 export class CartItemController {
   constructor(private readonly cart_itemService: CartItemService) {}
@@ -18,8 +32,11 @@ export class CartItemController {
   }
 
   @Post()
-  create(@Body() cart_item: CartItem) {
-    return this.cart_itemService.create(cart_item);
+  @ApiBody({ type: CreateCartItemDto })
+  async create(@Req() request: Request, createCartItemDto: CreateCartItemDto) {
+    let user: User = request['user'];
+
+    return await this.cart_itemService.create(user, createCartItemDto);
   }
 
   @Put(':id')
