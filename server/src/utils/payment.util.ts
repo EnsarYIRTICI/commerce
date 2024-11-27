@@ -1,14 +1,27 @@
 import Iyzipay from 'iyzipay';
 import { Request } from 'express';
-import { CreateOrderDto } from '@modules/order/dto/createOrderDto';
+import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '@modules/user/user.entity';
 import { Address } from '@modules/address/address.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
+
+const getBasketItem = (productVariant: ProductVariant) => {
+  return {
+    id: productVariant.id,
+    name: productVariant.name,
+    category1: productVariant.product.categories[0],
+    category2: productVariant.product.categories[1],
+    itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+    price: productVariant.price,
+  };
+};
 
 const getOrderPaymentRequest = (
-  request: Request,
   user: User,
-  createOrderDto: CreateOrderDto,
+  ip: string,
+  paymentCardDto: PaymentCardDto,
   billingAddress: Address,
   shippingAddress: Address,
   price: number,
@@ -16,7 +29,6 @@ const getOrderPaymentRequest = (
 ) => {
   const basketId = uuidv4();
   const conversationId = `${user.id}-${Date.now()}`;
-  const ip = request.ip;
 
   return {
     locale: Iyzipay.LOCALE.TR,
@@ -29,13 +41,13 @@ const getOrderPaymentRequest = (
     paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,
     paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
     paymentCard: {
-      cardHolderName: createOrderDto.paymentCard.cardHolderName,
-      cardNumber: createOrderDto.paymentCard.cardNumber,
-      expireMonth: createOrderDto.paymentCard.expireMonth,
-      expireYear: createOrderDto.paymentCard.expireYear,
-      cvc: createOrderDto.paymentCard.cvc,
-      registerCard: createOrderDto.paymentCard.registerCard,
-      cardAlias: createOrderDto.paymentCard.cardAlias,
+      cardHolderName: paymentCardDto.cardHolderName,
+      cardNumber: paymentCardDto.cardNumber,
+      expireMonth: paymentCardDto.expireMonth,
+      expireYear: paymentCardDto.expireYear,
+      cvc: paymentCardDto.cvc,
+      registerCard: paymentCardDto.registerCard,
+      cardAlias: paymentCardDto.cardAlias,
     },
     buyer: {
       id: user.iyzipayId,
@@ -71,4 +83,4 @@ const getOrderPaymentRequest = (
   };
 };
 
-export { getOrderPaymentRequest };
+export { getBasketItem, getOrderPaymentRequest };

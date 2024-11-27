@@ -13,7 +13,10 @@ import { JwtService } from '@nestjs/jwt';
 import { Roles } from '@decorators/role.decorator';
 import { errorMessages } from '@common/errorMessages';
 import { QueryFailedError } from 'typeorm';
+import { ApiTags } from '@nestjs/swagger';
 
+@Roles('public')
+@ApiTags('App')
 @Controller('app')
 export class AppController {
   constructor(
@@ -21,7 +24,6 @@ export class AppController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @Roles('public')
   @Get('/seedData')
   async seedData() {
     try {
@@ -36,7 +38,6 @@ export class AppController {
     }
   }
 
-  @Roles('public')
   @Get('/createAdmin')
   async createAdmin() {
     try {

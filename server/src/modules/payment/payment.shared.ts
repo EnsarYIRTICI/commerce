@@ -6,17 +6,11 @@ import { PaymentController } from './payment.controller';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { RefundModule } from './refund/refund.module';
-import { PaymentSharedModule } from './payment.shared';
+import { IyzicoService } from './iyzico.service';
 
 @Module({
-  imports: [
-    InvoiceModule,
-    RefundModule,
-    SubscriptionModule,
-    TypeOrmModule.forFeature([Payment]),
-    PaymentSharedModule,
-  ],
-  providers: [PaymentService],
-  controllers: [PaymentController],
+  imports: [],
+  providers: [IyzicoService],
+  exports: [IyzicoService],
 })
-export class PaymentModule {}
+export class PaymentSharedModule {}

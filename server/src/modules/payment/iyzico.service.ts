@@ -18,8 +18,13 @@ export class IyzicoService {
     });
   }
 
-  test(data: ApiTestRequestData): Promise<PaymentResult> {
+  test(): Promise<PaymentResult> {
     return new Promise((resolve, reject) => {
+      const data: ApiTestRequestData = {
+        conversationId: 'id-123',
+        locale: Iyzipay.LOCALE.TR,
+      };
+
       this.iyzipay.apiTest.retrieve(
         data,
         (error: any, result: PaymentResult) => {

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from './address.entity';
 import { User } from '@modules/user/user.entity';
+import { CreateAddressDto } from './dto/createAddress.dto';
 
 @Injectable()
 export class AddressService {
@@ -22,16 +23,25 @@ export class AddressService {
     });
   }
 
-  findAll() {
-    return this.addressRepository.find();
+  async findAll() {
+    return await this.addressRepository.find({
+      relations: {
+        user: true,
+      },
+    });
   }
 
   findOne(id: number) {
     return this.addressRepository.findOne({ where: { id } });
   }
 
-  create(address: Address) {
-    return this.addressRepository.save(address);
+  async create(createOrderDto: CreateAddressDto, user: User) {
+    let address = this.addressRepository.create({
+      ...createOrderDto,
+      user: user,
+    });
+
+    return await this.addressRepository.save(address);
   }
 
   update(id: number, address: Address) {

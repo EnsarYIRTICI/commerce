@@ -18,7 +18,7 @@ import { Product } from './product.entity';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { errorMessages } from '@common/errorMessages';
 import { CreateProductDto } from './dto/create_product.dto';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@decorators/role.decorator';
 import { ProductFileInterceptor } from 'src/interceptor/product.file.interceptor';
 import { DataSource, QueryFailedError } from 'typeorm';
@@ -28,14 +28,13 @@ import { ProductAttributeValue } from '@modules/product/product_attribute_value/
 import { CategoryService } from '@modules/product/category/category.service';
 import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 import { createSlug } from '@utils/string.util';
-import { ProductDomainService } from '@modules/product/product.domain';
 
 @ApiBearerAuth()
+@ApiTags('Product')
 @Controller('products')
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
-    private readonly productDomain: ProductDomainService,
     private readonly categoryService: CategoryService,
     private readonly product_attribute_valueService: ProductAttributeValueService,
     private readonly dataSource: DataSource,
@@ -43,11 +42,28 @@ export class ProductController {
 
   // CUSTOM
 
-  @Post('create')
+  @Get('by/slug/:slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    return await this.productService.findOneBySlug(slug);
+  }
+
+  // CRUD
+
+  @Get()
+  async findAll() {
+    return await this.productService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.findOne(id);
+  }
+
+  @Post()
   @UseInterceptors(ProductFileInterceptor)
-  async domainCreate(@Body() createProductDto: CreateProductDto) {
+  async create(@Body() createProductDto: CreateProductDto) {
     try {
-      return await this.productDomain.create(createProductDto);
+      return await this.productService.create(createProductDto);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         console.log(error.message);
@@ -65,33 +81,6 @@ export class ProductController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  @Get('details')
-  async finAllDetails() {
-    return await this.productService.findAllDetails();
-  }
-
-  @Get('detail/:slug')
-  async findBySlug(@Param('slug') slug: string) {
-    return await this.productService.findBySlug(slug);
-  }
-
-  // CRUD
-
-  @Get()
-  findAll() {
-    return this.productService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() product: Product) {
-    return this.productService.create(product);
   }
 
   @Put(':id')

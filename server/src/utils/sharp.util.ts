@@ -19,7 +19,7 @@ async function processImage(buffer: Buffer) {
   const processedImages = [];
 
   for (const size of sizes) {
-    const resizedBuffer = await this.resizeImage(buffer, size.width);
+    const resizedBuffer = await resizeImage(buffer, size.width);
     const sizedName = `${baseImageName}_${size.name}`;
 
     processedImages.push({

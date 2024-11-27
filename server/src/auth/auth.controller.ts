@@ -16,11 +16,12 @@ import { successMessages } from '@common/successMessages';
 import { RegisterDto } from './dto/register.dto';
 import { Roles } from '@decorators/role.decorator';
 import { RedisService } from 'src/cache/redis.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Response, Request } from 'express';
 import { getToken } from '@utils/request.util';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(

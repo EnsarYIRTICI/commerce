@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
@@ -11,7 +16,6 @@ import { FormDataMiddleware } from 'src/middleware/formdata.middleware';
 import { CategoryService } from '@modules/product/category/category.service';
 import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 import { ProductSharedModule } from './product.shared';
-import { ProductDomainService } from '@modules/product/product.domain';
 import { ProductVariantModule } from './product_variant/product_variant.module';
 import { ProductImageModule } from './product_image/product_image.module';
 import { CategoryModule } from './category/category.module';
@@ -32,11 +36,13 @@ import { ProductAttributeValueModule } from './product_attribute_value/product_a
     TypeOrmModule.forFeature([Product]),
     ProductSharedModule,
   ],
-  providers: [ProductService, ProductDomainService],
+  providers: [ProductService],
   controllers: [ProductController],
 })
 export class ProductModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FormDataMiddleware).forRoutes('products/create');
+    consumer
+      .apply(FormDataMiddleware)
+      .forRoutes({ path: 'products', method: RequestMethod.POST });
   }
 }

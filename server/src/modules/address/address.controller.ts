@@ -1,8 +1,22 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { AddressService } from './address.service';
 import { Address } from './address.entity';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { CreateAddressDto } from './dto/createAddress.dto';
+import { Request } from 'express';
+import { User } from '@modules/user/user.entity';
 
+@ApiBearerAuth()
+@ApiTags('Address')
 @Controller('addresses')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
@@ -18,8 +32,13 @@ export class AddressController {
   }
 
   @Post()
-  create(@Body() address: Address) {
-    return this.addressService.create(address);
+  @ApiBody({ type: CreateAddressDto })
+  async create(
+    @Req() req: Request,
+    @Body() createAddressDto: CreateAddressDto,
+  ) {
+    const user: User = req['user'];
+    return await this.addressService.create(createAddressDto, user);
   }
 
   @Put(':id')

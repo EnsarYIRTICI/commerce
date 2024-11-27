@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './order.entity';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
-import { OrderDomainService } from '@modules/order/order.domain';
 import { OrderItem } from './order_item/order_item.entity';
 
 import { Address } from '@modules/address/address.entity';
@@ -24,7 +23,7 @@ import { AddressDetailModule } from './address_detail/address_detail.module';
     TypeOrmModule.forFeature([Order]),
     OrderSharedModule,
   ],
-  providers: [OrderService, OrderDomainService],
+  providers: [OrderService],
   controllers: [OrderController],
 })
 export class OrderModule {}

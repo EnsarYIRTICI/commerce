@@ -14,27 +14,41 @@ import { OrderService } from './order.service';
 import { Order } from './order.entity';
 import { Roles } from '@decorators/role.decorator';
 import { DataSource, QueryFailedError } from 'typeorm';
-import { CreateOrderDto } from './dto/createOrderDto';
-import { OrderDomainService } from '@modules/order/order.domain';
+import { CreateOrderDto } from './dto/createOrder.dto';
 import { errorMessages } from '@common/errorMessages';
 
 import { Request } from 'express';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Order')
 @Controller('orders')
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
-    private readonly orderDomain: OrderDomainService,
     private readonly dataSource: DataSource,
   ) {}
 
+  // CRUD
+
+  @Get()
+  findAll() {
+    return this.orderService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.orderService.findOne(id);
+  }
+
   @Post()
-  async domainCreate(
+  @ApiBody({ type: CreateOrderDto })
+  async create(
     @Req() request: Request,
     @Body() createOrderDto: CreateOrderDto,
   ) {
     try {
-      return await this.orderDomain.create(request, createOrderDto);
+      return await this.orderService.create(request, createOrderDto);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         console.log(error.message);
@@ -52,23 +66,6 @@ export class OrderController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  // CRUD
-
-  @Get()
-  findAll() {
-    return this.orderService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.orderService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() order: Order) {
-    return this.orderService.create(order);
   }
 
   @Put(':id')

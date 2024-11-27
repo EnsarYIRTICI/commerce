@@ -1,5 +1,4 @@
 import { Order } from '@modules/order/order.entity';
-import { PaymentMethod } from '@modules/payment_method/payment_method.entity';
 import { Refund } from '@modules/payment/refund/refund.entity';
 import {
   Entity,
@@ -8,6 +7,7 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
+import { PaymentMethod } from './payment_method/payment_method.entity';
 
 @Entity()
 export class Payment {
