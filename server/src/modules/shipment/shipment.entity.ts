@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { Order } from '../order/order.entity';
 import { Carrier } from '@modules/carrier/carrier.entity';
@@ -35,6 +36,6 @@ export class Shipment {
   @ManyToOne(() => Carrier, (carrier) => carrier.shipment)
   carrier: Carrier;
 
-  @ManyToOne(() => Order, (order) => order.shipment)
+  @OneToOne(() => Order, (order) => order.shipment)
   order: Order;
 }

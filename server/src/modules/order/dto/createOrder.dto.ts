@@ -26,9 +26,10 @@ export class CreateOrderDto {
     description: 'Ödeme bilgileri',
     example: {
       cardHolderName: 'AHMET ENSAR YIRTICI',
-      cardNumber: '4444111144441111',
-      expiryDate: '12/24',
-      cvc: '123',
+      cardNumber: '4543590000000006',
+      expireMonth: '12',
+      expireYear: '2030',
+      cvc: '000',
     },
   })
   paymentCard: PaymentCardDto;

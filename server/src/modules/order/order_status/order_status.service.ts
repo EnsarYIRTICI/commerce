@@ -10,6 +10,10 @@ export class OrderStatusService {
     private readonly orderStatusRepository: Repository<OrderStatus>,
   ) {}
 
+  async findOneByName(name: string): Promise<OrderStatus> {
+    return await this.orderStatusRepository.findOne({ where: { name: name } });
+  }
+
   findAll(): Promise<OrderStatus[]> {
     return this.orderStatusRepository.find();
   }

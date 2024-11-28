@@ -49,10 +49,14 @@ export class CreditCardPaymentService implements PaymentService {
       createdDate: this.paymentServiceInitData.date,
     });
 
+    // console.log('Payment Request -->', paymentRequest);
+
     const result =
       await this.iyzicoService.createCreditCardPayment(paymentRequest);
 
     if (result.status !== 'success') {
+      console.log(result);
+
       throw new BadRequestException('Payment failed.');
     }
 

@@ -61,8 +61,6 @@ export class OrderController {
     @Body() createOrderDto: CreateOrderDto,
   ) {
     try {
-      console.log('CREATE ORDER DTO: ', createOrderDto);
-
       const date = new Date();
 
       let user: User = request['user'];
@@ -79,9 +77,6 @@ export class OrderController {
             createOrderDto.billingAddressId,
           )
         : shippingAddress;
-
-      console.log('Shipping Address: ', shippingAddress);
-      console.log('Billing Address: ', billingAddress);
 
       user = await this.userShoppingCartService.init(user);
 

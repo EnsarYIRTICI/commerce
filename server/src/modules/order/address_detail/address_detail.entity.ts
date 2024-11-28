@@ -8,7 +8,7 @@ export class AddressDetail {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   name: string; // Adresin adı (örneğin, "Home", "Work" gibi)
 
   @Column()

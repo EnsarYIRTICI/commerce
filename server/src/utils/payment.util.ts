@@ -43,14 +43,14 @@ const getPaymentRequest = (
 
 const getBuyer = (ip: string, user: User, billingAddress: Address) => {
   return {
-    id: user.iyzipayId,
+    id: user.id,
     name: user.name,
     surname: user.lastname,
-    gsmNumber: user.phoneNumber,
+    gsmNumber: '+905554443322',
     email: user.email,
-    identityNumber: user.identityNumber,
-    lastLoginDate: user.lastLogin.toDateString(),
-    registrationDate: user.createdAt.toDateString(),
+    identityNumber: '12345678910',
+    lastLoginDate: formatDateToIyzicoFormat(new Date()),
+    registrationDate: formatDateToIyzicoFormat(user.createdAt),
     registrationAddress:
       billingAddress.addressLine1 + billingAddress.addressLine2,
     city: billingAddress.city,
@@ -66,14 +66,16 @@ const getBasketItems = (cartItems: CartItem[]) => {
   for (const item of cartItems) {
     const productVariant = item.productVariant;
 
-    basketItems.push({
-      id: productVariant.id,
-      name: productVariant.name,
-      category1: productVariant.product.categories[0],
-      category2: productVariant.product.categories[1],
-      itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-      price: productVariant.price,
-    });
+    for (let i = 0; i < item.quantity; i++) {
+      basketItems.push({
+        id: productVariant.id,
+        name: productVariant.name,
+        category1: productVariant.product.categories?.[0]?.id || 'N/A',
+        category2: productVariant.product.categories?.[1]?.id || 'N/A',
+        itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+        price: productVariant.price,
+      });
+    }
   }
 
   return basketItems;
@@ -111,10 +113,21 @@ const getShippingAddress = (shippingAddress: Address) => {
   };
 };
 
+const formatDateToIyzicoFormat = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 export {
   getPaymentRequest,
   getBasketItems,
   getPaymentCard,
   getBillingAddress,
   getShippingAddress,
+  formatDateToIyzicoFormat,
 };

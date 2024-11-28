@@ -35,7 +35,11 @@ export class UserShoppingCartService {
       relations: {
         shoppingCart: {
           items: {
-            productVariant: true,
+            productVariant: {
+              product: {
+                categories: true,
+              },
+            },
           },
         },
       },

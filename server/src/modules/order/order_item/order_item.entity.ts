@@ -24,9 +24,9 @@ export class OrderItem {
 
   // Relationships for the entity
 
-  @ManyToOne(() => Order, (order) => order.orderItems)
-  order: Order;
-
   @ManyToOne(() => ProductVariant, (variant) => variant.orderItems)
   productVariant: ProductVariant;
+
+  @ManyToOne(() => Order, (order) => order.orderItems)
+  order: Order;
 }
