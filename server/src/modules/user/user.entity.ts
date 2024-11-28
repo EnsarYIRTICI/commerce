@@ -70,7 +70,7 @@ export class User {
   wishlists: Wishlist;
 
   @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.user)
-  shoppingCarts: ShoppingCart;
+  shoppingCart: ShoppingCart;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];

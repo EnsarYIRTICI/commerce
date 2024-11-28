@@ -20,6 +20,7 @@ export class CreateOrderDto {
   @IsNumber()
   billingAddressId: number;
 
+  @IsOptional()
   @ApiProperty({
     type: PaymentCardDto,
     description: 'Ödeme bilgileri',

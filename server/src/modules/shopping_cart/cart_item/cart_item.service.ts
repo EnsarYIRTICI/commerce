@@ -7,16 +7,36 @@ import { ShoppingCartService } from '../shopping_cart.service';
 import { CreateCartItemDto } from './dto/create_cart_item.dto';
 import { ProductService } from '@modules/product/product.service';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
+import { UserService } from '@modules/user/user.service';
+import { UserShoppingCartService } from '@modules/user/user-shopping-cart.service';
+import { ShoppingCart } from '../shopping_cart.entity';
+import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 
 @Injectable()
 export class CartItemService {
   constructor(
     @InjectRepository(CartItem)
     private cart_itemRepository: Repository<CartItem>,
-
-    private readonly shoppingCartService: ShoppingCartService,
-    private readonly productVariantService: ProductVariantService,
   ) {}
+
+  async validate(shoppingCart: ShoppingCart, productVariant: ProductVariant) {
+    return await this.cart_itemRepository.findOne({
+      where: { shoppingCart: shoppingCart, productVariant: productVariant },
+    });
+  }
+
+  async create(shoppingCart: ShoppingCart, productVariant: ProductVariant) {
+    return await this.cart_itemRepository.save({
+      shoppingCart: shoppingCart,
+      productVariant: productVariant,
+      quantity: 1,
+    });
+  }
+
+  async raiseOfQuantity(cart_item: CartItem) {
+    cart_item.quantity += 1;
+    return await this.cart_itemRepository.save(cart_item);
+  }
 
   findAll() {
     return this.cart_itemRepository.find();
@@ -24,47 +44,6 @@ export class CartItemService {
 
   findOne(id: number) {
     return this.cart_itemRepository.findOne({ where: { id } });
-  }
-
-  async create(user: User, createCartItemDto: CreateCartItemDto) {
-    let shoppingCart = await this.shoppingCartService.findOneByUser(user);
-
-    if (!shoppingCart) {
-      throw new BadRequestException(
-        'User does not have an active shopping cart',
-      );
-    }
-
-    let productVariant = await this.productVariantService.findOneBySlug(
-      createCartItemDto.slug,
-    );
-
-    if (!productVariant) {
-      throw new BadRequestException(
-        'The requested product variant does not exist',
-      );
-    }
-
-    if (productVariant.stock < 1) {
-      throw new BadRequestException(
-        'Insufficient stock for the selected product variant',
-      );
-    }
-
-    let cart_item = await this.cart_itemRepository.findOne({
-      where: { shoppingCart: shoppingCart, productVariant: productVariant },
-    });
-
-    if (!cart_item) {
-      cart_item = this.cart_itemRepository.create({
-        shoppingCart: shoppingCart,
-        productVariant: productVariant,
-      });
-    } else {
-      cart_item.quantity += 1;
-    }
-
-    return await this.cart_itemRepository.save(cart_item);
   }
 
   update(id: number, cart_item: CartItem) {

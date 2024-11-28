@@ -1,5 +1,12 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ShoppingCartService } from './shopping_cart.service';
 import { ShoppingCart } from './shopping_cart.entity';
 
@@ -15,11 +22,6 @@ export class ShoppingCartController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.shopping_cartService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() shopping_cart: ShoppingCart) {
-    return this.shopping_cartService.create(shopping_cart);
   }
 
   @Put(':id')

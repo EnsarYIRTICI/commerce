@@ -17,13 +17,12 @@ import { ProductVariantService } from '@modules/product/product_variant/product_
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { errorMessages } from '@common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
-import { IyzicoService } from '@modules/payment/iyzico.service';
-import { getBasketItem, getOrderPaymentRequest } from '@utils/payment.util';
-import { PaymentRequestData } from 'iyzipay';
 
 import { Request } from 'express';
-import { PaymentService } from '@modules/payment/payment.service';
 import { ShoppingCartService } from '@modules/shopping_cart/shopping_cart.service';
+import { PaymentService } from '@modules/payment/interface/payment.service';
+import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
+import { Address } from '@modules/address/address.entity';
 
 @Injectable()
 export class OrderService {
@@ -32,10 +31,6 @@ export class OrderService {
     private orderRepository: Repository<Order>,
 
     private readonly dataSource: DataSource,
-    private readonly addressService: AddressService,
-    private readonly productVariantService: ProductVariantService,
-    private readonly paymentService: PaymentService,
-    private readonly shoppingCartService: ShoppingCartService,
   ) {}
 
   findAll() {
@@ -46,43 +41,25 @@ export class OrderService {
     return this.orderRepository.findOne({ where: { id } });
   }
 
-  async create(request: Request, createOrderDto: CreateOrderDto) {
+  async create(
+    date: Date,
+    user: User,
+    shippingAddress: Address,
+    billingAddress: Address,
+    cartItems: CartItem[],
+    paymentService: PaymentService,
+  ) {
     const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      const user: User = request['user'];
-
       const orderItems: OrderItem[] = [];
-      const basketItems = [];
 
-      let price: number = 0;
+      let amount: number = 0;
 
-      const shippingAddress = await this.addressService.validateUserAddressById(
-        user,
-        createOrderDto.shippingAddressId,
-      );
-
-      console.log('Shipping Address: ', shippingAddress);
-
-      const billingAddress = createOrderDto.billingAddressId
-        ? await this.addressService.validateUserAddressById(
-            user,
-            createOrderDto.billingAddressId,
-          )
-        : shippingAddress;
-
-      console.log('Billing Address: ', billingAddress);
-
-      const shoppingCart = await this.shoppingCartService.findOneByUser(user);
-
-      if (!shoppingCart.items.length) {
-        throw new BadRequestException('No item found in cart.');
-      }
-
-      for (const item of shoppingCart.items) {
+      for (const item of cartItems) {
         const productVariant: ProductVariant = item.productVariant;
 
         if (productVariant.stock < 1) {
@@ -92,9 +69,7 @@ export class OrderService {
         productVariant.stock -= item.quantity;
         await queryRunner.manager.save(productVariant);
 
-        price = productVariant.price + price;
-
-        basketItems.push(getBasketItem(productVariant));
+        amount = productVariant.price + amount;
 
         const orderItem = queryRunner.manager.create(OrderItem, {
           productVariant,
@@ -106,21 +81,8 @@ export class OrderService {
       }
 
       console.log('Order Items: ', orderItems);
-      console.log('Basket Items: ', basketItems);
 
-      let date = new Date();
-
-      let paymentRequest: PaymentRequestData = getOrderPaymentRequest(
-        user,
-        request.ip,
-        createOrderDto.paymentCard,
-        billingAddress,
-        shippingAddress,
-        price,
-        basketItems,
-      );
-
-      const payment = await this.paymentService.create(paymentRequest);
+      const payment = await paymentService.create(amount);
 
       let order = queryRunner.manager.create(Order, {
         createdAt: date,
@@ -128,6 +90,7 @@ export class OrderService {
         shippingAddress,
         billingAddress,
         orderItems,
+        user,
       });
 
       order = await queryRunner.manager.save(order);

@@ -1,15 +1,25 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ProductVariantService } from './product_variant.service';
 import { ProductVariant } from './product_variant.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Product Variant')
 @Controller('product_variants')
 export class ProductVariantController {
   constructor(private readonly product_variantService: ProductVariantService) {}
 
   @Get()
-  findAll() {
-    return this.product_variantService.findAll();
+  async findAll() {
+    return await this.product_variantService.findAll();
   }
 
   @Get(':id')

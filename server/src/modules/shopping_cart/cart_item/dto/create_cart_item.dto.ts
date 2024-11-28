@@ -11,7 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCartItemDto {
   @ApiProperty({
-    example: '',
+    example: 'deneme2-asdfasdf',
   })
   @IsString()
   @IsNotEmpty()

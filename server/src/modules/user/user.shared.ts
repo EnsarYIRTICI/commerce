@@ -13,16 +13,25 @@ import { ShoppingCartService } from '@modules/shopping_cart/shopping_cart.servic
 import { ShoppingCart } from '@modules/shopping_cart/shopping_cart.entity';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
-import { UserSharedModule } from './user.shared';
+import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.service';
 
 @Module({
   imports: [
-    StatusModule,
-    RoleModule,
-    TypeOrmModule.forFeature([User, ProductVariant, CartItem, ShoppingCart]),
-    UserSharedModule,
+    TypeOrmModule.forFeature([CartItem, ShoppingCart, ProductVariant, User]),
   ],
-  providers: [UserService],
-  controllers: [UserController],
+  providers: [
+    ProductVariantService,
+    ShoppingCartService,
+    CartItemService,
+    UserShoppingCartService,
+  ],
+  exports: [
+    TypeOrmModule,
+
+    ProductVariantService,
+    ShoppingCartService,
+    CartItemService,
+    UserShoppingCartService,
+  ],
 })
-export class UserModule {}
+export class UserSharedModule {}

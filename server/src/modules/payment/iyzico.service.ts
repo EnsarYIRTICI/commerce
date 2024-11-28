@@ -18,7 +18,7 @@ export class IyzicoService {
     });
   }
 
-  test(): Promise<PaymentResult> {
+  async test(): Promise<PaymentResult> {
     return new Promise((resolve, reject) => {
       const data: ApiTestRequestData = {
         conversationId: 'id-123',
@@ -37,9 +37,22 @@ export class IyzicoService {
     });
   }
 
-  createPayment(paymentRequest: PaymentRequestData): Promise<PaymentResult> {
+  async createCreditCardPayment(
+    paymentRequest: PaymentRequestData,
+  ): Promise<PaymentResult> {
     return new Promise((resolve, reject) => {
       this.iyzipay.payment.create(paymentRequest, (err, result) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(result);
+      });
+    });
+  }
+
+  async createBkmPayment(paymentRequest: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.iyzipay.bkmInitialize.create(paymentRequest, (err, result) => {
         if (err) {
           return reject(err);
         }

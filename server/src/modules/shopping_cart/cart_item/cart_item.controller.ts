@@ -31,14 +31,6 @@ export class CartItemController {
     return this.cart_itemService.findOne(id);
   }
 
-  @Post()
-  @ApiBody({ type: CreateCartItemDto })
-  async create(@Req() request: Request, createCartItemDto: CreateCartItemDto) {
-    let user: User = request['user'];
-
-    return await this.cart_itemService.create(user, createCartItemDto);
-  }
-
   @Put(':id')
   update(@Param('id') id: number, @Body() cart_item: CartItem) {
     return this.cart_itemService.update(id, cart_item);

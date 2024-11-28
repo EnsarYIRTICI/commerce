@@ -26,8 +26,8 @@ export class ProductVariantService {
     });
   }
 
-  findAll() {
-    return this.product_variantRepository.find();
+  async findAll() {
+    return await this.product_variantRepository.find();
   }
 
   findOne(id: number) {

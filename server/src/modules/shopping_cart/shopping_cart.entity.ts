@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToOne,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { CartItem } from './cart_item/cart_item.entity';
@@ -24,6 +25,7 @@ export class ShoppingCart {
   @OneToMany(() => CartItem, (cartItem) => cartItem.shoppingCart)
   items: CartItem[];
 
-  @OneToOne(() => User, (user) => user.shoppingCarts)
+  @OneToOne(() => User, (user) => user.shoppingCart)
+  @JoinColumn()
   user: User;
 }
