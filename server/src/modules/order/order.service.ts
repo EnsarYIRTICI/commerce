@@ -19,7 +19,6 @@ import { errorMessages } from '@common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
 
 import { Request } from 'express';
-import { ShoppingCartService } from '@modules/shopping_cart/shopping_cart.service';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 import { Address } from '@modules/address/address.entity';
 
@@ -109,7 +108,11 @@ export class OrderService {
 
       order = await queryRunner.manager.save(order);
 
+      await queryRunner.commitTransaction();
+
       console.log('Order -->', order);
+
+      return order;
     } catch (error) {
       await queryRunner.rollbackTransaction();
 

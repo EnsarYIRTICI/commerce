@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
-import { ShoppingCart } from '../shopping_cart.entity';
+import { User } from '@modules/user/user.entity';
 
 @Entity()
 export class CartItem {
@@ -21,8 +21,8 @@ export class CartItem {
 
   // Relationships for the entity
 
-  @ManyToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.items)
-  shoppingCart: ShoppingCart;
+  @ManyToOne(() => User, (entity) => entity.cartItems)
+  user: User;
 
   @ManyToOne(() => ProductVariant, (variant) => variant.cartItems)
   productVariant: ProductVariant;

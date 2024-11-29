@@ -26,14 +26,13 @@ import { ShipmentModule } from '@modules/shipment/shipment.module';
 import { UserModule } from '@modules/user/user.module';
 import { WishlistItemModule } from '@modules/wishlist/wishlist_item/wishlist_item.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
-import { ShoppingCartModule } from '@modules/shopping_cart/shopping_cart.module';
 import { PaymentModule } from '@modules/payment/payment.module';
 import { ActivityLog } from '@modules/activity_log/activity_log.entity';
 import { ActivityLogModule } from '@modules/activity_log/activity_log.module';
-import { CarrierModule } from '@modules/carrier/carrier.module';
 import { Address } from '@modules/address/address.entity';
 import { AddressModule } from '@modules/address/address.module';
 import { SeedService } from './seed/seed.service';
+import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.module';
 
 @Module({
   imports: [
@@ -52,16 +51,15 @@ import { SeedService } from './seed/seed.service';
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
     }),
     AuthModule,
+    UserModule,
     ProductModule,
     OrderModule,
-    CarrierModule,
     ShipmentModule,
     PaymentModule,
     WishlistModule,
-    ShoppingCartModule,
-    ActivityLogModule,
+    CartItemModule,
     AddressModule,
-    UserModule,
+    ActivityLogModule,
   ],
   controllers: [AppController],
   providers: [

@@ -4,8 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { User } from '../user.entity';
-import { ShoppingCart } from '../../shopping_cart/shopping_cart.entity';
-import { ShoppingCartService } from '../../shopping_cart/shopping_cart.service';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/exceptions/service-not-initialized.exception';
@@ -75,7 +74,7 @@ export class UserOrderFacade {
 
     this.userCartFacade.init(this.user);
 
-    const cartItems = this.user.shoppingCart.items;
+    const cartItems = await this.userCartFacade.getItems();
     if (!cartItems.length) {
       throw new BadRequestException('No item found in cart.');
     }
@@ -101,7 +100,7 @@ export class UserOrderFacade {
       paymentService.initCreditCard(createOrderDto.paymentCard);
     }
 
-    return await this.orderService.create(
+    let order = await this.orderService.create(
       date,
       this.user,
       shippingAddress,
@@ -109,5 +108,9 @@ export class UserOrderFacade {
       cartItems,
       paymentService,
     );
+
+    await this.userCartFacade.clearItems();
+
+    return order;
   }
 }

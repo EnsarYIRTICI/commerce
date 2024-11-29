@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { ShoppingCart } from '@modules/shopping_cart/shopping_cart.entity';
 
 @Injectable()
 export class UserService {

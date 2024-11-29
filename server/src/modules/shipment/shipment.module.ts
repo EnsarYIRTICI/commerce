@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Shipment } from './shipment.entity';
 import { ShipmentService } from './shipment.service';
 import { ShipmentController } from './shipment.controller';
+import { CarrierModule } from './carrier/carrier.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Shipment])],
+  imports: [CarrierModule, TypeOrmModule.forFeature([Shipment])],
   providers: [ShipmentService],
   controllers: [ShipmentController],
 })

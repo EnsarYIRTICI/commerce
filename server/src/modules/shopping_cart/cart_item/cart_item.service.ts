@@ -3,12 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CartItem } from './cart_item.entity';
 import { User } from '@modules/user/user.entity';
-import { ShoppingCartService } from '../shopping_cart.service';
 import { CreateCartItemDto } from './dto/create_cart_item.dto';
 import { ProductService } from '@modules/product/product.service';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { UserService } from '@modules/user/user.service';
-import { ShoppingCart } from '../shopping_cart.entity';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 
 @Injectable()
@@ -18,18 +16,22 @@ export class CartItemService {
     private cart_itemRepository: Repository<CartItem>,
   ) {}
 
-  async validate(shoppingCart: ShoppingCart, productVariant: ProductVariant) {
+  async validate(user: User, productVariant: ProductVariant) {
     return await this.cart_itemRepository.findOne({
-      where: { shoppingCart: shoppingCart, productVariant: productVariant },
+      where: { user: user, productVariant: productVariant },
     });
   }
 
-  async create(shoppingCart: ShoppingCart, productVariant: ProductVariant) {
+  async create(user: User, productVariant: ProductVariant) {
     return await this.cart_itemRepository.save({
-      shoppingCart: shoppingCart,
+      user: user,
       productVariant: productVariant,
       quantity: 1,
     });
+  }
+
+  async deleteByCartId(userId: number): Promise<void> {
+    await this.cart_itemRepository.delete({ user: { id: userId } });
   }
 
   async raiseOfQuantity(cart_item: CartItem) {

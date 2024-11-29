@@ -4,8 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { User } from '../user.entity';
-import { ShoppingCart } from '../../shopping_cart/shopping_cart.entity';
-import { ShoppingCartService } from '../../shopping_cart/shopping_cart.service';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/exceptions/service-not-initialized.exception';
@@ -21,43 +20,46 @@ export class UserCartFacade {
     private userRepository: Repository<User>,
 
     private readonly cartItemService: CartItemService,
-    private readonly shoppingCartService: ShoppingCartService,
     private readonly productVariantService: ProductVariantService,
   ) {}
 
   private user: User;
 
-  async init(user: User) {
+  init(user: User) {
     this.user = user;
   }
 
+  isInit() {
+    if (!this.user) {
+      throw new BadRequestException(
+        'Shopping cart not initialized for the user.',
+      );
+    }
+  }
+
   async getItems() {
+    this.isInit();
+
     this.user = await this.userRepository.findOne({
       where: {
         id: this.user.id,
       },
       relations: {
-        shoppingCart: {
-          items: {
-            productVariant: {
-              product: {
-                categories: true,
-              },
+        cartItems: {
+          productVariant: {
+            product: {
+              categories: true,
             },
           },
         },
       },
     });
 
-    if (!this.user.shoppingCart) {
-      this.user.shoppingCart = await this.shoppingCartService.create(this.user);
-    }
-
-    return this.user.shoppingCart;
+    return this.user.cartItems;
   }
 
   async addItem(createCartItemDto: CreateCartItemDto) {
-    let shoppingCart = this.user.shoppingCart;
+    this.isInit();
 
     let productVariant = await this.productVariantService.findOneBySlug(
       createCartItemDto.slug,
@@ -76,14 +78,20 @@ export class UserCartFacade {
     }
 
     let cart_item = await this.cartItemService.validate(
-      shoppingCart,
+      this.user,
       productVariant,
     );
 
     if (!cart_item) {
-      return await this.cartItemService.create(shoppingCart, productVariant);
+      return await this.cartItemService.create(this.user, productVariant);
     } else {
       return await this.cartItemService.raiseOfQuantity(cart_item);
     }
+  }
+
+  async clearItems() {
+    this.isInit();
+
+    await this.cartItemService.deleteByCartId(this.user.id);
   }
 }

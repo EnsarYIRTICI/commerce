@@ -11,12 +11,11 @@ import { Role } from './role/role.entity';
 import { Status } from './status/status.entity';
 import { ProductReview } from '../product/product_review/product_review.entity';
 import { Wishlist } from '../wishlist/wishlist.entity';
-import { ShoppingCart } from '../shopping_cart/shopping_cart.entity';
 import { Order } from '../order/order.entity';
-import { Payment } from '../payment/payment.entity';
 import { Address } from '../address/address.entity';
 import { ActivityLog } from '../activity_log/activity_log.entity';
 import { Subscription } from '@modules/payment/subscription/subscription.entity';
+import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 
 @Entity()
 export class User {
@@ -69,8 +68,8 @@ export class User {
   @OneToOne(() => Wishlist, (wishlist) => wishlist.user)
   wishlists: Wishlist;
 
-  @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.user)
-  shoppingCart: ShoppingCart;
+  @OneToMany(() => CartItem, (entity) => entity.user)
+  cartItems: CartItem[];
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];

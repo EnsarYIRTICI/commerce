@@ -7,7 +7,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { Order } from '../order/order.entity';
-import { Carrier } from '@modules/carrier/carrier.entity';
+import { Carrier } from './carrier/carrier.entity';
 
 @Entity()
 export class Shipment {
