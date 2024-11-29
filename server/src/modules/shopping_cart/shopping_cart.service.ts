@@ -5,7 +5,6 @@ import { ShoppingCart } from './shopping_cart.entity';
 import { User } from '@modules/user/user.entity';
 import { CreateCartItemDto } from './cart_item/dto/create_cart_item.dto';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
-import { UserShoppingCartService } from '@modules/user/user-shopping-cart.service';
 import { CartItem } from './cart_item/cart_item.entity';
 
 @Injectable()

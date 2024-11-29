@@ -17,42 +17,13 @@ import { BKMExpressPaymentService } from '@modules/payment/bkm-express-payment.s
 import { CreditCardPaymentService } from '@modules/payment/credit-card-payment.service';
 import { PaymentCoreModule } from '@modules/payment/payment.core';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
-import { UserShoppingCartService } from '@modules/user/user-shopping-cart.service';
 import { User } from '@modules/user/user.entity';
 import { OrderItemService } from './order_item/order_item.service';
 import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      User,
-      Address,
-      ProductVariant,
-      OrderItem,
-      Payment,
-      ShoppingCart,
-      CartItem,
-    ]),
-    PaymentCoreModule,
-  ],
-  providers: [
-    CartItemService,
-    AddressService,
-    ProductVariantService,
-    ShoppingCartService,
-    IyzicoService,
-    UserShoppingCartService,
-  ],
-  exports: [
-    TypeOrmModule,
-    PaymentCoreModule,
-
-    CartItemService,
-    AddressService,
-    ProductVariantService,
-    ShoppingCartService,
-    IyzicoService,
-    UserShoppingCartService,
-  ],
+  imports: [],
+  providers: [],
+  exports: [],
 })
 export class OrderSharedModule {}

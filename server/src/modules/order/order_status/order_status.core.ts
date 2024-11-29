@@ -3,10 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderStatus } from './order_status.entity';
 import { OrderStatusService } from './order_status.service';
 import { OrderStatusController } from './order_status.controller';
-import { OrderStatusCoreModule } from './order_status.core';
 
 @Module({
-  imports: [OrderStatusCoreModule],
-  controllers: [OrderStatusController],
+  imports: [TypeOrmModule.forFeature([OrderStatus])],
+  providers: [OrderStatusService],
+  exports: [OrderStatusService],
 })
-export class OrderStatusModule {}
+export class OrderStatusCoreModule {}

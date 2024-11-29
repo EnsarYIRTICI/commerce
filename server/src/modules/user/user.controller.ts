@@ -7,13 +7,19 @@ import {
   Put,
   Delete,
   Req,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { CreateCartItemDto } from '@modules/shopping_cart/cart_item/dto/create_cart_item.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { UserShoppingCartService } from './user-shopping-cart.service';
+import { UserCartFacade } from './user-cart/user-cart.facade';
 import { Request } from 'express';
+import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
+import { errorMessages } from '@common/errorMessages';
+import { QueryFailedError } from 'typeorm';
+import { UserOrderFacade } from './user-order/user-order.facade';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -21,18 +27,17 @@ import { Request } from 'express';
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly userShoppingCartService: UserShoppingCartService,
+    private readonly userCartFacade: UserCartFacade,
+    private readonly userOrderFacade: UserOrderFacade,
   ) {}
 
   @Get('/shopping-cart/items')
   async getCartItems(@Req() request: Request) {
     let user: User = request['user'];
 
-    user = await this.userShoppingCartService.init({
-      id: user.id,
-    } as User);
+    this.userCartFacade.init(user);
 
-    return user.shoppingCart;
+    return await this.userCartFacade.getItems();
   }
 
   @Post('/shopping-cart/items')
@@ -43,11 +48,68 @@ export class UserController {
   ) {
     let user: User = request['user'];
 
-    user = await this.userShoppingCartService.init({
-      id: user.id,
-    } as User);
+    this.userCartFacade.init(user);
 
-    return this.userShoppingCartService.addItem(createCartItemDto);
+    return await this.userCartFacade.addItem(createCartItemDto);
+  }
+
+  @Get('/order/order-items')
+  async getOrders(@Req() request: Request) {
+    try {
+      const user: User = request['user'];
+
+      this.userOrderFacade.init(user);
+
+      return await this.userOrderFacade.getOrders();
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        console.log(error.message);
+
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+
+      console.error(error);
+
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('/order/order-items')
+  @ApiBody({ type: CreateOrderDto })
+  async createOrder(
+    @Req() request: Request,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
+    try {
+      const user: User = request['user'];
+      const ip = request.ip;
+
+      this.userOrderFacade.init(user);
+
+      return await this.userOrderFacade.createOrder(ip, createOrderDto);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        console.log(error.message);
+
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+
+      console.error(error);
+
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get()

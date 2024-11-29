@@ -14,18 +14,12 @@ import { OrderSharedModule } from './order.shared';
 import { OrderItemModule } from './order_item/order_item.module';
 import { OrderStatusModule } from './order_status/order_status.module';
 import { AddressDetailModule } from './address_detail/address_detail.module';
-import { OrderCoreModule } from './order.core';
+import { OrderStatusService } from './order_status/order_status.service';
+import { OrderStatusCoreModule } from './order_status/order_status.core';
 
 @Module({
-  imports: [
-    OrderItemModule,
-    OrderStatusModule,
-    AddressDetailModule,
-
-    OrderCoreModule,
-    OrderSharedModule,
-  ],
-  providers: [],
-  controllers: [OrderController],
+  imports: [OrderStatusCoreModule, TypeOrmModule.forFeature([Order])],
+  providers: [OrderService],
+  exports: [OrderService],
 })
-export class OrderModule {}
+export class OrderCoreModule {}

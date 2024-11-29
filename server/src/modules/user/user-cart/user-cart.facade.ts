@@ -3,9 +3,9 @@ import {
   BadRequestException,
   Injectable,
 } from '@nestjs/common';
-import { User } from '../user/user.entity';
-import { ShoppingCart } from '../shopping_cart/shopping_cart.entity';
-import { ShoppingCartService } from '../shopping_cart/shopping_cart.service';
+import { User } from '../user.entity';
+import { ShoppingCart } from '../../shopping_cart/shopping_cart.entity';
+import { ShoppingCartService } from '../../shopping_cart/shopping_cart.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/exceptions/service-not-initialized.exception';
@@ -15,7 +15,7 @@ import { CreateCartItemDto } from '@modules/shopping_cart/cart_item/dto/create_c
 import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.service';
 
 @Injectable()
-export class UserShoppingCartService {
+export class UserCartFacade {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -28,9 +28,13 @@ export class UserShoppingCartService {
   private user: User;
 
   async init(user: User) {
+    this.user = user;
+  }
+
+  async getItems() {
     this.user = await this.userRepository.findOne({
       where: {
-        id: user.id,
+        id: this.user.id,
       },
       relations: {
         shoppingCart: {
@@ -46,10 +50,10 @@ export class UserShoppingCartService {
     });
 
     if (!this.user.shoppingCart) {
-      this.user.shoppingCart = await this.shoppingCartService.create(user);
+      this.user.shoppingCart = await this.shoppingCartService.create(this.user);
     }
 
-    return this.user;
+    return this.user.shoppingCart;
   }
 
   async addItem(createCartItemDto: CreateCartItemDto) {

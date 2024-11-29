@@ -8,7 +8,6 @@ import { CreateCartItemDto } from './dto/create_cart_item.dto';
 import { ProductService } from '@modules/product/product.service';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { UserService } from '@modules/user/user.service';
-import { UserShoppingCartService } from '@modules/user/user-shopping-cart.service';
 import { ShoppingCart } from '../shopping_cart.entity';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 
