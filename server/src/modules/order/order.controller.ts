@@ -20,14 +20,6 @@ import { errorMessages } from '@common/errorMessages';
 
 import { Request } from 'express';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { PaymentService } from '@modules/payment/interface/payment.service';
-import { PaymentServiceFactory } from '@modules/payment/payment.service.factory';
-import { CreditCardPaymentService } from '@modules/payment/credit-card-payment.service';
-import { BankTransferPaymentService } from '@modules/payment/bank-transfer-payment.service';
-import { AddressService } from '@modules/address/address.service';
-import { ShoppingCartService } from '@modules/shopping_cart/shopping_cart.service';
-import { User } from '@modules/user/user.entity';
-import { UserCartFacade } from '@modules/user/user-cart/user-cart.facade';
 
 @ApiBearerAuth()
 @ApiTags('Order')

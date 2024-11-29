@@ -5,7 +5,7 @@ import { PaymentController } from './payment.controller';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { RefundModule } from './refund/refund.module';
-import { IyzicoService } from './iyzico.service';
+import { IyzicoService } from './iyzico/iyzico.service';
 
 @Module({
   imports: [],

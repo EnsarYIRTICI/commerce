@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Client } from 'minio';
+import { StorageService } from '../storage.service';
 
 @Injectable()
-export class MinioService {
+export class MinioService implements StorageService {
   private readonly minioClient: Client;
 
   constructor() {
@@ -27,20 +28,18 @@ export class MinioService {
     }
   }
 
-  async ensureBucketExists(bucketName: string) {
-    const bucketExists = await this.minioClient.bucketExists(bucketName);
+  async isBucketExists(bucketName: string) {
+    return await this.minioClient.bucketExists(bucketName);
+  }
 
-    console.log('Bucket Exist: ', bucketExists);
-
-    if (!bucketExists) {
-      await this.minioClient.makeBucket(bucketName, 'us-east-1');
-    }
+  async createBucket(bucketName: string) {
+    await this.minioClient.makeBucket(bucketName, 'us-east-1');
   }
 
   async uploadFile(
+    bucketName: string,
     buffer: Buffer,
     size: number,
-    bucketName: string,
     objectName: string,
     mimeType: string,
   ) {

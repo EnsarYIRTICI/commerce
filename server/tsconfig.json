@@ -24,7 +24,7 @@
       "@config/*": ["src/config/*"],   
       "@auth/*": ["src/auth/*"],
       "@common/*": ["src/common/*"],   
-      "@interface/*": ["src/interface/*"],
+      "@interface/*": ["src/cache/interface/*"],
       "@utils/*": ["src/utils/*"], 
       "@services/*": ["src/services/*"],
       "@middleware/*": ["src/middleware/*"],

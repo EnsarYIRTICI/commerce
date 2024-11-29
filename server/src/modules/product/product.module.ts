@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
-import { MinioService } from 'src/storage/minio.service';
+import { MinioService } from 'src/storage/minio/minio.service';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Category } from '@modules/product/category/category.entity';
 import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';

@@ -2,8 +2,8 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository, TreeRepository } from 'typeorm';
 import { ModuleRef } from '@nestjs/core';
-import { ITreeEntity } from '@interface/ITreeEntity';
-import { IStaticEntity } from '@interface/IStaticEntity';
+import { IStaticEntity } from './interface/IStaticEntity';
+import { ITreeEntity } from './interface/ITreeEntity';
 
 @Injectable()
 export class SeedService {

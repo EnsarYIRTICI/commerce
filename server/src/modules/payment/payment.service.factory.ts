@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreditCardPaymentService } from './credit-card-payment.service';
 import { BKMExpressPaymentService } from './bkm-express-payment.service';
 import { BankTransferPaymentService } from './bank-transfer-payment.service';
-import { PaymentService } from './interface/payment.service';
+import { PaymentService } from './payment.service';
 
 @Injectable()
 export class PaymentServiceFactory {

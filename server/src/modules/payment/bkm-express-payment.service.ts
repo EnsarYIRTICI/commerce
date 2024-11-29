@@ -1,18 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import {
-  PaymentService,
-  PaymentServiceInitData,
-} from './interface/payment.service';
+
 import { PaymentRequestData } from 'iyzipay';
-import { Payment } from './payment.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 import { Address } from '@modules/address/address.entity';
 import { PaymentCardDto } from './dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
-import { IyzicoService } from './iyzico.service';
+import { IyzicoService } from './iyzico/iyzico.service';
 import { getPaymentRequest } from '@utils/payment.util';
+import { Payment } from './payment.entity';
+import { PaymentService, PaymentServiceInitData } from './payment.service';
 
 @Injectable()
 export class BKMExpressPaymentService implements PaymentService {

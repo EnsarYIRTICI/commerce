@@ -8,7 +8,6 @@ import { AppService } from './app.service';
 import typeorm from '@config/typeorm';
 
 import { RedisService } from 'src/cache/redis.service';
-import { SeedService } from 'src/cache/seed.service';
 
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/auth.guard';
@@ -20,7 +19,7 @@ import { Status } from '@modules/user/status/status.entity';
 import { Category } from '@modules/product/category/category.entity';
 import { User } from '@modules/user/user.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { MinioService } from 'src/storage/minio.service';
+import { MinioService } from 'src/storage/minio/minio.service';
 import { ProductModule } from '@modules/product/product.module';
 import { OrderModule } from '@modules/order/order.module';
 import { ShipmentModule } from '@modules/shipment/shipment.module';
@@ -34,6 +33,7 @@ import { ActivityLogModule } from '@modules/activity_log/activity_log.module';
 import { CarrierModule } from '@modules/carrier/carrier.module';
 import { Address } from '@modules/address/address.entity';
 import { AddressModule } from '@modules/address/address.module';
+import { SeedService } from './seed/seed.service';
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { Product } from './product.entity';
-import { MinioService } from 'src/storage/minio.service';
+import { MinioService } from 'src/storage/minio/minio.service';
 import { CreateProductDto } from './dto/create_product.dto';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Category } from '@modules/product/category/category.entity';

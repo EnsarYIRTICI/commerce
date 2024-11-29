@@ -18,10 +18,10 @@ import { PaymentServiceFactory } from '@modules/payment/payment.service.factory'
 import { AddressService } from '@modules/address/address.service';
 import { CreditCardPaymentService } from '@modules/payment/credit-card-payment.service';
 import { BankTransferPaymentService } from '@modules/payment/bank-transfer-payment.service';
-import { PaymentService } from '@modules/payment/interface/payment.service';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { OrderService } from '@modules/order/order.service';
 import { UserCartFacade } from '../user-cart/user-cart.facade';
+import { PaymentService } from '@modules/payment/payment.service';
 
 @Injectable()
 export class UserOrderFacade {

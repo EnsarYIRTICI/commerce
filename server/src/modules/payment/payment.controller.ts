@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { Payment } from './payment.entity';
-import { IyzicoService } from './iyzico.service';
+import { IyzicoService } from './iyzico/iyzico.service';
 import { ApiTestRequestData } from 'iyzipay';
 import { Roles } from '@decorators/role.decorator';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';

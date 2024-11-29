@@ -20,13 +20,12 @@ import { AddressService } from '@modules/address/address.service';
 
 import { Request } from 'express';
 import { ShoppingCartService } from '@modules/shopping_cart/shopping_cart.service';
-import { PaymentService } from '@modules/payment/interface/payment.service';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 import { Address } from '@modules/address/address.entity';
 
 import { v4 as uuidv4 } from 'uuid';
 import { OrderStatusService } from './order_status/order_status.service';
-import { Payment } from '@modules/payment/payment.entity';
+import { PaymentService } from '@modules/payment/payment.service';
 
 @Injectable()
 export class OrderService {

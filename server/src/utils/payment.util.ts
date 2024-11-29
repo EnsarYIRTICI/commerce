@@ -7,7 +7,7 @@ import { Address } from '@modules/address/address.entity';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
-import { PaymentServiceInitData } from '@modules/payment/interface/payment.service';
+import { PaymentServiceInitData } from '@modules/payment/payment.service';
 
 const getPaymentRequest = (
   paymentServiceInitData: PaymentServiceInitData,

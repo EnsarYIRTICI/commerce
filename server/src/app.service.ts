@@ -5,7 +5,6 @@ import { Role } from '@modules/user/role/role.entity';
 import { Status } from '@modules/user/status/status.entity';
 import { Repository } from 'typeorm';
 import { RegisterDto } from '@auth/dto/register.dto';
-import { SeedService } from 'src/cache/seed.service';
 import { rolesJson } from '@common/roles';
 import { statusesJson } from '@common/statuses';
 import { OrderStatus } from '@modules/order/order_status/order_status.entity';
@@ -15,6 +14,7 @@ import { categoriesJson } from '@common/categories';
 import { ProductAttribute } from '@modules/product/product_attribute/product_attribute.entity';
 import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
 import { productAttributesJson } from '@common/product_attributes';
+import { SeedService } from './seed/seed.service';
 
 @Injectable()
 export class AppService {

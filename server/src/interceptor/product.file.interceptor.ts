@@ -4,17 +4,19 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { min, Observable } from 'rxjs';
 import { Request } from 'express';
-import { MinioService } from 'src/storage/minio.service';
+import { MinioService } from 'src/storage/minio/minio.service';
 
 import { processImage } from '@utils/sharp.util';
 
 import fs from 'fs';
+import { FileService } from 'src/storage/file.service';
+import { StorageService } from 'src/storage/storage.service';
 
 @Injectable()
 export class ProductFileInterceptor implements NestInterceptor {
-  constructor(private readonly minioService: MinioService) {}
+  constructor(private readonly fileService: FileService) {}
 
   async intercept(
     context: ExecutionContext,
@@ -30,6 +32,8 @@ export class ProductFileInterceptor implements NestInterceptor {
     // console.log('Interceptor: Body', body);
 
     const bucketName = 'product-images';
+
+    await this.fileService.init(bucketName);
 
     if (body.variants && Array.isArray(body.variants)) {
       for (const variant of body.variants) {
@@ -51,10 +55,9 @@ export class ProductFileInterceptor implements NestInterceptor {
                   await processImage(buffer);
 
                 for (const image of processedImages) {
-                  await this.minioService.uploadFile(
+                  await this.fileService.upload(
                     image.buffer,
                     image.buffer.length,
-                    bucketName,
                     image.name,
                     file.mimetype,
                   );
