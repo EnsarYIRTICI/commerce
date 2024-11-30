@@ -8,6 +8,7 @@ import { JwtAuthGuard } from './auth.guard';
 import { Role } from '@modules/user/role/role.entity';
 import { Status } from '@modules/user/status/status.entity';
 import { RedisService } from 'src/cache/redis.service';
+import { BlacklistService } from 'src/cache/blacklist.service';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { RedisService } from 'src/cache/redis.service';
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
     }),
   ],
+  providers: [AuthService, BlacklistService],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard, RedisService],
-  exports: [AuthService, JwtModule, JwtAuthGuard],
+  exports: [JwtModule],
 })
 export class AuthModule {}

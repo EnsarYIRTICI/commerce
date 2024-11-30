@@ -1,8 +1,18 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ProductReviewService } from './product_review.service';
 import { ProductReview } from './product_review.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Product Review')
 @Controller('product_reviews')
 export class ProductReviewController {
   constructor(private readonly product_reviewService: ProductReviewService) {}

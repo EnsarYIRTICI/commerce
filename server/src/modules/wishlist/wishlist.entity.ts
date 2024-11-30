@@ -12,8 +12,11 @@ import { WishlistItem } from './wishlist_item/wishlist_item.entity';
 export class Wishlist {
   // Fields for the entity
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
 
   @Column()
   createdAt: Date;

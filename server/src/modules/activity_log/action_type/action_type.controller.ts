@@ -1,8 +1,18 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ActionTypeService } from './action_type.service';
 import { ActionType } from './action_type.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Action Types')
 @Controller('action_types')
 export class ActionTypeController {
   constructor(private readonly action_typeService: ActionTypeService) {}

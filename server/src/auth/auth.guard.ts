@@ -18,6 +18,7 @@ import { getToken } from '@utils/request.util';
 import { compareDates } from '@utils/date.util';
 
 import { Response, Request } from 'express';
+import { BlacklistService } from 'src/cache/blacklist.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -26,7 +27,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
-    private readonly redisService: RedisService,
+    private readonly blackListService: BlacklistService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -50,7 +51,7 @@ export class JwtAuthGuard implements CanActivate {
       );
     }
 
-    const isBlacklisted = await this.redisService.isTokenBlacklisted(token);
+    const isBlacklisted = await this.blackListService.isTokenListed(token);
     if (isBlacklisted) {
       throw new UnauthorizedException('Token is blacklisted');
     }

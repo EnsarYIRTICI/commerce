@@ -18,7 +18,11 @@ import { OrderStatusService } from './order_status/order_status.service';
 import { OrderStatusCoreModule } from './order_status/order_status.core';
 
 @Module({
-  imports: [OrderStatusCoreModule, TypeOrmModule.forFeature([Order])],
+  imports: [
+    OrderStatusCoreModule,
+    TypeOrmModule.forFeature([Order]),
+    OrderSharedModule,
+  ],
   providers: [OrderService],
   exports: [OrderService],
 })

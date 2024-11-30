@@ -33,13 +33,4 @@ export class RedisService {
   async del(key: string) {
     await this.client.del(key);
   }
-
-  async addTokenToBlacklist(token: string, expiresIn: number): Promise<void> {
-    await this.client.set(token, 'blacklisted', {});
-  }
-
-  async isTokenBlacklisted(token: string): Promise<boolean> {
-    const result = await this.client.get(token);
-    return result === 'blacklisted';
-  }
 }

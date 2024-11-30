@@ -33,6 +33,7 @@ import { Address } from '@modules/address/address.entity';
 import { AddressModule } from '@modules/address/address.module';
 import { SeedService } from './seed/seed.service';
 import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.module';
+import { BlacklistService } from './cache/blacklist.service';
 
 @Module({
   imports: [
@@ -46,10 +47,6 @@ import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.modul
         configService.get('typeorm'),
     }),
     TypeOrmModule.forFeature([Role, Status, Category, OrderStatus, User]),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key',
-      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
-    }),
     AuthModule,
     UserModule,
     ProductModule,
@@ -65,14 +62,14 @@ import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.modul
   providers: [
     AppService,
     SeedService,
-    RedisService,
     MinioService,
+    RedisService,
+    BlacklistService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
   ],
-  exports: [JwtModule],
 })
 export class AppModule {
   constructor(

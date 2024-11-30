@@ -1,8 +1,18 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ProductImageService } from './product_image.service';
 import { ProductImage } from './product_image.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Product Image')
 @Controller('product_images')
 export class ProductImageController {
   constructor(private readonly product_imageService: ProductImageService) {}

@@ -25,9 +25,6 @@ import { PaymentService } from '@modules/payment/payment.service';
 @Injectable()
 export class UserOrderFacade {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-
     private readonly userCartFacade: UserCartFacade,
     private readonly paymentFactory: PaymentServiceFactory,
     private readonly addressService: AddressService,
@@ -41,36 +38,17 @@ export class UserOrderFacade {
   }
 
   async getOrders() {
-    this.user = await this.userRepository.findOne({
-      where: {
-        id: this.user.id,
-      },
-      relations: {
-        orders: {
-          orderItems: {
-            productVariant: true,
-          },
-        },
-      },
-    });
-
-    return this.user.orders;
+    return await this.orderService.findAllByUser(this.user);
   }
 
   async createOrder(ip: string, createOrderDto: CreateOrderDto) {
     const date = new Date();
 
-    const shippingAddress = await this.addressService.validateUserAddressById(
-      this.user,
-      createOrderDto.shippingAddressId,
-    );
-
-    const billingAddress = createOrderDto.billingAddressId
-      ? await this.addressService.validateUserAddressById(
-          this.user,
-          createOrderDto.billingAddressId,
-        )
-      : shippingAddress;
+    const { billingAddress, shippingAddress } =
+      await this.addressService.validatedUserAddresses(
+        this.user,
+        createOrderDto,
+      );
 
     this.userCartFacade.init(this.user);
 
@@ -92,22 +70,22 @@ export class UserOrderFacade {
       shippingAddress: shippingAddress,
       cartItems: cartItems,
       date: date,
-      ip: ip,
       user: this.user,
+      ip: ip,
     });
 
     if (paymentService instanceof CreditCardPaymentService) {
       paymentService.initCreditCard(createOrderDto.paymentCard);
     }
 
-    let order = await this.orderService.create(
-      date,
-      this.user,
-      shippingAddress,
-      billingAddress,
-      cartItems,
-      paymentService,
-    );
+    let order = await this.orderService.create({
+      billingAddress: billingAddress,
+      shippingAddress: shippingAddress,
+      cartItems: cartItems,
+      date: date,
+      user: this.user,
+      paymentService: paymentService,
+    });
 
     await this.userCartFacade.clearItems();
 

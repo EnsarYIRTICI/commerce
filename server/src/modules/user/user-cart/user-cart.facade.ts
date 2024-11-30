@@ -16,9 +16,6 @@ import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.serv
 @Injectable()
 export class UserCartFacade {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-
     private readonly cartItemService: CartItemService,
     private readonly productVariantService: ProductVariantService,
   ) {}
@@ -40,30 +37,13 @@ export class UserCartFacade {
   async getItems() {
     this.isInit();
 
-    this.user = await this.userRepository.findOne({
-      where: {
-        id: this.user.id,
-      },
-      relations: {
-        cartItems: {
-          productVariant: {
-            product: {
-              categories: true,
-            },
-          },
-        },
-      },
-    });
-
-    return this.user.cartItems;
+    return await this.cartItemService.findAllByUser(this.user);
   }
 
-  async addItem(createCartItemDto: CreateCartItemDto) {
+  async addItem(slug: string) {
     this.isInit();
 
-    let productVariant = await this.productVariantService.findOneBySlug(
-      createCartItemDto.slug,
-    );
+    let productVariant = await this.productVariantService.findOneBySlug(slug);
 
     if (!productVariant) {
       throw new BadRequestException(

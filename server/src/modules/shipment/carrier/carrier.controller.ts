@@ -11,7 +11,10 @@ import { CarrierService } from './carrier.service';
 import { Carrier } from './carrier.entity';
 import { CreateCarrierDto } from './dto/create_carrier.dto';
 import { UpdateCarrierDto } from './dto/update.carrier.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Carrier')
 @Controller('carriers')
 export class CarrierController {
   constructor(private readonly carrierService: CarrierService) {}

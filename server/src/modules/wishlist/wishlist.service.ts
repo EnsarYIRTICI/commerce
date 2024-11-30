@@ -1,8 +1,8 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Wishlist } from './wishlist.entity';
+import { User } from '@modules/user/user.entity';
 
 @Injectable()
 export class WishlistService {
@@ -11,16 +11,37 @@ export class WishlistService {
     private wishlistRepository: Repository<Wishlist>,
   ) {}
 
+  async findOneByUser(user: User, id: string) {
+    return await this.wishlistRepository.findOne({ where: { user, id } });
+  }
+
+  async findAllByUser(user: User) {
+    return await this.wishlistRepository.find({
+      where: {
+        user,
+      },
+    });
+  }
+
+  async create(user: User, name: string) {
+    return await this.wishlistRepository.save({
+      name,
+      user,
+      createdAt: new Date(),
+    });
+  }
+
+  async deleteOneByUser(user: User, id: string) {
+    const wishlist = await this.findOneByUser(user, id);
+    return await this.wishlistRepository.delete(wishlist.id);
+  }
+
   findAll() {
     return this.wishlistRepository.find();
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.wishlistRepository.findOne({ where: { id } });
-  }
-
-  create(wishlist: Wishlist) {
-    return this.wishlistRepository.save(wishlist);
   }
 
   update(id: number, wishlist: Wishlist) {

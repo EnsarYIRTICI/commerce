@@ -16,6 +16,14 @@ export class CartItemService {
     private cart_itemRepository: Repository<CartItem>,
   ) {}
 
+  async findAllByUser(user: User) {
+    return await this.cart_itemRepository.find({
+      where: {
+        user: user,
+      },
+    });
+  }
+
   async validate(user: User, productVariant: ProductVariant) {
     return await this.cart_itemRepository.findOne({
       where: { user: user, productVariant: productVariant },

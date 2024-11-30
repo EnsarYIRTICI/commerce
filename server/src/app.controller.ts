@@ -24,8 +24,8 @@ export class AppController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @Get('/seedData')
-  async seedData() {
+  @Get('/seed')
+  async seed() {
     try {
       this.appService.seedData();
     } catch (error) {
@@ -38,8 +38,8 @@ export class AppController {
     }
   }
 
-  @Get('/createAdmin')
-  async createAdmin() {
+  @Get('/initAdmin')
+  async initAdmin() {
     try {
       const registerDto = {
         email: 'turing@turing.com',

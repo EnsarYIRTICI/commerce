@@ -1,9 +1,10 @@
+import { ProductVariantCoreModule } from '@modules/product/product_variant/product-variant.core';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [],
+  imports: [ProductVariantCoreModule],
   providers: [],
-  exports: [],
+  exports: [ProductVariantCoreModule],
 })
 export class OrderSharedModule {}

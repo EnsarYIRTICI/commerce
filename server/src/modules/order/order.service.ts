@@ -34,6 +34,7 @@ export class OrderService {
 
     private readonly dataSource: DataSource,
     private readonly order_statusService: OrderStatusService,
+    private readonly productVariantService: ProductVariantService,
   ) {}
 
   findAll() {
@@ -44,14 +45,29 @@ export class OrderService {
     return this.orderRepository.findOne({ where: { id } });
   }
 
-  async create(
-    date: Date,
-    user: User,
-    shippingAddress: Address,
-    billingAddress: Address,
-    cartItems: CartItem[],
-    paymentService: PaymentService,
-  ) {
+  async findAllByUser(user: User) {
+    return await this.orderRepository.find({
+      where: {
+        user: user,
+      },
+    });
+  }
+
+  async create({
+    date,
+    user,
+    shippingAddress,
+    billingAddress,
+    cartItems,
+    paymentService,
+  }: {
+    date: Date;
+    user: User;
+    shippingAddress: Address;
+    billingAddress: Address;
+    cartItems: CartItem[];
+    paymentService: PaymentService;
+  }) {
     const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -69,15 +85,13 @@ export class OrderService {
 
       const orderItems: OrderItem[] = [];
 
+      await this.productVariantService.decreaseStockByCartItems(
+        queryRunner,
+        cartItems,
+      );
+
       for (const item of cartItems) {
         const productVariant: ProductVariant = item.productVariant;
-
-        if (productVariant.stock < 1) {
-          throw new BadRequestException('The product variant is out of stock.');
-        }
-
-        productVariant.stock -= item.quantity;
-        await queryRunner.manager.save(productVariant);
 
         amount = productVariant.price * item.quantity + amount;
 

@@ -1,8 +1,18 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { WishlistService } from './wishlist.service';
 import { Wishlist } from './wishlist.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Wishlist')
 @Controller('wishlists')
 export class WishlistController {
   constructor(private readonly wishlistService: WishlistService) {}
@@ -13,13 +23,8 @@ export class WishlistController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id') id: string) {
     return this.wishlistService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() wishlist: Wishlist) {
-    return this.wishlistService.create(wishlist);
   }
 
   @Put(':id')

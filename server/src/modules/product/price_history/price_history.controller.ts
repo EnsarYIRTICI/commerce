@@ -1,8 +1,18 @@
-
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { PriceHistoryService } from './price_history.service';
 import { PriceHistory } from './price_history.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Price History')
 @Controller('price_histories')
 export class PriceHistoryController {
   constructor(private readonly price_historyService: PriceHistoryService) {}

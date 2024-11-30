@@ -10,7 +10,10 @@ import {
 import { ProductAttributeService } from './product_attribute.service';
 import { ProductAttribute } from './product_attribute.entity';
 import { Roles } from '@decorators/role.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Product Attribute')
 @Controller('product_attributes')
 export class ProductAttributeController {
   constructor(

@@ -20,6 +20,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Response, Request } from 'express';
 import { getToken } from '@utils/request.util';
+import { BlacklistService } from 'src/cache/blacklist.service';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -27,7 +28,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-    private readonly redisService: RedisService,
+    private readonly blacklistService: BlacklistService,
   ) {}
 
   @Roles('public')
@@ -109,12 +110,13 @@ export class AuthController {
 
   @Roles('user')
   @Get('logout')
+  @ApiBearerAuth()
   async logout(@Req() request: Request) {
     const token = getToken(request);
 
     const oneWeekInSeconds = 7 * 24 * 60 * 60;
 
-    await this.redisService.addTokenToBlacklist(token, oneWeekInSeconds);
+    await this.blacklistService.addTokenTolist(token);
 
     return {
       message: successMessages.LOGIN_SUCCESS,

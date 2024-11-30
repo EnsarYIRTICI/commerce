@@ -9,7 +9,10 @@ import {
 } from '@nestjs/common';
 import { OrderItemService } from './order_item.service';
 import { OrderItem } from './order_item.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Order Item')
 @Controller('order_items')
 export class OrderItemController {
   constructor(private readonly order_itemService: OrderItemService) {}

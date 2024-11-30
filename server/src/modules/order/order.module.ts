@@ -23,7 +23,6 @@ import { OrderCoreModule } from './order.core';
     AddressDetailModule,
 
     OrderCoreModule,
-    OrderSharedModule,
   ],
   providers: [],
   controllers: [OrderController],

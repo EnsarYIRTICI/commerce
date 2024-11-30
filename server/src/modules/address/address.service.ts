@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Address } from './address.entity';
 import { User } from '@modules/user/user.entity';
 import { CreateAddressDto } from './dto/createAddress.dto';
+import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 
 @Injectable()
 export class AddressService {
@@ -11,6 +12,27 @@ export class AddressService {
     @InjectRepository(Address)
     private addressRepository: Repository<Address>,
   ) {}
+
+  async validatedUserAddresses(
+    user: User,
+    createOrderDto: CreateOrderDto,
+  ): Promise<{ shippingAddress: Address; billingAddress: Address }> {
+    const shippingAddress = await this.validateUserAddressById(
+      user,
+      createOrderDto.shippingAddressId,
+    );
+
+    const billingAddress =
+      createOrderDto.billingAddressId &&
+      createOrderDto.billingAddressId !== createOrderDto.shippingAddressId
+        ? await this.validateUserAddressById(
+            user,
+            createOrderDto.billingAddressId,
+          )
+        : shippingAddress;
+
+    return { shippingAddress, billingAddress };
+  }
 
   async validateUserAddressById(user: User, addressId: number) {
     return await this.addressRepository.findOne({
@@ -35,9 +57,9 @@ export class AddressService {
     return this.addressRepository.findOne({ where: { id } });
   }
 
-  async create(createOrderDto: CreateAddressDto, user: User) {
+  async create(createAddressDto: CreateAddressDto, user: User) {
     let address = this.addressRepository.create({
-      ...createOrderDto,
+      ...createAddressDto,
       user: user,
     });
 

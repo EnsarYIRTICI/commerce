@@ -19,6 +19,8 @@ import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 
 @Entity()
 export class User {
+  // Fields for the entity
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -27,8 +29,6 @@ export class User {
 
   @Column()
   lastname: string;
-
-  // Fields for the entity
 
   @Column({ unique: true })
   email: string;
@@ -42,20 +42,20 @@ export class User {
   @Column({ nullable: true })
   updatedAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   lastLogin: Date;
 
   @Column({ type: 'timestamp', nullable: true })
   lastPasswordChange: Date;
 
   @Column({ nullable: true })
-  iyzipayId: string;
-
-  @Column({ nullable: true })
   phoneNumber: string;
 
   @Column({ nullable: true })
   identityNumber: string;
+
+  @Column({ nullable: true })
+  iyzipayId: string;
 
   // Relationships for the entity
 
@@ -65,14 +65,14 @@ export class User {
   @ManyToOne(() => Status, (status) => status.users, { nullable: false })
   status: Status;
 
-  @OneToOne(() => Wishlist, (wishlist) => wishlist.user)
-  wishlists: Wishlist;
-
   @OneToMany(() => CartItem, (entity) => entity.user)
   cartItems: CartItem[];
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
+  wishlists: Wishlist[];
 
   @OneToMany(() => ProductReview, (productReview) => productReview.user)
   reviews: ProductReview[];
