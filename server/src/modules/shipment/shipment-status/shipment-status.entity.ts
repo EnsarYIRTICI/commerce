@@ -2,13 +2,13 @@ import { Shipment } from '@modules/shipment/shipment.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
-export class Carrier {
+export class ShipmentStatus {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  status: string;
 
-  @OneToMany(() => Shipment, (entity) => entity.carrier)
-  shipment: Shipment;
+  @OneToMany(() => Shipment, (shipment) => shipment.status)
+  shipments: Shipment[];
 }

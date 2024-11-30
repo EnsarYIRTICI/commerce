@@ -23,28 +23,16 @@ import { PriceHistoryModule } from './price_history/price_history.module';
 import { ProductReviewModule } from './product_review/product_review.module';
 import { ProductAttributeModule } from './product_attribute/product_attribute.module';
 import { ProductAttributeValueModule } from './product_attribute_value/product_attribute_value.module';
-import { ProductCoreModule } from './product.core';
+import { CategoryCoreModule } from './category/category.core';
+import { ProductAttributeValueCoreModule } from './product_attribute_value/product-attribute-value.core';
 
 @Module({
   imports: [
-    ProductSharedModule,
-    ProductCoreModule,
-
-    CategoryModule,
-    PriceHistoryModule,
-    ProductReviewModule,
-    ProductVariantModule,
-    ProductImageModule,
-    ProductAttributeModule,
-    ProductAttributeValueModule,
+    ProductAttributeValueCoreModule,
+    CategoryCoreModule,
+    TypeOrmModule.forFeature([Product]),
   ],
-  providers: [],
-  controllers: [ProductController],
+  providers: [ProductService],
+  exports: [ProductService],
 })
-export class ProductModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(FormDataMiddleware)
-      .forRoutes({ path: 'products', method: RequestMethod.POST });
-  }
-}
+export class ProductCoreModule {}

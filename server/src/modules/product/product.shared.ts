@@ -14,11 +14,8 @@ import { ProductImage } from './product_image/product_image.entity';
 import { StorageModule } from 'src/storage/storage.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Category, ProductAttributeValue]),
-    StorageModule,
-  ],
-  providers: [CategoryService, ProductAttributeValueService],
-  exports: [CategoryService, ProductAttributeValueService, StorageModule],
+  imports: [StorageModule],
+  providers: [],
+  exports: [StorageModule],
 })
 export class ProductSharedModule {}

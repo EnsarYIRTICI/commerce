@@ -7,7 +7,7 @@ import { JwtService, JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth.guard';
 import { Role } from '@modules/user/role/role.entity';
 import { Status } from '@modules/user/status/status.entity';
-import { RedisService } from 'src/cache/redis.service';
+import { RedisService } from 'src/cache/redis/redis.service';
 import { BlacklistService } from 'src/cache/blacklist.service';
 
 @Module({

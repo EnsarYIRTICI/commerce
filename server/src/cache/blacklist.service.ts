@@ -1,4 +1,4 @@
-import { RedisService } from './redis.service';
+import { RedisService } from './redis/redis.service';
 
 export class BlacklistService {
   constructor(private readonly redisService: RedisService) {}

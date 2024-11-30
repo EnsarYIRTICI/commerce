@@ -24,20 +24,6 @@ export class AppController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @Get('/seed')
-  async seed() {
-    try {
-      this.appService.seedData();
-    } catch (error) {
-      console.log(error);
-
-      throw new HttpException(
-        errorMessages.INTERNAL_SERVER_ERROR,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
   @Get('/initAdmin')
   async initAdmin() {
     try {

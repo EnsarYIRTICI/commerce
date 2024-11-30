@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 
 import typeorm from '@config/typeorm';
 
-import { RedisService } from 'src/cache/redis.service';
+import { RedisService } from 'src/cache/redis/redis.service';
 
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/auth.guard';
@@ -34,6 +34,7 @@ import { AddressModule } from '@modules/address/address.module';
 import { SeedService } from './seed/seed.service';
 import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.module';
 import { BlacklistService } from './cache/blacklist.service';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -57,11 +58,11 @@ import { BlacklistService } from './cache/blacklist.service';
     CartItemModule,
     AddressModule,
     ActivityLogModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    SeedService,
     MinioService,
     RedisService,
     BlacklistService,

@@ -10,7 +10,6 @@ import { AddressService } from '@modules/address/address.service';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Product } from '@modules/product/product.entity';
-import { OrderSharedModule } from './order.shared';
 import { OrderItemModule } from './order_item/order_item.module';
 import { OrderStatusModule } from './order_status/order_status.module';
 import { AddressDetailModule } from './address_detail/address_detail.module';
@@ -21,7 +20,6 @@ import { OrderCoreModule } from './order.core';
     OrderItemModule,
     OrderStatusModule,
     AddressDetailModule,
-
     OrderCoreModule,
   ],
   providers: [],

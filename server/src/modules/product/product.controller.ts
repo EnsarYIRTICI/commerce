@@ -33,12 +33,7 @@ import { createSlug } from '@utils/string.util';
 @ApiTags('Product')
 @Controller('products')
 export class ProductController {
-  constructor(
-    private readonly productService: ProductService,
-    private readonly categoryService: CategoryService,
-    private readonly product_attribute_valueService: ProductAttributeValueService,
-    private readonly dataSource: DataSource,
-  ) {}
+  constructor(private readonly productService: ProductService) {}
 
   // CUSTOM
 

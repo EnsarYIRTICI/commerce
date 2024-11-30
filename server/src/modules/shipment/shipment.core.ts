@@ -4,10 +4,15 @@ import { Shipment } from './shipment.entity';
 import { ShipmentService } from './shipment.service';
 import { ShipmentController } from './shipment.controller';
 import { CarrierModule } from './carrier/carrier.module';
-import { ShipmentCoreModule } from './shipment.core';
+import { ShipmentStatusModule } from './shipment-status/shipment-status.module';
 
 @Module({
-  imports: [ShipmentCoreModule],
-  controllers: [ShipmentController],
+  imports: [
+    ShipmentStatusModule,
+    CarrierModule,
+    TypeOrmModule.forFeature([Shipment]),
+  ],
+  providers: [ShipmentService],
+  exports: [ShipmentService],
 })
-export class ShipmentModule {}
+export class ShipmentCoreModule {}

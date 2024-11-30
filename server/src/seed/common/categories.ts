@@ -361,7 +361,6 @@ export const categoriesJson = [
       { name: 'Stuffed Animals & Plush Toys' },
       { name: 'Toy Remote Control & Play Vehicles' },
       { name: 'Tricycles, Scooters & Wagons' },
-      { name: 'Video Games' },
     ],
   },
   {

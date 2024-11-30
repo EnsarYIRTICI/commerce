@@ -13,7 +13,7 @@ import { User } from '@modules/user/user.entity';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@decorators/role.decorator';
 import { errorMessages } from '@common/errorMessages';
-import { RedisService } from 'src/cache/redis.service';
+import { RedisService } from 'src/cache/redis/redis.service';
 import { getToken } from '@utils/request.util';
 import { compareDates } from '@utils/date.util';
 
