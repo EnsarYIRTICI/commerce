@@ -13,10 +13,10 @@ import {
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './order.entity';
-import { Roles } from '@decorators/role.decorator';
+import { Roles } from 'src/shared/decorators/role.decorator';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { CreateOrderDto } from './dto/createOrder.dto';
-import { errorMessages } from '@common/errorMessages';
+import { errorMessages } from 'src/shared/common/errorMessages';
 
 import { Request } from 'express';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';

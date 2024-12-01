@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { min, Observable } from 'rxjs';
 import { Request } from 'express';
-import { MinioService } from 'src/storage/minio/minio.service';
+import { MinioService } from '@modules/storage/minio/minio.service';
 
-import { processImage } from '@utils/sharp.util';
+import { processImage } from 'src/shared/utils/sharp.util';
 
 import fs from 'fs';
-import { FileService } from 'src/storage/file.service';
-import { StorageService } from 'src/storage/storage.service';
+import { FileService } from '@modules/storage/file.service';
+import { StorageService } from '@modules/storage/storage.service';
 
 @Injectable()
 export class ProductFileInterceptor implements NestInterceptor {

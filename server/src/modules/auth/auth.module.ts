@@ -4,11 +4,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { User } from '@modules/user/user.entity';
 import { JwtService, JwtModule } from '@nestjs/jwt';
-import { JwtAuthGuard } from './auth.guard';
+import { JwtAuthGuard } from '../../shared/guard/auth.guard';
 import { Role } from '@modules/user/role/role.entity';
 import { Status } from '@modules/user/status/status.entity';
-import { RedisService } from 'src/cache/redis/redis.service';
-import { BlacklistService } from 'src/cache/blacklist.service';
+import { RedisService } from '@modules/cache/redis/redis.service';
+import { BlacklistService } from '@modules/cache/blacklist.service';
 
 @Module({
   imports: [

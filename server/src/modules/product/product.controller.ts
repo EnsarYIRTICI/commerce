@@ -16,18 +16,18 @@ import {
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { errorMessages } from '@common/errorMessages';
+import { errorMessages } from 'src/shared/common/errorMessages';
 import { CreateProductDto } from './dto/create_product.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { Roles } from '@decorators/role.decorator';
-import { ProductFileInterceptor } from 'src/interceptor/product.file.interceptor';
+import { Roles } from 'src/shared/decorators/role.decorator';
+import { ProductFileInterceptor } from 'src/shared/interceptor/product.file.interceptor';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { Category } from '@modules/product/category/category.entity';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
 import { CategoryService } from '@modules/product/category/category.service';
 import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
-import { createSlug } from '@utils/string.util';
+import { createSlug } from 'src/shared/utils/string.util';
 
 @ApiBearerAuth()
 @ApiTags('Product')

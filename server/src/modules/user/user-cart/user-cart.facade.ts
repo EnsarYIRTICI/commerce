@@ -7,7 +7,7 @@ import { User } from '../user.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ServiceNotInitializedException } from 'src/exceptions/service-not-initialized.exception';
+import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 import { CreateCartItemDto } from '@modules/shopping_cart/cart_item/dto/create_cart_item.dto';

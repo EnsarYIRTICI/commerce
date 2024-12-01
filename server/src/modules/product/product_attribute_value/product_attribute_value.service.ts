@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ProductAttributeValue } from './product_attribute_value.entity';
-import { Roles } from '@decorators/role.decorator';
+import { Roles } from 'src/shared/decorators/role.decorator';
 
 @Injectable()
 export class ProductAttributeValueService {

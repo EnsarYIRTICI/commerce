@@ -5,12 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import typeorm from '@config/typeorm';
+import typeorm from 'src/shared/config/typeorm';
 
-import { RedisService } from 'src/cache/redis/redis.service';
+import { RedisService } from '@modules/cache/redis/redis.service';
 
-import { AuthModule } from './auth/auth.module';
-import { JwtAuthGuard } from './auth/auth.guard';
+import { AuthModule } from './modules/auth/auth.module';
+import { JwtAuthGuard } from './shared/guard/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 
 import { Role } from '@modules/user/role/role.entity';
@@ -19,7 +19,7 @@ import { Status } from '@modules/user/status/status.entity';
 import { Category } from '@modules/product/category/category.entity';
 import { User } from '@modules/user/user.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { MinioService } from 'src/storage/minio/minio.service';
+import { MinioService } from '@modules/storage/minio/minio.service';
 import { ProductModule } from '@modules/product/product.module';
 import { OrderModule } from '@modules/order/order.module';
 import { ShipmentModule } from '@modules/shipment/shipment.module';
@@ -31,10 +31,9 @@ import { ActivityLog } from '@modules/activity_log/activity_log.entity';
 import { ActivityLogModule } from '@modules/activity_log/activity_log.module';
 import { Address } from '@modules/address/address.entity';
 import { AddressModule } from '@modules/address/address.module';
-import { SeedService } from './seed/seed.service';
 import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.module';
-import { BlacklistService } from './cache/blacklist.service';
-import { SeedModule } from './seed/seed.module';
+import { BlacklistService } from './modules/cache/blacklist.service';
+import { SeedModule } from '@modules/seed/seed.module';
 
 @Module({
   imports: [

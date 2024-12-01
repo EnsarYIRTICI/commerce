@@ -11,16 +11,16 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { errorMessages } from '@common/errorMessages';
-import { successMessages } from '@common/successMessages';
+import { errorMessages } from 'src/shared/common/errorMessages';
+import { successMessages } from 'src/shared/common/successMessages';
 import { RegisterDto } from './dto/register.dto';
-import { Roles } from '@decorators/role.decorator';
-import { RedisService } from 'src/cache/redis/redis.service';
+import { Roles } from 'src/shared/decorators/role.decorator';
+import { RedisService } from '@modules/cache/redis/redis.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Response, Request } from 'express';
-import { getToken } from '@utils/request.util';
-import { BlacklistService } from 'src/cache/blacklist.service';
+import { getToken } from 'src/shared/utils/request.util';
+import { BlacklistService } from '@modules/cache/blacklist.service';
 
 @ApiTags('Auth')
 @Controller('auth')

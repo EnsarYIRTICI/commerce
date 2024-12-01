@@ -7,11 +7,11 @@ import {
   Post,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { successMessages } from '@common/successMessages';
-import { RegisterDto } from '@auth/dto/register.dto';
+import { successMessages } from 'src/shared/common/successMessages';
+import { RegisterDto } from '@modules/auth/dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
-import { Roles } from '@decorators/role.decorator';
-import { errorMessages } from '@common/errorMessages';
+import { Roles } from 'src/shared/decorators/role.decorator';
+import { errorMessages } from 'src/shared/common/errorMessages';
 import { QueryFailedError } from 'typeorm';
 import { ApiTags } from '@nestjs/swagger';
 

@@ -15,7 +15,7 @@ import { OrderItem } from './order_item/order_item.entity';
 
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
-import { errorMessages } from '@common/errorMessages';
+import { errorMessages } from 'src/shared/common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
 
 import { Request } from 'express';

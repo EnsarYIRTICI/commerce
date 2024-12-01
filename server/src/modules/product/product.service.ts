@@ -2,14 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { Product } from './product.entity';
-import { MinioService } from 'src/storage/minio/minio.service';
+import { MinioService } from '@modules/storage/minio/minio.service';
 import { CreateProductDto } from './dto/create_product.dto';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Category } from '@modules/product/category/category.entity';
 import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
-import { createSlug } from '@utils/string.util';
+import { createSlug } from 'src/shared/utils/string.util';
 import { CategoryService } from '@modules/product/category/category.service';
-import { errorMessages } from '@common/errorMessages';
+import { errorMessages } from 'src/shared/common/errorMessages';
 import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 
 import { Order } from '@modules/order/order.entity';

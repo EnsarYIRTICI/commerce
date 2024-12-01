@@ -9,7 +9,10 @@ import { Address } from '@modules/address/address.entity';
 import { PaymentCardDto } from './dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { IyzicoService } from './iyzico/iyzico.service';
-import { getPaymentCard, getPaymentRequest } from '@utils/payment.util';
+import {
+  getPaymentCard,
+  getPaymentRequest,
+} from 'src/shared/utils/payment.util';
 
 @Injectable()
 export class CreditCardPaymentService implements PaymentService {

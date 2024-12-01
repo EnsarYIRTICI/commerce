@@ -10,7 +10,7 @@ import {
 import { ProductAttributeValueService } from './product_attribute_value.service';
 import { ProductAttributeValue } from './product_attribute_value.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Roles } from '@decorators/role.decorator';
+import { Roles } from 'src/shared/decorators/role.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Product Attribute Value')

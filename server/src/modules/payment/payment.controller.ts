@@ -10,7 +10,7 @@ import {
 import { Payment } from './payment.entity';
 import { IyzicoService } from './iyzico/iyzico.service';
 import { ApiTestRequestData } from 'iyzipay';
-import { Roles } from '@decorators/role.decorator';
+import { Roles } from 'src/shared/decorators/role.decorator';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()

@@ -11,14 +11,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from '@decorators/role.decorator';
-import { errorMessages } from '@common/errorMessages';
-import { RedisService } from 'src/cache/redis/redis.service';
-import { getToken } from '@utils/request.util';
-import { compareDates } from '@utils/date.util';
+import { ROLES_KEY } from 'src/shared/decorators/role.decorator';
+import { errorMessages } from 'src/shared/common/errorMessages';
+import { RedisService } from '@modules/cache/redis/redis.service';
+import { getToken } from 'src/shared/utils/request.util';
+import { compareDates } from 'src/shared/utils/date.util';
 
 import { Response, Request } from 'express';
-import { BlacklistService } from 'src/cache/blacklist.service';
+import { BlacklistService } from '@modules/cache/blacklist.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {

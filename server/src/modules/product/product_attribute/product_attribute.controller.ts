@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ProductAttributeService } from './product_attribute.service';
 import { ProductAttribute } from './product_attribute.entity';
-import { Roles } from '@decorators/role.decorator';
+import { Roles } from 'src/shared/decorators/role.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()

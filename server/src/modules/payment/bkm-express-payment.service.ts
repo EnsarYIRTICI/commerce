@@ -8,7 +8,7 @@ import { Address } from '@modules/address/address.entity';
 import { PaymentCardDto } from './dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { IyzicoService } from './iyzico/iyzico.service';
-import { getPaymentRequest } from '@utils/payment.util';
+import { getPaymentRequest } from 'src/shared/utils/payment.util';
 import { Payment } from './payment.entity';
 import { PaymentService, PaymentServiceInitData } from './payment.service';
 
