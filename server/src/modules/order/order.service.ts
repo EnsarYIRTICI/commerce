@@ -24,7 +24,8 @@ import { Address } from '@modules/address/address.entity';
 
 import { v4 as uuidv4 } from 'uuid';
 import { OrderStatusService } from './order_status/order_status.service';
-import { PaymentService } from '@modules/payment/payment.service';
+import { Payment } from '@modules/payment/payment.entity';
+import { OrderItemService } from './order_item/order_item.service';
 
 @Injectable()
 export class OrderService {
@@ -32,9 +33,8 @@ export class OrderService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
 
-    private readonly dataSource: DataSource,
-    private readonly order_statusService: OrderStatusService,
-    private readonly productVariantService: ProductVariantService,
+    private readonly orderStatusService: OrderStatusService,
+    private readonly orderItemService: OrderItemService,
   ) {}
 
   findAll() {
@@ -54,86 +54,57 @@ export class OrderService {
   }
 
   async create({
+    queryRunner,
     date,
     user,
     shippingAddress,
     billingAddress,
+    payment,
     cartItems,
-    paymentService,
   }: {
+    queryRunner: QueryRunner;
     date: Date;
     user: User;
     shippingAddress: Address;
     billingAddress: Address;
+    payment: Payment;
     cartItems: CartItem[];
-    paymentService: PaymentService;
   }) {
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+    const orderStatus = await this.orderStatusService.findOneByName('pending');
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+    if (!orderStatus) {
+      throw new BadRequestException('The order status is null.');
+    }
 
-    try {
-      let amount: number = 0;
+    const orderItems: OrderItem[] = [];
 
-      const orderStatus =
-        await this.order_statusService.findOneByName('pending');
+    for (const item of cartItems) {
+      const productVariant: ProductVariant = item.productVariant;
 
-      if (!orderStatus) {
-        throw new BadRequestException('The order status is null.');
-      }
-
-      const orderItems: OrderItem[] = [];
-
-      await this.productVariantService.decreaseStockByCartItems(
-        queryRunner,
-        cartItems,
-      );
-
-      for (const item of cartItems) {
-        const productVariant: ProductVariant = item.productVariant;
-
-        amount = productVariant.price * item.quantity + amount;
-
-        let orderItem = queryRunner.manager.create(OrderItem, {
-          productVariant,
-          quantity: item.quantity,
-          price: productVariant.price,
-        });
-
-        orderItems.push(orderItem);
-      }
-
-      let payment = await paymentService.create(amount);
-
-      shippingAddress.id = undefined;
-      billingAddress.id = undefined;
-
-      let order = queryRunner.manager.create(Order, {
-        createdAt: date,
-        orderNumber: uuidv4(),
-        status: orderStatus,
-        shippingAddress,
-        billingAddress,
-        user,
-        payments: [payment],
-        orderItems: orderItems,
+      let orderItem = queryRunner.manager.create(OrderItem, {
+        productVariant,
+        quantity: item.quantity,
+        price: productVariant.price,
       });
 
-      order = await queryRunner.manager.save(order);
-
-      await queryRunner.commitTransaction();
-
-      console.log('Order -->', order);
-
-      return order;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-
-      throw error;
-    } finally {
-      await queryRunner.release();
+      orderItems.push(orderItem);
     }
+
+    shippingAddress.id = undefined;
+    billingAddress.id = undefined;
+
+    let order = queryRunner.manager.create(Order, {
+      createdAt: date,
+      orderNumber: uuidv4(),
+      status: orderStatus,
+      shippingAddress,
+      billingAddress,
+      user,
+      payments: [payment],
+      orderItems: orderItems,
+    });
+
+    return await queryRunner.manager.save(order);
   }
 
   update(id: number, order: Order) {

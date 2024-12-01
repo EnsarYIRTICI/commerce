@@ -13,27 +13,6 @@ export class AddressService {
     private addressRepository: Repository<Address>,
   ) {}
 
-  async validatedUserAddresses(
-    user: User,
-    createOrderDto: CreateOrderDto,
-  ): Promise<{ shippingAddress: Address; billingAddress: Address }> {
-    const shippingAddress = await this.validateUserAddressById(
-      user,
-      createOrderDto.shippingAddressId,
-    );
-
-    const billingAddress =
-      createOrderDto.billingAddressId &&
-      createOrderDto.billingAddressId !== createOrderDto.shippingAddressId
-        ? await this.validateUserAddressById(
-            user,
-            createOrderDto.billingAddressId,
-          )
-        : shippingAddress;
-
-    return { shippingAddress, billingAddress };
-  }
-
   async validateUserAddressById(user: User, addressId: number) {
     return await this.addressRepository.findOne({
       where: {

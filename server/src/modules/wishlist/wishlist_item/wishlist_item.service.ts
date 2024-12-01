@@ -16,7 +16,9 @@ export class WishlistItemService {
     return await this.wishlist_itemRepository.findOne({
       where: {
         id,
-        wishlist,
+        wishlist: {
+          id: wishlist.id,
+        },
       },
     });
   }
@@ -24,7 +26,9 @@ export class WishlistItemService {
   async findAllByWishlist(wishlist: Wishlist) {
     return await this.wishlist_itemRepository.find({
       where: {
-        wishlist,
+        wishlist: {
+          id: wishlist.id,
+        },
       },
       relations: {
         productVariant: true,
@@ -41,7 +45,6 @@ export class WishlistItemService {
 
   async deleteOneByWishlist(wishlist: Wishlist, id: number) {
     const wishlistItem = await this.findOneByWishlist(wishlist, id);
-
     return await this.wishlist_itemRepository.delete(wishlistItem.id);
   }
 

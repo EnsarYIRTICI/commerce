@@ -1,45 +1,11 @@
 import Iyzipay from 'iyzipay';
 import { Request } from 'express';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { User } from '@modules/user/user.entity';
 import { Address } from '@modules/address/address.entity';
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
-import { PaymentServiceInitData } from '@modules/payment/payment.service';
-
-const getPaymentRequest = (
-  paymentServiceInitData: PaymentServiceInitData,
-  amount: number,
-) => {
-  const ip = paymentServiceInitData.ip;
-  const user = paymentServiceInitData.user;
-  const billingAddress = paymentServiceInitData.billingAddress;
-  const shippingAddress = paymentServiceInitData.shippingAddress;
-
-  const cartItems = paymentServiceInitData.cartItems;
-
-  const basketId = uuidv4();
-  const conversationId = `${user.id}-${Date.now()}`;
-
-  return {
-    locale: Iyzipay.LOCALE.TR,
-    conversationId: conversationId,
-    price: amount,
-    paidPrice: amount,
-    currency: Iyzipay.CURRENCY.TRY,
-    installments: 1,
-    basketId: basketId,
-    paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,
-    paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
-
-    buyer: getBuyer(ip, user, billingAddress),
-    shippingAddress: getShippingAddress(shippingAddress),
-    billingAddress: getBillingAddress(billingAddress),
-    basketItems: getBasketItems(cartItems),
-  };
-};
 
 const getBuyer = (ip: string, user: User, billingAddress: Address) => {
   return {
@@ -124,7 +90,7 @@ const formatDateToIyzicoFormat = (date: Date) => {
 };
 
 export {
-  getPaymentRequest,
+  getBuyer,
   getBasketItems,
   getPaymentCard,
   getBillingAddress,

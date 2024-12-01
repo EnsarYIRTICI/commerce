@@ -12,13 +12,22 @@ export class WishlistService {
   ) {}
 
   async findOneByUser(user: User, id: string) {
-    return await this.wishlistRepository.findOne({ where: { user, id } });
+    return await this.wishlistRepository.findOne({
+      where: {
+        user: {
+          id: user.id,
+        },
+        id,
+      },
+    });
   }
 
   async findAllByUser(user: User) {
     return await this.wishlistRepository.find({
       where: {
-        user,
+        user: {
+          id: user.id,
+        },
       },
     });
   }

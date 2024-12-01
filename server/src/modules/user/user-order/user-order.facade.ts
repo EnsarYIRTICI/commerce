@@ -6,29 +6,34 @@ import {
 import { User } from '../user.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
 import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 import { CreateCartItemDto } from '@modules/shopping_cart/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.service';
 import { Request } from 'express';
-import { PaymentServiceFactory } from '@modules/payment/payment.service.factory';
+import { PaymentProcessor } from '@modules/payment/payment.processor';
 import { AddressService } from '@modules/address/address.service';
-import { CreditCardPaymentService } from '@modules/payment/credit-card-payment.service';
-import { BankTransferPaymentService } from '@modules/payment/bank-transfer-payment.service';
+import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { OrderService } from '@modules/order/order.service';
 import { UserCartFacade } from '../user-cart/user-cart.facade';
 import { PaymentService } from '@modules/payment/payment.service';
+import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 
 @Injectable()
 export class UserOrderFacade {
   constructor(
-    private readonly userCartFacade: UserCartFacade,
-    private readonly paymentFactory: PaymentServiceFactory,
+    private readonly dataSource: DataSource,
+
     private readonly addressService: AddressService,
     private readonly orderService: OrderService,
+    private readonly productVariantService: ProductVariantService,
+
+    private readonly paymentProcessor: PaymentProcessor,
+    private readonly paymentService: PaymentService,
+    private readonly creditCardPaymentStrategy: CreditCardPaymentStrategy,
   ) {}
 
   private user: User;
@@ -41,54 +46,82 @@ export class UserOrderFacade {
     return await this.orderService.findAllByUser(this.user);
   }
 
-  async createOrder(ip: string, createOrderDto: CreateOrderDto) {
-    const date = new Date();
+  async createOrder(
+    ip: string,
+    createOrderDto: CreateOrderDto,
+    cartItems: CartItem[],
+  ) {
+    const billingAddressId = createOrderDto.billingAddressId;
+    const shippingAddressId = createOrderDto.shippingAddressId;
+    const paymentCard = createOrderDto.paymentCard;
 
-    const { billingAddress, shippingAddress } =
-      await this.addressService.validatedUserAddresses(
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const date = new Date();
+
+      let amount: number = 0;
+
+      const shippingAddress = await this.addressService.validateUserAddressById(
         this.user,
-        createOrderDto,
+        shippingAddressId,
       );
 
-    this.userCartFacade.init(this.user);
+      const billingAddress =
+        billingAddressId && billingAddressId !== shippingAddressId
+          ? await this.addressService.validateUserAddressById(
+              this.user,
+              billingAddressId,
+            )
+          : shippingAddress;
 
-    const cartItems = await this.userCartFacade.getItems();
-    if (!cartItems.length) {
-      throw new BadRequestException('No item found in cart.');
+      this.creditCardPaymentStrategy.init(paymentCard);
+
+      this.paymentProcessor.init(this.creditCardPaymentStrategy);
+
+      const paymentResult = await this.paymentProcessor.pay(amount, {
+        billingAddress: billingAddress,
+        shippingAddress: shippingAddress,
+        cartItems: cartItems,
+        date: date,
+        user: this.user,
+        ip: ip,
+      });
+
+      await this.productVariantService.decreaseStockByCartItems(
+        queryRunner,
+        cartItems,
+      );
+
+      let payment = await this.paymentService.create({
+        queryRunner: queryRunner,
+        basketId: '',
+        date: date,
+        price: amount,
+      });
+
+      let order = await this.orderService.create({
+        queryRunner: queryRunner,
+        billingAddress: billingAddress,
+        shippingAddress: shippingAddress,
+        cartItems: cartItems,
+        date: date,
+        user: this.user,
+        payment: payment,
+      });
+
+      await queryRunner.commitTransaction();
+
+      return order;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
-
-    const paymentService: PaymentService = createOrderDto.paymentCard
-      ? (this.paymentFactory.getPaymentService(
-          'CreditCard',
-        ) as CreditCardPaymentService)
-      : (this.paymentFactory.getPaymentService(
-          'BankTransfer',
-        ) as BankTransferPaymentService);
-
-    paymentService.init({
-      billingAddress: billingAddress,
-      shippingAddress: shippingAddress,
-      cartItems: cartItems,
-      date: date,
-      user: this.user,
-      ip: ip,
-    });
-
-    if (paymentService instanceof CreditCardPaymentService) {
-      paymentService.initCreditCard(createOrderDto.paymentCard);
-    }
-
-    let order = await this.orderService.create({
-      billingAddress: billingAddress,
-      shippingAddress: shippingAddress,
-      cartItems: cartItems,
-      date: date,
-      user: this.user,
-      paymentService: paymentService,
-    });
-
-    await this.userCartFacade.clearItems();
-
-    return order;
   }
 }

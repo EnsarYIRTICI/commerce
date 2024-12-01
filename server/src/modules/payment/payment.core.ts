@@ -1,27 +1,32 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './payment.entity';
-import { CreditCardPaymentService } from './credit-card-payment.service';
-import { BKMExpressPaymentService } from './bkm-express-payment.service';
-import { BankTransferPaymentService } from './bank-transfer-payment.service';
-import { PaymentServiceFactory } from './payment.service.factory';
-import { PaymentSharedModule } from './payment.shared';
+import { CreditCardPaymentStrategy } from './payment-strategy/credit-card-payment.strategy';
+import { BKMExpressPaymentStrategy } from './payment-strategy/bkm-express-payment.strategy';
+import { BankTransferPaymentStrategy } from './payment-strategy/bank-transfer-payment.strategy';
+import { PaymentService } from './payment.service';
+import { PaymentProcessor } from './payment.processor';
+import { IyzicoService } from './payment-system/iyzico/iyzico.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment]), PaymentSharedModule],
+  imports: [TypeOrmModule.forFeature([Payment])],
   providers: [
-    CreditCardPaymentService,
-    BKMExpressPaymentService,
-    BankTransferPaymentService,
-    PaymentServiceFactory,
+    {
+      provide: 'PaymentSystem',
+      useClass: IyzicoService,
+    },
+    CreditCardPaymentStrategy,
+    BankTransferPaymentStrategy,
+    BKMExpressPaymentStrategy,
+    PaymentService,
+    PaymentProcessor,
   ],
   exports: [
-    CreditCardPaymentService,
-    BKMExpressPaymentService,
-    BankTransferPaymentService,
-    PaymentServiceFactory,
-    TypeOrmModule,
-    PaymentSharedModule,
+    CreditCardPaymentStrategy,
+    BankTransferPaymentStrategy,
+    BKMExpressPaymentStrategy,
+    PaymentService,
+    PaymentProcessor,
   ],
 })
 export class PaymentCoreModule {}

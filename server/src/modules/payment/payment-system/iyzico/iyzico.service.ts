@@ -5,9 +5,10 @@ import Iyzipay, {
   PaymentRequestData,
   PaymentResult,
 } from 'iyzipay';
+import { PaymentSystem } from '../payment.system';
 
 @Injectable()
-export class IyzicoService {
+export class IyzicoService implements PaymentSystem {
   private iyzipay: Iyzipay;
 
   constructor() {

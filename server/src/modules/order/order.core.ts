@@ -6,10 +6,11 @@ import { OrderController } from './order.controller';
 
 import { OrderStatusCoreModule } from './order_status/order_status.core';
 import { ProductVariantCoreModule } from '@modules/product/product_variant/product-variant.core';
+import { OrderItemCoreModule } from './order_item/order_item.core';
 
 @Module({
   imports: [
-    ProductVariantCoreModule,
+    OrderItemCoreModule,
     OrderStatusCoreModule,
     TypeOrmModule.forFeature([Order]),
   ],

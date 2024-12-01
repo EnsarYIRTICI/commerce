@@ -10,6 +10,7 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -34,7 +35,6 @@ import { CreateWishlistItemDto } from '@modules/wishlist/wishlist_item/dto/creat
 @Controller('users')
 export class UserFacadeController {
   constructor(
-    private readonly userService: UserService,
     private readonly userCartFacade: UserCartFacade,
     private readonly userOrderFacade: UserOrderFacade,
     private readonly userWishlistFacade: UserWishlistFacade,
@@ -175,27 +175,29 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
-      const ip = request.ip;
+
+      this.userCartFacade.init(user);
+
+      const cartItems = await this.userCartFacade.getItems();
+      if (!cartItems.length) {
+        throw new BadRequestException('No item found in cart.');
+      }
 
       this.userOrderFacade.init(user);
 
-      return await this.userOrderFacade.createOrder(ip, createOrderDto);
+      let order = await this.userOrderFacade.createOrder(
+        request.ip,
+        createOrderDto,
+        cartItems,
+      );
+
+      await this.userCartFacade.clearItems();
+
+      return order;
     } catch (error) {
-      if (error instanceof QueryFailedError) {
-        console.log(error.message);
-
-        throw new HttpException(
-          error.message,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-
       console.error(error);
 
-      throw new HttpException(
-        errorMessages.INTERNAL_SERVER_ERROR,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

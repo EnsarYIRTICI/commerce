@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { Payment } from './payment.entity';
-import { IyzicoService } from './iyzico/iyzico.service';
+import { IyzicoService } from './payment-system/iyzico/iyzico.service';
 import { ApiTestRequestData } from 'iyzipay';
 import { Roles } from 'src/shared/decorators/role.decorator';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
@@ -17,10 +17,11 @@ import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 @ApiTags('Payment')
 @Controller('payments')
 export class PaymentController {
-  constructor(private readonly iyzicoService: IyzicoService) {}
+  constructor() // private readonly iyzicoService: IyzicoService
+  {}
 
-  @Get('/test/iyzico')
-  async testIyzico() {
-    return await this.iyzicoService.test();
-  }
+  // @Get('/test/iyzico')
+  // async testIyzico() {
+  //   return await this.iyzicoService.test();
+  // }
 }

@@ -1,20 +1,44 @@
-import { User } from '@modules/user/user.entity';
-import { PaymentCardDto } from './dto/paymentCard.dto';
-import { Address } from '@modules/address/address.entity';
-import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 import { Payment } from './payment.entity';
 
-export interface PaymentServiceInitData {
-  user: User;
-  ip: string;
-  billingAddress: Address;
-  shippingAddress: Address;
-  cartItems: CartItem[];
-  date: Date;
-}
+@Injectable()
+export class PaymentService {
+  constructor(
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
+  ) {}
 
-export interface PaymentService {
-  init: (paymentServiceInitData: PaymentServiceInitData) => void;
+  async find(): Promise<Payment[]> {
+    return await this.paymentRepository.find();
+  }
 
-  create(amount: number): Promise<Payment>;
+  async findOne(id: number): Promise<Payment> {
+    const payment = await this.paymentRepository.findOne({ where: { id } });
+    if (!payment) {
+      throw new NotFoundException(`Payment with ID ${id} not found.`);
+    }
+    return payment;
+  }
+
+  async create({
+    queryRunner,
+    basketId,
+    price,
+    date,
+  }: {
+    queryRunner: QueryRunner;
+    basketId: string;
+    price: number;
+    date: Date;
+  }) {
+    let payment = queryRunner.manager.create(Payment, {
+      basketId: basketId,
+      amount: price,
+      createdDate: date,
+    });
+
+    return await queryRunner.manager.save(payment);
+  }
 }
