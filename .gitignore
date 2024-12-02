@@ -1,15 +1,23 @@
-client/node_modules
-client/.next/
-client/out/
-client/build
+customer/node_modules
+customer/.next/
+customer/out/
+customer/build
 
-client/.env*
-client/!.env.example
+customer/.env*
+customer/!.env.example
+
+admin/node_modules
+admin/.next/
+admin/out/
+admin/build
+
+admin.env*
+admin/!.env.example
 
 
-server/dist
-server/node_modules
-server/build
+core/dist
+core/node_modules
+core/build
 
-server/.env
-server/!.env.example
+core/.env
+core/!.env.example
