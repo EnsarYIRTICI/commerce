@@ -11,11 +11,10 @@ import { FormDataMiddleware } from 'src/shared/middleware/formdata.middleware';
 import { CategoryService } from '@modules/product/category/category.service';
 import { ProductAttributeValueService } from '@modules/product/product_attribute_value/product_attribute_value.service';
 import { ProductImage } from './product_image/product_image.entity';
-import { StorageModule } from '@modules/storage/storage.module';
+import { FileModule } from '@modules/storage/file/file.module';
 
 @Module({
-  imports: [StorageModule],
-  providers: [],
-  exports: [StorageModule],
+  imports: [FileModule],
+  exports: [FileModule],
 })
 export class ProductSharedModule {}

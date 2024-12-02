@@ -14,8 +14,14 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOne({ where: { id } });
+  async findOne(id: number) {
+    return await this.userRepository.findOne({
+      where: { id: id },
+      relations: {
+        role: true,
+        status: true,
+      },
+    });
   }
 
   create(user: User) {

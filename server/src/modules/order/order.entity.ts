@@ -18,11 +18,8 @@ import { AddressDetail } from './address_detail/address_detail.entity';
 export class Order {
   // Fields for the entity
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
-
-  @Column({ unique: true })
-  orderNumber: string;
 
   @Column()
   createdAt: Date;

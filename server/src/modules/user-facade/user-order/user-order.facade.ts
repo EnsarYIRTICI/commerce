@@ -3,7 +3,6 @@ import {
   BadRequestException,
   Injectable,
 } from '@nestjs/common';
-import { User } from '../user.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
@@ -21,6 +20,7 @@ import { OrderService } from '@modules/order/order.service';
 import { UserCartFacade } from '../user-cart/user-cart.facade';
 import { PaymentService } from '@modules/payment/payment.service';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
+import { User } from '@modules/user/user.entity';
 
 @Injectable()
 export class UserOrderFacade {
@@ -50,6 +50,7 @@ export class UserOrderFacade {
     ip: string,
     createOrderDto: CreateOrderDto,
     cartItems: CartItem[],
+    totalAmount: number,
   ) {
     const billingAddressId = createOrderDto.billingAddressId;
     const shippingAddressId = createOrderDto.shippingAddressId;
@@ -62,8 +63,6 @@ export class UserOrderFacade {
 
     try {
       const date = new Date();
-
-      let amount: number = 0;
 
       const shippingAddress = await this.addressService.validateUserAddressById(
         this.user,
@@ -82,7 +81,7 @@ export class UserOrderFacade {
 
       this.paymentProcessor.init(this.creditCardPaymentStrategy);
 
-      const paymentResult = await this.paymentProcessor.pay(amount, {
+      const paymentResult = await this.paymentProcessor.pay(totalAmount, {
         billingAddress: billingAddress,
         shippingAddress: shippingAddress,
         cartItems: cartItems,
@@ -96,15 +95,13 @@ export class UserOrderFacade {
         cartItems,
       );
 
-      let payment = await this.paymentService.create({
-        queryRunner: queryRunner,
-        basketId: '',
+      let payment = await this.paymentService.create(queryRunner, {
+        conversationId: paymentResult.conversationId,
         date: date,
-        price: amount,
+        price: totalAmount,
       });
 
-      let order = await this.orderService.create({
-        queryRunner: queryRunner,
+      let order = await this.orderService.create(queryRunner, {
         billingAddress: billingAddress,
         shippingAddress: shippingAddress,
         cartItems: cartItems,

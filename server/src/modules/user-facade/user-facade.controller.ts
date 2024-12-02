@@ -13,8 +13,6 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
-import { UserService } from './user.service';
-import { User } from './user.entity';
 import { CreateCartItemDto } from '@modules/shopping_cart/cart_item/dto/create_cart_item.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UserCartFacade } from './user-cart/user-cart.facade';
@@ -28,6 +26,7 @@ import { UserWishlistItemFacade } from './user-wishlist-item/user-wishlist-item.
 import { CreateWishlistDto } from '@modules/wishlist/dto/create-wishlist.dto';
 import { Roles } from 'src/shared/decorators/role.decorator';
 import { CreateWishlistItemDto } from '@modules/wishlist/wishlist_item/dto/create-wishlist-item.dto';
+import { User } from '@modules/user/user.entity';
 
 @Roles('user')
 @ApiBearerAuth()
@@ -50,9 +49,7 @@ export class UserFacadeController {
 
       return await this.userWishlistFacade.getLists();
     } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -71,9 +68,7 @@ export class UserFacadeController {
 
       return await this.userWishlistFacade.createList(name);
     } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -91,9 +86,7 @@ export class UserFacadeController {
       this.userWishlistItemFacade.init(wishlist);
       return await this.userWishlistItemFacade.getItems();
     } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -114,9 +107,7 @@ export class UserFacadeController {
       const slug = createWishlistItemDto.slug;
       return await this.userWishlistItemFacade.addItem(slug);
     } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -127,9 +118,14 @@ export class UserFacadeController {
 
       this.userCartFacade.init(user);
 
-      return await this.userCartFacade.getItems();
+      const { cartItems, totalAmount } = await this.userCartFacade.getItems();
+
+      return {
+        totalAmount: totalAmount,
+        cartItems: cartItems,
+      };
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -148,9 +144,7 @@ export class UserFacadeController {
 
       return await this.userCartFacade.addItem(slug);
     } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -163,7 +157,7 @@ export class UserFacadeController {
 
       return await this.userOrderFacade.getOrders();
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -178,7 +172,7 @@ export class UserFacadeController {
 
       this.userCartFacade.init(user);
 
-      const cartItems = await this.userCartFacade.getItems();
+      const { cartItems, totalAmount } = await this.userCartFacade.getItems();
       if (!cartItems.length) {
         throw new BadRequestException('No item found in cart.');
       }
@@ -189,14 +183,13 @@ export class UserFacadeController {
         request.ip,
         createOrderDto,
         cartItems,
+        totalAmount,
       );
 
       await this.userCartFacade.clearItems();
 
       return order;
     } catch (error) {
-      console.error(error);
-
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

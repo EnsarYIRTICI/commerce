@@ -21,6 +21,6 @@ export class PaymentMethod {
   @Column({ nullable: true })
   description: string;
 
-  @OneToMany(() => Payment, (entity) => entity.paymentMethod)
+  @OneToMany(() => Payment, (entity) => entity.method)
   paymentDetail: Payment;
 }

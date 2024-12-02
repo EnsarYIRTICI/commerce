@@ -4,6 +4,8 @@ import Iyzipay, {
   ApiTestRequestData,
   PaymentRequestData,
   PaymentResult,
+  ThreeDSInitializePaymentRequestData,
+  ThreeDSInitializePaymentResult,
 } from 'iyzipay';
 import { PaymentSystem } from '../payment.system';
 
@@ -51,7 +53,9 @@ export class IyzicoService implements PaymentSystem {
     });
   }
 
-  async createBkmPayment(paymentRequest: any): Promise<any> {
+  async createBkmPayment(
+    paymentRequest: ThreeDSInitializePaymentRequestData,
+  ): Promise<ThreeDSInitializePaymentResult> {
     return new Promise((resolve, reject) => {
       this.iyzipay.bkmInitialize.create(paymentRequest, (err, result) => {
         if (err) {

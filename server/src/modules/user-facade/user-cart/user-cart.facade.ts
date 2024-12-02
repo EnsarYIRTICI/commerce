@@ -3,7 +3,6 @@ import {
   BadRequestException,
   Injectable,
 } from '@nestjs/common';
-import { User } from '../user.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,6 +11,7 @@ import { ProductVariantService } from '@modules/product/product_variant/product_
 import { CartItem } from '@modules/shopping_cart/cart_item/cart_item.entity';
 import { CreateCartItemDto } from '@modules/shopping_cart/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.service';
+import { User } from '@modules/user/user.entity';
 
 @Injectable()
 export class UserCartFacade {
@@ -37,7 +37,15 @@ export class UserCartFacade {
   async getItems() {
     this.isInit();
 
-    return await this.cartItemService.findAllByUser(this.user);
+    let totalAmount = 0;
+
+    const cartItems = await this.cartItemService.findAllByUser(this.user);
+
+    for (const item of cartItems) {
+      totalAmount += item.quantity * item.productVariant.price;
+    }
+
+    return { cartItems, totalAmount };
   }
 
   async addItem(slug: string) {
@@ -72,6 +80,6 @@ export class UserCartFacade {
   async clearItems() {
     this.isInit();
 
-    await this.cartItemService.deleteByCartId(this.user.id);
+    await this.cartItemService.clearByUser(this.user);
   }
 }

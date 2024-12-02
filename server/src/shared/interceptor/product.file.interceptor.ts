@@ -11,7 +11,7 @@ import { MinioService } from '@modules/storage/minio/minio.service';
 import { processImage } from 'src/shared/utils/sharp.util';
 
 import fs from 'fs';
-import { FileService } from '@modules/storage/file.service';
+import { FileService } from '@modules/storage/file/file.service';
 import { StorageService } from '@modules/storage/storage.service';
 
 @Injectable()

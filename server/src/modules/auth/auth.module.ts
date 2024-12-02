@@ -8,17 +8,19 @@ import { JwtAuthGuard } from '../../shared/guard/auth.guard';
 import { Role } from '@modules/user/role/role.entity';
 import { Status } from '@modules/user/status/status.entity';
 import { RedisService } from '@modules/cache/redis/redis.service';
-import { BlacklistService } from '@modules/cache/blacklist.service';
+import { BlacklistService } from '@modules/cache/blacklist/blacklist.service';
+import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
 
 @Module({
   imports: [
+    BlackListModule,
     TypeOrmModule.forFeature([User, Role, Status]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'your-secret-key',
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
     }),
   ],
-  providers: [AuthService, BlacklistService],
+  providers: [AuthService],
   controllers: [AuthController],
   exports: [JwtModule],
 })

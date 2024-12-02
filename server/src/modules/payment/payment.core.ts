@@ -7,12 +7,13 @@ import { BankTransferPaymentStrategy } from './payment-strategy/bank-transfer-pa
 import { PaymentService } from './payment.service';
 import { PaymentProcessor } from './payment.processor';
 import { IyzicoService } from './payment-system/iyzico/iyzico.service';
+import { PaymentSystem } from './payment-system/payment.system';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Payment])],
   providers: [
     {
-      provide: 'PaymentSystem',
+      provide: PaymentSystem,
       useClass: IyzicoService,
     },
     CreditCardPaymentStrategy,

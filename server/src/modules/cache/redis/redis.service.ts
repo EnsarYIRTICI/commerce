@@ -1,8 +1,9 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { createClient, RedisClientType } from 'redis';
+import { CacheSystem } from '../cache.system';
 
 @Injectable()
-export class RedisService {
+export class RedisService implements CacheSystem {
   private readonly client: RedisClientType;
 
   constructor() {

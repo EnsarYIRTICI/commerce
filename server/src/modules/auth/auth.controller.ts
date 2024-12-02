@@ -20,7 +20,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Response, Request } from 'express';
 import { getToken } from 'src/shared/utils/request.util';
-import { BlacklistService } from '@modules/cache/blacklist.service';
+import { BlacklistService } from '@modules/cache/blacklist/blacklist.service';
 
 @ApiTags('Auth')
 @Controller('auth')

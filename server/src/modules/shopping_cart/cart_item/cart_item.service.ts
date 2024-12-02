@@ -19,14 +19,24 @@ export class CartItemService {
   async findAllByUser(user: User) {
     return await this.cart_itemRepository.find({
       where: {
-        user: user,
+        user: {
+          id: user.id,
+        },
+      },
+      relations: {
+        productVariant: true,
       },
     });
   }
 
   async validate(user: User, productVariant: ProductVariant) {
     return await this.cart_itemRepository.findOne({
-      where: { user: user, productVariant: productVariant },
+      where: {
+        user: {
+          id: user.id,
+        },
+        productVariant: productVariant,
+      },
     });
   }
 
@@ -38,8 +48,8 @@ export class CartItemService {
     });
   }
 
-  async deleteByCartId(userId: number): Promise<void> {
-    await this.cart_itemRepository.delete({ user: { id: userId } });
+  async clearByUser(user: User): Promise<void> {
+    await this.cart_itemRepository.delete({ user: { id: user.id } });
   }
 
   async raiseOfQuantity(cart_item: CartItem) {

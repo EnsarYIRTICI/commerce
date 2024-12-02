@@ -18,13 +18,13 @@ import { getToken } from 'src/shared/utils/request.util';
 import { compareDates } from 'src/shared/utils/date.util';
 
 import { Response, Request } from 'express';
-import { BlacklistService } from '@modules/cache/blacklist.service';
+import { BlacklistService } from '@modules/cache/blacklist/blacklist.service';
+import { UserService } from '@modules/user/user.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
     private readonly blackListService: BlacklistService,
@@ -51,6 +51,8 @@ export class JwtAuthGuard implements CanActivate {
       );
     }
 
+    // console.log(token);
+
     const isBlacklisted = await this.blackListService.isTokenListed(token);
     if (isBlacklisted) {
       throw new UnauthorizedException('Token is blacklisted');
@@ -69,10 +71,9 @@ export class JwtAuthGuard implements CanActivate {
       );
     }
 
-    const user = await this.userRepository.findOne({
-      where: { id: decoded.id },
-      relations: ['role', 'status'],
-    });
+    // console.log(decoded);
+
+    const user = await this.userService.findOne(decoded.id);
 
     if (!user) {
       throw new HttpException(

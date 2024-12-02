@@ -53,23 +53,24 @@ export class OrderService {
     });
   }
 
-  async create({
-    queryRunner,
-    date,
-    user,
-    shippingAddress,
-    billingAddress,
-    payment,
-    cartItems,
-  }: {
-    queryRunner: QueryRunner;
-    date: Date;
-    user: User;
-    shippingAddress: Address;
-    billingAddress: Address;
-    payment: Payment;
-    cartItems: CartItem[];
-  }) {
+  async create(
+    queryRunner: QueryRunner,
+    {
+      date,
+      user,
+      shippingAddress,
+      billingAddress,
+      payment,
+      cartItems,
+    }: {
+      date: Date;
+      user: User;
+      shippingAddress: Address;
+      billingAddress: Address;
+      payment: Payment;
+      cartItems: CartItem[];
+    },
+  ) {
     const orderStatus = await this.orderStatusService.findOneByName('pending');
 
     if (!orderStatus) {
@@ -95,7 +96,6 @@ export class OrderService {
 
     let order = queryRunner.manager.create(Order, {
       createdAt: date,
-      orderNumber: uuidv4(),
       status: orderStatus,
       shippingAddress,
       billingAddress,

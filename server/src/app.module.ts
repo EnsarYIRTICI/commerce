@@ -32,8 +32,11 @@ import { ActivityLogModule } from '@modules/activity_log/activity_log.module';
 import { Address } from '@modules/address/address.entity';
 import { AddressModule } from '@modules/address/address.module';
 import { CartItemModule } from '@modules/shopping_cart/cart_item/cart_item.module';
-import { BlacklistService } from './modules/cache/blacklist.service';
+import { BlacklistService } from './modules/cache/blacklist/blacklist.service';
 import { SeedModule } from '@modules/seed/seed.module';
+import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
+import { UserCoreModule } from '@modules/user/user.core';
+import { UserFacadeModule } from '@modules/user-facade/user-facade.module';
 
 @Module({
   imports: [
@@ -46,8 +49,10 @@ import { SeedModule } from '@modules/seed/seed.module';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    TypeOrmModule.forFeature([Role, Status, Category, OrderStatus, User]),
+    TypeOrmModule.forFeature([User, Role, Status]),
+
     AuthModule,
+    UserFacadeModule,
     UserModule,
     ProductModule,
     OrderModule,
@@ -58,27 +63,23 @@ import { SeedModule } from '@modules/seed/seed.module';
     AddressModule,
     ActivityLogModule,
     SeedModule,
+    BlackListModule,
+    UserCoreModule,
   ],
-  controllers: [AppController],
   providers: [
     AppService,
     MinioService,
-    RedisService,
-    BlacklistService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
   ],
+  controllers: [AppController],
 })
 export class AppModule {
-  constructor(
-    private readonly redisService: RedisService,
-    private readonly minioService: MinioService,
-  ) {}
+  constructor(private readonly minioService: MinioService) {}
 
   async onModuleInit() {
     await this.minioService.testConnection();
-    await this.redisService.connect();
   }
 }

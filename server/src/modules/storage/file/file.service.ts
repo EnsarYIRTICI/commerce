@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Client } from 'minio';
-import { MinioService } from './minio/minio.service';
-import { StorageService } from './storage.service';
+import { MinioService } from '../minio/minio.service';
+import { StorageService } from '../storage.service';
 
 @Injectable()
 export class FileService {

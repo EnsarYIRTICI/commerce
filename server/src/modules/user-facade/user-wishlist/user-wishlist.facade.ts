@@ -3,9 +3,9 @@ import {
   BadRequestException,
   Injectable,
 } from '@nestjs/common';
-import { User } from '../user.entity';
 
 import { WishlistService } from '@modules/wishlist/wishlist.service';
+import { User } from '@modules/user/user.entity';
 
 @Injectable()
 export class UserWishlistFacade {

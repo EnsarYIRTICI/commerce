@@ -15,17 +15,14 @@ import {
   getShippingAddress,
   getBuyer,
 } from '@utils/iyzico.util';
-import { PaymentStrategy } from './payment.strategy';
+import { PayData, PaymentStrategy } from './payment.strategy';
 
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentSystem } from '../payment-system/payment.system';
 
 @Injectable()
 export class CreditCardPaymentStrategy implements PaymentStrategy {
-  constructor(
-    @Inject('PaymentSystem')
-    private readonly paymentSystem: PaymentSystem,
-  ) {}
+  constructor(private readonly paymentSystem: PaymentSystem) {}
 
   private paymentCardDto: PaymentCardDto;
 
@@ -33,24 +30,15 @@ export class CreditCardPaymentStrategy implements PaymentStrategy {
     this.paymentCardDto = paymentCardDto;
   }
 
-  async pay(
-    amount: number,
-    {
-      user,
-      ip,
-      billingAddress,
-      shippingAddress,
-      cartItems,
-      date,
-    }: {
-      user: User;
-      ip: string;
-      billingAddress: Address;
-      shippingAddress: Address;
-      cartItems: CartItem[];
-      date: Date;
-    },
-  ) {
+  async pay(amount: number, payData: PayData) {
+    const user = payData.user;
+    const ip = payData.ip;
+    const date = payData.date;
+
+    const billingAddress = payData.billingAddress;
+    const shippingAddress = payData.shippingAddress;
+    const cartItems = payData.cartItems;
+
     const basketId = uuidv4();
     const conversationId = `${user.id}-${date.toDateString()}`;
 

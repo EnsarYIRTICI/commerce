@@ -1,4 +1,4 @@
-import { RefundStatus } from '@modules/payment/refund_status/refund-status.entity';
+import { RefundStatus } from '@modules/payment/refund-status/refund-status.entity';
 import { Payment } from '@modules/payment/payment.entity';
 import {
   Entity,

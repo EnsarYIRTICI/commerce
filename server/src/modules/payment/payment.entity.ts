@@ -7,16 +7,17 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { PaymentMethod } from './payment_method/payment_method.entity';
-import { PaymentStatus } from './payment_status/payment_status.entity';
+import { PaymentMethod } from './payment-method/payment_method.entity';
+import { PaymentStatus } from './payment-status/payment_status.entity';
+import { PaymentCurrency } from './payment-currency/payment-currency.entity';
 
 @Entity()
 export class Payment {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column({ unique: true })
-  basketId: string;
+  conversationId: string;
 
   @Column()
   amount: number;
@@ -27,8 +28,11 @@ export class Payment {
   @ManyToOne(() => PaymentStatus, (status) => status.payments)
   status: PaymentStatus;
 
+  @ManyToOne(() => PaymentCurrency, (currency) => currency.payments)
+  currency: PaymentCurrency;
+
   @ManyToOne(() => PaymentMethod, (method) => method.paymentDetail)
-  paymentMethod: PaymentMethod;
+  method: PaymentMethod;
 
   @OneToMany(() => Refund, (refund) => refund.payment, { cascade: true })
   refunds: Refund[];

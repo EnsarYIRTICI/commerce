@@ -22,19 +22,20 @@ export class PaymentService {
     return payment;
   }
 
-  async create({
-    queryRunner,
-    basketId,
-    price,
-    date,
-  }: {
-    queryRunner: QueryRunner;
-    basketId: string;
-    price: number;
-    date: Date;
-  }) {
+  async create(
+    queryRunner: QueryRunner,
+    {
+      conversationId,
+      price,
+      date,
+    }: {
+      conversationId: string;
+      price: number;
+      date: Date;
+    },
+  ) {
     let payment = queryRunner.manager.create(Payment, {
-      basketId: basketId,
+      conversationId: conversationId,
       amount: price,
       createdDate: date,
     });

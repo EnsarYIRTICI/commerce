@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MinioService } from './minio/minio.service';
+import { MinioService } from '../minio/minio.service';
 import { FileService } from './file.service';
-import { StorageService } from './storage.service';
+import { StorageService } from '../storage.service';
 
 @Module({
   providers: [
@@ -13,4 +13,4 @@ import { StorageService } from './storage.service';
   ],
   exports: [FileService],
 })
-export class StorageModule {}
+export class FileModule {}

@@ -8,7 +8,7 @@ import { ProductVariantService } from '@modules/product/product_variant/product_
 import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { CartItemService } from '@modules/shopping_cart/cart_item/cart_item.service';
 import { UserCartFacade } from './user-cart.facade';
-import { User } from '../user.entity';
+import { User } from '@modules/user/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CartItem, ProductVariant, User])],
