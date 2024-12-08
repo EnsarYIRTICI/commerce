@@ -11,7 +11,7 @@ import { UserReviewFacade } from './user-review.facade';
 import { ProductReviewCoreModule } from '@modules/product/product_review/product-review.core';
 
 @Module({
-  imports: [ProductReviewCoreModule],
+  imports: [ProductReviewCoreModule, ProductVariantCoreModule, OrderCoreModule],
   providers: [UserReviewFacade],
   exports: [UserReviewFacade],
 })

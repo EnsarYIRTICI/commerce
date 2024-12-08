@@ -26,8 +26,9 @@ export class CreditCardPaymentStrategy implements PaymentStrategy {
 
   private paymentCardDto: PaymentCardDto;
 
-  init(paymentCardDto: PaymentCardDto) {
+  init(paymentCardDto: PaymentCardDto): PaymentStrategy {
     this.paymentCardDto = paymentCardDto;
+    return this;
   }
 
   async pay(amount: number, payData: PayData) {

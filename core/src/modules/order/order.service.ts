@@ -50,7 +50,29 @@ export class OrderService {
       where: {
         user: user,
       },
+      relations: {
+        orderItems: {
+          productVariant: true,
+        },
+      },
     });
+  }
+
+  async isPurchased(user: User, productVariant: ProductVariant) {
+    const order = await this.orderRepository.findOne({
+      where: {
+        user,
+        orderItems: {
+          productVariant,
+        },
+      },
+    });
+
+    if (!order) {
+      return false;
+    }
+
+    return true;
   }
 
   async create(

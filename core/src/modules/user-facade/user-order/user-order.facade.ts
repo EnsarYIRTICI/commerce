@@ -21,6 +21,7 @@ import { UserCartFacade } from '../user-cart/user-cart.facade';
 import { PaymentService } from '@modules/payment/payment.service';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
+import { BankTransferPaymentStrategy } from '@modules/payment/payment-strategy/bank-transfer-payment.strategy';
 
 @Injectable()
 export class UserOrderFacade {
@@ -33,7 +34,9 @@ export class UserOrderFacade {
 
     private readonly paymentProcessor: PaymentProcessor,
     private readonly paymentService: PaymentService,
+
     private readonly creditCardPaymentStrategy: CreditCardPaymentStrategy,
+    private readonly bankTransferPaymentStrategy: BankTransferPaymentStrategy,
   ) {}
 
   private user: User;
@@ -42,7 +45,17 @@ export class UserOrderFacade {
     this.user = user;
   }
 
+  isInit() {
+    if (!this.user) {
+      throw new BadRequestException(
+        'Shopping cart not initialized for the user.',
+      );
+    }
+  }
+
   async getOrders() {
+    this.isInit();
+
     return await this.orderService.findAllByUser(this.user);
   }
 
@@ -52,9 +65,10 @@ export class UserOrderFacade {
     cartItems: CartItem[],
     totalAmount: number,
   ) {
+    this.isInit();
+
     const billingAddressId = createOrderDto.billingAddressId;
     const shippingAddressId = createOrderDto.shippingAddressId;
-    const paymentCard = createOrderDto.paymentCard;
 
     const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
@@ -77,9 +91,11 @@ export class UserOrderFacade {
             )
           : shippingAddress;
 
-      this.creditCardPaymentStrategy.init(paymentCard);
+      const paymentStrategy = createOrderDto.paymentCard
+        ? this.creditCardPaymentStrategy.init(createOrderDto.paymentCard)
+        : this.bankTransferPaymentStrategy;
 
-      this.paymentProcessor.init(this.creditCardPaymentStrategy);
+      this.paymentProcessor.init(paymentStrategy);
 
       const paymentResult = await this.paymentProcessor.pay(totalAmount, {
         billingAddress: billingAddress,

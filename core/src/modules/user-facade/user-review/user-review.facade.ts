@@ -22,17 +22,62 @@ import { PaymentService } from '@modules/payment/payment.service';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { ProductReviewService } from '@modules/product/product_review/product_review.service';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @Injectable()
 export class UserReviewFacade {
   constructor(
     private readonly dataSource: DataSource,
+    private readonly productVariantSerivce: ProductVariantService,
     private readonly productReviewService: ProductReviewService,
+    private readonly orderService: OrderService,
   ) {}
 
   private user: User;
 
   async init(user: User) {
     this.user = user;
+  }
+
+  isInit() {
+    if (!this.user) {
+      throw new BadRequestException(
+        'Shopping cart not initialized for the user.',
+      );
+    }
+  }
+
+  async getReviews() {
+    this.isInit();
+
+    return await this.productReviewService.findAllByUser(this.user);
+  }
+
+  async createReview(createReviewDto: CreateReviewDto) {
+    this.isInit();
+
+    const variant = await this.productVariantSerivce.findOneBySlug(
+      createReviewDto.slug,
+    );
+
+    if (!variant) {
+      throw new BadRequestException(
+        'The requested product variant does not exist',
+      );
+    }
+
+    const isPurchased = await this.orderService.isPurchased(this.user, variant);
+
+    if (!isPurchased) {
+      throw new BadRequestException(
+        'You can only review products that you have purchased.',
+      );
+    }
+
+    return await this.productReviewService.create({
+      user: this.user,
+      productVariant: variant,
+      ...createReviewDto,
+    });
   }
 }

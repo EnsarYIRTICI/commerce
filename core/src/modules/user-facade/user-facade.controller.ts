@@ -28,6 +28,7 @@ import { Roles } from 'src/shared/decorators/role.decorator';
 import { CreateWishlistItemDto } from '@modules/wishlist/wishlist_item/dto/create-wishlist-item.dto';
 import { User } from '@modules/user/user.entity';
 import { UserReviewFacade } from './user-review/user-review.facade';
+import { CreateReviewDto } from './user-review/dto/create-review.dto';
 
 @Roles('user')
 @ApiBearerAuth()
@@ -41,6 +42,52 @@ export class UserFacadeController {
     private readonly userWishlistItemFacade: UserWishlistItemFacade,
     private readonly userReviewFacade: UserReviewFacade,
   ) {}
+
+  @Get('/orders')
+  async getOrders(@Req() request: Request) {
+    try {
+      const user: User = request['user'];
+
+      this.userOrderFacade.init(user);
+
+      return await this.userOrderFacade.getOrders();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('/order')
+  @ApiBody({ type: CreateOrderDto })
+  async createOrder(
+    @Req() request: Request,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
+    try {
+      const user: User = request['user'];
+
+      this.userCartFacade.init(user);
+
+      const { cartItems, totalAmount } = await this.userCartFacade.getItems();
+      if (!cartItems.length) {
+        throw new BadRequestException('No item found in cart.');
+      }
+
+      this.userOrderFacade.init(user);
+
+      let order = await this.userOrderFacade.createOrder(
+        request.ip,
+        createOrderDto,
+        cartItems,
+        totalAmount,
+      );
+
+      await this.userCartFacade.clearItems();
+
+      return order;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
   @Get('/wishlists')
   async getWishlists(@Req() request: Request) {
@@ -150,47 +197,31 @@ export class UserFacadeController {
     }
   }
 
-  @Get('/orders')
-  async getOrders(@Req() request: Request) {
+  @Get('/reviews')
+  async getReviews(@Req() request: Request) {
     try {
       const user: User = request['user'];
 
-      this.userOrderFacade.init(user);
+      this.userReviewFacade.init(user);
 
-      return await this.userOrderFacade.getOrders();
+      return await this.userReviewFacade.getReviews();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Post('/order')
-  @ApiBody({ type: CreateOrderDto })
-  async createOrder(
+  @Post('/review')
+  @ApiBody({ type: CreateReviewDto })
+  async createReview(
     @Req() request: Request,
-    @Body() createOrderDto: CreateOrderDto,
+    @Body() createReviewDto: CreateReviewDto,
   ) {
     try {
       const user: User = request['user'];
 
-      this.userCartFacade.init(user);
+      this.userReviewFacade.init(user);
 
-      const { cartItems, totalAmount } = await this.userCartFacade.getItems();
-      if (!cartItems.length) {
-        throw new BadRequestException('No item found in cart.');
-      }
-
-      this.userOrderFacade.init(user);
-
-      let order = await this.userOrderFacade.createOrder(
-        request.ip,
-        createOrderDto,
-        cartItems,
-        totalAmount,
-      );
-
-      await this.userCartFacade.clearItems();
-
-      return order;
+      return await this.userReviewFacade.createReview(createReviewDto);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
