@@ -1,13 +1,17 @@
 import { Request } from 'express';
 
-function getToken(request: Request): string | null {
+const getToken = (request: Request): string | null => {
   const authHeader = request.headers['authorization'];
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.split(' ')[1];
   }
 
-  return authHeader.split(' ')[1];
-}
+  const tokenFromCookie = request.cookies?.token;
+  if (tokenFromCookie) {
+    return tokenFromCookie;
+  }
+
+  return null;
+};
 
 export { getToken };

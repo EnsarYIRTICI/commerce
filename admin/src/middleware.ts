@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
           response = next(request);
         }
 
-        return cookie(response, userData, token.value);
+        return cookie(response, token.value);
       } catch (error) {
         console.error(error);
 

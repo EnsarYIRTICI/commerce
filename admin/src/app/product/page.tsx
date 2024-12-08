@@ -30,7 +30,7 @@ export default function page() {
     try {
       setIsLoading(true);
 
-      const data = await findProducts(token);
+      const data = await findProducts();
       setProducts(data);
     } catch (error: any) {
       console.error(error);

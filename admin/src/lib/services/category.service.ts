@@ -1,7 +1,7 @@
 import { httpGet } from "./http.service";
 
-async function findCategoryTree(token: string) {
-  return await httpGet(`/categories/tree`, token);
+async function findCategoryTree() {
+  return await httpGet(`/categories/tree`);
 }
 
 export { findCategoryTree };

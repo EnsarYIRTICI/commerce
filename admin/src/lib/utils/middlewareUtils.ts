@@ -26,17 +26,14 @@ const next = (request: NextRequest) => {
   });
 };
 
-const cookie = (response: NextResponse, user: IUser, token: string) => {
+const cookie = (response: NextResponse, token: string) => {
   const maxAge = 60 * 60 * 24 * 7;
 
-  response.cookies.set("user", JSON.stringify(user), {
-    httpOnly: false,
-    maxAge,
-  });
-
   response.cookies.set("token", token, {
-    httpOnly: false,
+    httpOnly: true,
+    sameSite: "strict",
     maxAge,
+    path: "/",
   });
 
   return response;
