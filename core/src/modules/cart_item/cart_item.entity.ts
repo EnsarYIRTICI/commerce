@@ -6,7 +6,8 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { SKU } from '@modules/sku/entites/sku.entity';
+
 import { User } from '@modules/user/user.entity';
 
 @Entity()
@@ -24,6 +25,6 @@ export class CartItem {
   @ManyToOne(() => User, (entity) => entity.cartItems)
   user: User;
 
-  @ManyToOne(() => ProductVariant, (variant) => variant.cartItems)
-  productVariant: ProductVariant;
+  @ManyToOne(() => SKU, (variant) => variant.cartItems)
+  productVariant: SKU;
 }

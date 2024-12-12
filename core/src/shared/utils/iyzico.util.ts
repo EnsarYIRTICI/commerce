@@ -3,7 +3,6 @@ import { Request } from 'express';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { User } from '@modules/user/user.entity';
 import { Address } from '@modules/address/address.entity';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
 
@@ -39,7 +38,7 @@ const getBasketItems = (cartItems: CartItem[]) => {
         category1: productVariant.product.categories?.[0]?.id || 'N/A',
         category2: productVariant.product.categories?.[1]?.id || 'N/A',
         itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-        price: productVariant.price,
+        // price: productVariant.price,
       });
     }
   }

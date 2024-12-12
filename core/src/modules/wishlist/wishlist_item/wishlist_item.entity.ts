@@ -6,8 +6,8 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Wishlist } from '../wishlist.entity';
+import { SKU } from '@modules/sku/entites/sku.entity';
 
 @Entity()
 export class WishlistItem {
@@ -21,6 +21,6 @@ export class WishlistItem {
   @ManyToOne(() => Wishlist, (wishlist) => wishlist.items)
   wishlist: Wishlist;
 
-  @ManyToOne(() => ProductVariant, (variant) => variant.wishlistItems)
-  productVariant: ProductVariant;
+  @ManyToOne(() => SKU, (variant) => variant.wishlistItems)
+  productVariant: SKU;
 }

@@ -7,17 +7,17 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
-import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
 import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/cart_item/cart_item.service';
 import { User } from '@modules/user/user.entity';
+import { SKUService } from '@modules/sku/sku.service';
 
 @Injectable()
 export class UserCartFacade {
   constructor(
     private readonly cartItemService: CartItemService,
-    private readonly productVariantService: ProductVariantService,
+    private readonly skuService: SKUService,
   ) {}
 
   private user: User;
@@ -41,9 +41,9 @@ export class UserCartFacade {
 
     const cartItems = await this.cartItemService.findAllByUser(this.user);
 
-    for (const item of cartItems) {
-      totalAmount += item.quantity * item.productVariant.price;
-    }
+    // for (const item of cartItems) {
+    //   totalAmount += item.quantity * item.productVariant.price;
+    // }
 
     return { cartItems, totalAmount };
   }
@@ -51,7 +51,7 @@ export class UserCartFacade {
   async addItem(slug: string) {
     this.isInit();
 
-    let productVariant = await this.productVariantService.findOneBySlug(slug);
+    let productVariant = await this.skuService.findOneBySlug(slug);
 
     if (!productVariant) {
       throw new BadRequestException(
@@ -59,11 +59,11 @@ export class UserCartFacade {
       );
     }
 
-    if (productVariant.stock < 1) {
-      throw new BadRequestException(
-        'Insufficient stock for the selected product variant',
-      );
-    }
+    // if (productVariant.stock < 1) {
+    //   throw new BadRequestException(
+    //     'Insufficient stock for the selected product variant',
+    //   );
+    // }
 
     let cart_item = await this.cartItemService.validate(
       this.user,

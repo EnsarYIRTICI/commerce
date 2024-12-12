@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
-import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
 import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/cart_item/cart_item.service';
@@ -21,14 +20,15 @@ import { UserCartFacade } from '../user-cart/user-cart.facade';
 import { PaymentService } from '@modules/payment/payment.service';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
-import { ProductReviewService } from '@modules/product/product_review/product_review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { SKUService } from '@modules/sku/sku.service';
+import { ProductReviewService } from '@modules/sku/product_review/product_review.service';
 
 @Injectable()
 export class UserReviewFacade {
   constructor(
     private readonly dataSource: DataSource,
-    private readonly productVariantSerivce: ProductVariantService,
+    private readonly skuService: SKUService,
     private readonly productReviewService: ProductReviewService,
     private readonly orderService: OrderService,
   ) {}
@@ -56,9 +56,7 @@ export class UserReviewFacade {
   async createReview(createReviewDto: CreateReviewDto) {
     this.isInit();
 
-    const variant = await this.productVariantSerivce.findOneBySlug(
-      createReviewDto.slug,
-    );
+    const variant = await this.skuService.findOneBySlug(createReviewDto.slug);
 
     if (!variant) {
       throw new BadRequestException(

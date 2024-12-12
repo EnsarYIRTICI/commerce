@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
-import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
 import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/cart_item/cart_item.service';
@@ -22,6 +21,7 @@ import { PaymentService } from '@modules/payment/payment.service';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { BankTransferPaymentStrategy } from '@modules/payment/payment-strategy/bank-transfer-payment.strategy';
+import { SKUService } from '@modules/sku/sku.service';
 
 @Injectable()
 export class UserOrderFacade {
@@ -30,7 +30,7 @@ export class UserOrderFacade {
 
     private readonly addressService: AddressService,
     private readonly orderService: OrderService,
-    private readonly productVariantService: ProductVariantService,
+    private readonly skuService: SKUService,
 
     private readonly paymentProcessor: PaymentProcessor,
     private readonly paymentService: PaymentService,
@@ -106,10 +106,10 @@ export class UserOrderFacade {
         ip: ip,
       });
 
-      await this.productVariantService.decreaseStockByCartItems(
-        queryRunner,
-        cartItems,
-      );
+      // await this.skuService.decreaseStockByCartItems(
+      //   queryRunner,
+      //   cartItems,
+      // );
 
       let payment = await this.paymentService.create(queryRunner, {
         conversationId: paymentResult.conversationId,

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WishlistItem } from './wishlist_item.entity';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { Wishlist } from '../wishlist.entity';
+import { SKU } from '@modules/sku/entites/sku.entity';
 
 @Injectable()
 export class WishlistItemService {
@@ -36,7 +36,7 @@ export class WishlistItemService {
     });
   }
 
-  async create(wishlist: Wishlist, productVariant: ProductVariant) {
+  async create(wishlist: Wishlist, productVariant: SKU) {
     return await this.wishlist_itemRepository.save({
       productVariant,
       wishlist,

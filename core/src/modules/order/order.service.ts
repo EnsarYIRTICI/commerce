@@ -13,8 +13,6 @@ import { User } from '@modules/user/user.entity';
 
 import { OrderItem } from './order_item/order_item.entity';
 
-import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 import { errorMessages } from 'src/shared/common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
 
@@ -26,6 +24,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { OrderStatusService } from './order_status/order_status.service';
 import { Payment } from '@modules/payment/payment.entity';
 import { OrderItemService } from './order_item/order_item.service';
+import { SKU } from '@modules/sku/entites/sku.entity';
 
 @Injectable()
 export class OrderService {
@@ -58,7 +57,7 @@ export class OrderService {
     });
   }
 
-  async isPurchased(user: User, productVariant: ProductVariant) {
+  async isPurchased(user: User, productVariant: SKU) {
     const order = await this.orderRepository.findOne({
       where: {
         user,
@@ -102,12 +101,12 @@ export class OrderService {
     const orderItems: OrderItem[] = [];
 
     for (const item of cartItems) {
-      const productVariant: ProductVariant = item.productVariant;
+      const productVariant: SKU = item.productVariant;
 
       let orderItem = queryRunner.manager.create(OrderItem, {
         productVariant,
         quantity: item.quantity,
-        price: productVariant.price,
+        // price: productVariant.price.,
       });
 
       orderItems.push(orderItem);

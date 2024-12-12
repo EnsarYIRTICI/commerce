@@ -4,17 +4,16 @@ import {
   Injectable,
 } from '@nestjs/common';
 
-import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
-
 import { WishlistItemService } from '@modules/wishlist/wishlist_item/wishlist_item.service';
 import { Wishlist } from '@modules/wishlist/wishlist.entity';
 import { CreateWishlistItemDto } from '@modules/wishlist/wishlist_item/dto/create-wishlist-item.dto';
+import { SKUService } from '@modules/sku/sku.service';
 
 @Injectable()
 export class UserWishlistItemFacade {
   constructor(
     private readonly wishlistItemService: WishlistItemService,
-    private readonly productVariantService: ProductVariantService,
+    private readonly skuService: SKUService,
   ) {}
 
   private wishlist: Wishlist;
@@ -40,7 +39,7 @@ export class UserWishlistItemFacade {
   async addItem(slug: string) {
     this.isInit();
 
-    let productVariant = await this.productVariantService.findOneBySlug(slug);
+    let productVariant = await this.skuService.findOneBySlug(slug);
 
     if (!productVariant) {
       throw new BadRequestException(

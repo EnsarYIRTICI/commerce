@@ -12,7 +12,6 @@ import {
   Length,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
 
 export class PaymentCardDto {
   @IsString()

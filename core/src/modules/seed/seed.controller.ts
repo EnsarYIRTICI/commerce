@@ -12,8 +12,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { OrderStatus } from '@modules/order/order_status/order_status.entity';
 import { Category } from '@modules/product/category/category.entity';
-import { ProductAttribute } from '@modules/product/product_attribute/product_attribute.entity';
-import { ProductAttributeValue } from '@modules/product/product_attribute_value/product_attribute_value.entity';
+
 import { SeedService } from './seed.service';
 import { Role } from '@modules/user/role/role.entity';
 import { Status } from '@modules/user/status/status.entity';
@@ -22,6 +21,8 @@ import { statusesJson } from './common/statuses';
 import { order_statusesJson } from './common/order_statuses';
 import { categoriesJson } from './common/categories';
 import { productAttributesJson } from './common/product_attributes';
+import { Attribute } from '@modules/attribute/entities/attribute.entity';
+import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';
 
 @ApiBearerAuth()
 @ApiTags('Seed')
@@ -64,9 +65,9 @@ export class SeedController {
         },
         {
           entity: {
-            attribute: ProductAttribute,
-            value: ProductAttributeValue,
-            name: 'ProductAttribute',
+            attribute: Attribute,
+            value: AttributeValue,
+            name: 'Attribute',
           },
           data: productAttributesJson,
           type: 'attribute',

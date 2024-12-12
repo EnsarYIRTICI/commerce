@@ -6,7 +6,8 @@ import {
   ManyToOne,
   OneToOne,
 } from 'typeorm';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { SKU } from '@modules/sku/entites/sku.entity';
+
 import { Order } from '../order.entity';
 
 @Entity()
@@ -24,8 +25,8 @@ export class OrderItem {
 
   // Relationships for the entity
 
-  @ManyToOne(() => ProductVariant, (variant) => variant.orderItems)
-  productVariant: ProductVariant;
+  @ManyToOne(() => SKU, (variant) => variant.orderItems)
+  productVariant: SKU;
 
   @ManyToOne(() => Order, (order) => order.orderItems)
   order: Order;

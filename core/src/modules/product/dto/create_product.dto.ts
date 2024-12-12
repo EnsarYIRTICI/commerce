@@ -21,7 +21,7 @@ export class CreateProductDto {
   @IsInt({ each: true })
   categories: number[];
 
-  @ValidateNested({ each: true })
-  @Type(() => CreateProductVariantDto)
-  variants: CreateProductVariantDto[];
+  // @ValidateNested({ each: true })
+  // @Type(() => CreateProductVariantDto)
+  // variants: CreateProductVariantDto[];
 }

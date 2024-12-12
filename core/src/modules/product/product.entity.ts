@@ -9,7 +9,8 @@ import {
 } from 'typeorm';
 
 import { Category } from './category/category.entity';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { SKU } from '../sku/entites/sku.entity';
+import { ProductOption } from '../sku/product-option/entities/product-option.entity';
 
 @Entity()
 export class Product {
@@ -39,6 +40,6 @@ export class Product {
   @JoinTable({ name: 'product_category_set' })
   categories: Category[];
 
-  @OneToMany(() => ProductVariant, (productVariant) => productVariant.product)
-  variants: ProductVariant[];
+  @OneToMany(() => SKU, (entity) => entity.product)
+  skus: SKU[];
 }

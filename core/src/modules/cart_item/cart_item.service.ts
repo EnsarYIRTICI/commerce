@@ -5,9 +5,8 @@ import { CartItem } from './cart_item.entity';
 import { User } from '@modules/user/user.entity';
 import { CreateCartItemDto } from './dto/create_cart_item.dto';
 import { ProductService } from '@modules/product/product.service';
-import { ProductVariantService } from '@modules/product/product_variant/product_variant.service';
 import { UserService } from '@modules/user/user.service';
-import { ProductVariant } from '@modules/product/product_variant/product_variant.entity';
+import { SKU } from '@modules/sku/entites/sku.entity';
 
 @Injectable()
 export class CartItemService {
@@ -33,7 +32,7 @@ export class CartItemService {
     });
   }
 
-  async validate(user: User, productVariant: ProductVariant) {
+  async validate(user: User, productVariant: SKU) {
     return await this.cart_itemRepository.findOne({
       where: {
         user: {
@@ -44,7 +43,7 @@ export class CartItemService {
     });
   }
 
-  async create(user: User, productVariant: ProductVariant) {
+  async create(user: User, productVariant: SKU) {
     return await this.cart_itemRepository.save({
       user: user,
       productVariant: productVariant,
