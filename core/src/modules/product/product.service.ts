@@ -7,7 +7,7 @@ import { CreateProductDto } from './dto/create_product.dto';
 import { Category } from '@modules/product/category/category.entity';
 import { CategoryService } from '@modules/product/category/category.service';
 import { errorMessages } from 'src/shared/common/errorMessages';
-import { SlugUtil } from '@utils/slug.util';
+import { SlugUtil } from '@shared/utils/slug.util';
 
 @Injectable()
 export class ProductService {
@@ -63,11 +63,11 @@ export class ProductService {
     const slug = this.slugUtil.create(createProductDto.name);
 
     return await this.productRepository.save({
-      categories,
-      createdAt,
       name: createProductDto.name,
       description: createProductDto.description,
       slug,
+      createdAt,
+      categories,
     });
   }
 

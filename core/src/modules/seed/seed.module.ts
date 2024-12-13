@@ -7,12 +7,16 @@ import { Status } from '@modules/user/status/status.entity';
 import { Category } from '@modules/product/category/category.entity';
 import { OrderStatus } from '@modules/order/order_status/order_status.entity';
 import { User } from '@modules/user/user.entity';
+import { UserCoreModule } from '@modules/user/user.core';
+import { JwtModule } from '@nestjs/jwt';
+import { UserService } from '@modules/user/user.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Role, Status, Category, OrderStatus, User]),
+    JwtModule,
+    TypeOrmModule.forFeature([User, Role, Status, Category, OrderStatus]),
   ],
-  providers: [SeedService],
+  providers: [SeedService, UserService],
   controllers: [SeedController],
 })
 export class SeedModule {}

@@ -31,4 +31,52 @@ export class StockService {
     skuStock.stock -= quantity;
     await this.stockRepository.save(skuStock);
   }
+
+  // async decreaseStockByCartItems(
+  //   queryRunner: QueryRunner,
+  //   cartItems: CartItem[],
+  // ) {
+  //   const SKUIds = cartItems.map((item) => item.SKU.id);
+  //   const SKUs = await queryRunner.manager.find(SKU, {
+  //     where: { id: In(SKUIds) },
+  //   });
+
+  //   SKUs.forEach((variant) => {
+  //     const cartItem = cartItems.find(
+  //       (item) => item.SKU.id === variant.id,
+  //     );
+  //     if (cartItem) {
+  //       if (variant.stock < cartItem.quantity) {
+  //         throw new BadRequestException(
+  //           `The product variant ${variant.id} is out of stock.`,
+  //         );
+  //       }
+  //       variant.stock -= cartItem.quantity;
+  //     }
+  //   });
+
+  //   await queryRunner.manager.save(SKU, SKUs);
+  // }
+
+  // async increaseStock(id: number, quantity: number) {
+  //   let SKU = await this.findOne(id);
+
+  //   SKU.stock += quantity;
+
+  //   return await this.product_variantRepository.update(id, SKU);
+  // }
+
+  // async decreaseStock(id: number, quantity: number) {
+  //   let SKU = await this.findOne(id);
+
+  //   if (SKU.stock < quantity) {
+  //     SKU.stock = 0;
+
+  //     return await this.product_variantRepository.update(id, SKU);
+  //   }
+
+  //   SKU.stock -= quantity;
+
+  //   return await this.product_variantRepository.update(id, SKU);
+  // }
 }

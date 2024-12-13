@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ProductOption } from '../../product-option/entities/product-option.entity';
 import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';
+import { ProductOption } from './product-option.entity';
 
 @Entity()
 export class ProductOptionValue {

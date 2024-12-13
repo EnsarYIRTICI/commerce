@@ -14,7 +14,7 @@ import {
   getBillingAddress,
   getShippingAddress,
   getBuyer,
-} from '@utils/iyzico.util';
+} from '@shared/utils/iyzico.util';
 import { PayData, PaymentStrategy } from './payment.strategy';
 
 import { v4 as uuidv4 } from 'uuid';

@@ -6,8 +6,8 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { AttributeValue } from './attribute-value.entity';
-import { ProductOption } from '@modules/sku/product-option/entities/product-option.entity';
 import { AttributeType } from './attribute-type.entity';
+import { ProductOption } from '@modules/sku/entites/product-option.entity';
 
 @Entity()
 export class Attribute {

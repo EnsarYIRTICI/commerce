@@ -37,6 +37,9 @@ import { SeedModule } from '@modules/seed/seed.module';
 import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
 import { UserCoreModule } from '@modules/user/user.core';
 import { UserFacadeModule } from '@modules/user-facade/user-facade.module';
+import { SKUModule } from '@modules/sku/sku.module';
+import { TestGuard } from '@shared/guard/test.guard';
+import { AttributeModule } from '@modules/attribute/attribute.module';
 
 @Module({
   imports: [
@@ -49,30 +52,31 @@ import { UserFacadeModule } from '@modules/user-facade/user-facade.module';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    TypeOrmModule.forFeature([User, Role, Status]),
 
+    SeedModule,
     AuthModule,
     UserFacadeModule,
     UserModule,
     ProductModule,
+    SKUModule,
     OrderModule,
     ShipmentModule,
     PaymentModule,
+    AddressModule,
+    UserCoreModule,
+    AttributeModule,
     WishlistModule,
     CartItemModule,
-    AddressModule,
     ActivityLogModule,
-    SeedModule,
     BlackListModule,
-    UserCoreModule,
   ],
   providers: [
     AppService,
     MinioService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
   ],
   controllers: [AppController],
 })

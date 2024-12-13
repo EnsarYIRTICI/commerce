@@ -19,7 +19,7 @@ import {
   getBillingAddress,
   getShippingAddress,
   getBuyer,
-} from '@utils/iyzico.util';
+} from '@shared/utils/iyzico.util';
 import { PaymentSystem } from '../payment-system/payment.system';
 
 @Injectable()

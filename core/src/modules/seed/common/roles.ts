@@ -1,5 +1,5 @@
 export const rolesJson = [
-  { name: 'admin', description: 'Administrator role' },
-  { name: 'user', description: 'Default user role' },
-  { name: 'moderator', description: 'Moderator role' },
+  { id: 1, name: 'admin', description: 'Administrator role' },
+  { id: 2, name: 'user', description: 'Default user role' },
+  { id: 3, name: 'moderator', description: 'Moderator role' },
 ];

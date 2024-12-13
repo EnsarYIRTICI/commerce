@@ -7,6 +7,8 @@ import {
   Put,
   Delete,
   InternalServerErrorException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -20,83 +22,78 @@ import { rolesJson } from './common/roles';
 import { statusesJson } from './common/statuses';
 import { order_statusesJson } from './common/order_statuses';
 import { categoriesJson } from './common/categories';
-import { productAttributesJson } from './common/product_attributes';
+import { productAttributesJson } from './common/attributes/product_attributes';
 import { Attribute } from '@modules/attribute/entities/attribute.entity';
 import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';
+import { QueryFailedError } from 'typeorm';
+import { UserService } from '@modules/user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { successMessages } from '@shared/common/successMessages';
+import { errorMessages } from '@shared/common/errorMessages';
 
-@ApiBearerAuth()
 @ApiTags('Seed')
 @Controller('seeds')
 export class SeedController {
-  constructor(private readonly seedService: SeedService) {}
+  constructor(
+    private readonly seedService: SeedService,
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+  ) {}
 
-  @Get('/seed')
-  async seed() {
+  @Get('/admin')
+  async admin() {
     try {
-      const seedData = [
-        {
-          entity: {
-            entity: Role,
-            name: 'Role',
-          },
-          data: rolesJson,
-        },
-        {
-          entity: {
-            entity: Status,
-            name: 'Status',
-          },
-          data: statusesJson,
-        },
-        {
-          entity: {
-            entity: OrderStatus,
-            name: 'OrderStatus',
-          },
-          data: order_statusesJson,
-        },
-        {
-          entity: {
-            entity: Category,
-            name: 'Category',
-          },
-          data: categoriesJson,
-          type: 'tree',
-        },
-        {
-          entity: {
-            attribute: Attribute,
-            value: AttributeValue,
-            name: 'Attribute',
-          },
-          data: productAttributesJson,
-          type: 'attribute',
-        },
-      ];
+      const registerDto = {
+        email: 'turing@turing.com',
+        password: 'turing',
+        name: 'Alan',
+        lastname: 'Turing',
+      };
 
-      for (const items of seedData) {
-        try {
-          if (items.type === 'attribute') {
-            await this.seedService.seedAttribute(
-              items.entity.attribute,
-              items.entity.value,
-              items.data,
-            );
-          } else if (items.type === 'tree') {
-            await this.seedService.seedTree(items.entity.entity, items.data);
-          } else {
-            await this.seedService.seed(items.entity.entity, items.data);
-          }
+      let user;
 
-          console.log('--> Seed', items.entity.name);
-        } catch (error) {
-          console.log(error.message);
+      try {
+        user = await this.seedService.admin(registerDto);
+      } catch (error) {
+        if (
+          error instanceof QueryFailedError &&
+          error.message.includes('duplicate key value')
+        ) {
+          console.log('--> Admin hesabı zaten oluşturulmuş');
         }
+
+        user = await this.userService.findOneByEmail(registerDto.email);
       }
+
+      const payload = {
+        id: user.id,
+        email: user.email,
+        lastPasswordChange: user.lastPasswordChange,
+      };
+
+      const token = this.jwtService.sign(payload);
+
+      return {
+        message: successMessages.LOGIN_SUCCESS,
+        token,
+        user: {
+          id: user.id,
+          name: user.name,
+          lastname: user.lastname,
+          email: user.email,
+        },
+      };
     } catch (error) {
       console.log(error);
 
-      throw new InternalServerErrorException();
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
+
+  @ApiBearerAuth()
+  @Get('/category')
+  async seed() {}
 }

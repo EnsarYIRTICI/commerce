@@ -7,7 +7,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Attribute } from './attribute.entity';
-import { ProductOptionValue } from '@modules/sku/product-option-value/entities/product-option-value.entity';
+import { ProductOptionValue } from '@modules/sku/entites/product-option-value.entity';
 
 @Entity()
 export class AttributeValue {

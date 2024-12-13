@@ -10,7 +10,6 @@ import {
 
 import { Category } from './category/category.entity';
 import { SKU } from '../sku/entites/sku.entity';
-import { ProductOption } from '../sku/product-option/entities/product-option.entity';
 
 @Entity()
 export class Product {

@@ -10,10 +10,6 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  findAll() {
-    return this.userRepository.find();
-  }
-
   async findOne(id: number) {
     return await this.userRepository.findOne({
       where: { id: id },
@@ -22,6 +18,20 @@ export class UserService {
         status: true,
       },
     });
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.userRepository.findOne({
+      where: { email: email },
+      relations: {
+        role: true,
+        status: true,
+      },
+    });
+  }
+
+  async findAll() {
+    return await this.userRepository.find();
   }
 
   create(user: User) {

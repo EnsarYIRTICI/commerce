@@ -12,7 +12,7 @@ import { Product } from '@modules/product/product.entity';
 import { WishlistItem } from '@modules/wishlist/wishlist_item/wishlist_item.entity';
 import { OrderItem } from '@modules/order/order_item/order_item.entity';
 import { CartItem } from '@modules/cart_item/cart_item.entity';
-import { ProductOptionValue } from '../product-option-value/entities/product-option-value.entity';
+import { ProductOptionValue } from './product-option-value.entity';
 import { ProductReview } from '../product_review/product_review.entity';
 import { ProductImage } from '../product_image/product_image.entity';
 import { Price } from '../price/price.entity';

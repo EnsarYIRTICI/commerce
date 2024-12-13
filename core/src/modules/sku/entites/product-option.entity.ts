@@ -5,9 +5,8 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { ProductOptionValue } from '../../product-option-value/entities/product-option-value.entity';
 import { Attribute } from '@modules/attribute/entities/attribute.entity';
-import { Product } from '@modules/product/product.entity';
+import { ProductOptionValue } from './product-option-value.entity';
 
 @Entity()
 export class ProductOption {

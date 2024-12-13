@@ -16,35 +16,35 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiTags('Attribute')
 @Controller('attributes')
 export class AttributeController {
-  constructor(private readonly product_attributeService: AttributeService) {}
+  constructor(private readonly attributeService: AttributeService) {}
 
   @Get('/values')
   findValues() {
-    return this.product_attributeService.findValues();
+    return this.attributeService.findValues();
   }
 
   @Get()
   findAll() {
-    return this.product_attributeService.findAll();
+    return this.attributeService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.product_attributeService.findOne(id);
+    return this.attributeService.findOne(id);
   }
 
   @Post()
   create(@Body() product_attribute: Attribute) {
-    return this.product_attributeService.create(product_attribute);
+    return this.attributeService.create(product_attribute);
   }
 
   @Put(':id')
   update(@Param('id') id: number, @Body() product_attribute: Attribute) {
-    return this.product_attributeService.update(id, product_attribute);
+    return this.attributeService.update(id, product_attribute);
   }
 
   @Delete(':id')
   delete(@Param('id') id: number) {
-    return this.product_attributeService.delete(id);
+    return this.attributeService.delete(id);
   }
 }

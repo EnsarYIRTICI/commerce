@@ -9,7 +9,7 @@ import { Product } from './product.entity';
 import { ProductService } from './product.service';
 import { CategoryCoreModule } from './category/category.core';
 import { AttributeCoreModule } from '@modules/attribute/attribute.core';
-import { SlugUtil } from '@utils/slug.util';
+import { SlugUtil } from '@shared/utils/slug.util';
 
 @Module({
   imports: [

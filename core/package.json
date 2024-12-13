@@ -7,15 +7,7 @@
   "license": "UNLICENSED",
   "_moduleAliases": {
     "@modules": "dist/modules",
-    "@decorators": "dist/decorators",
-    "@config": "dist/config",
-    "@auth": "dist/auth",
-    "@common": "dist/common",
-    "@interface": "dist/interface",
-    "@utils": "dist/utils",
-    "@services": "dist/services",
-    "@middleware": "dist/middleware",
-    "@interceptor": "dist/interceptor"
+    "@shared": "dist/shared"
   },
   "scripts": {
     "build": "nest build",

@@ -17,24 +17,17 @@ import { CategoryModule } from './category/category.module';
 
 import { ProductCoreModule } from './product.core';
 import { WarehouseModule } from '../sku/warehouse/warehouse.module';
-import { ProductOptionModule } from '../sku/product-option/product-option.module';
 import { SKUModule } from '../sku/sku.module';
 
 @Module({
-  imports: [
-    ProductSharedModule,
-    ProductCoreModule,
-    CategoryModule,
-    WarehouseModule,
-    SKUModule,
-  ],
+  imports: [ProductSharedModule, ProductCoreModule, CategoryModule],
   providers: [],
   controllers: [ProductController],
 })
 export class ProductModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(FormDataMiddleware)
-      .forRoutes({ path: 'products', method: RequestMethod.POST });
+    // consumer
+    //   .apply(FormDataMiddleware)
+    //   .forRoutes({ path: 'products', method: RequestMethod.POST });
   }
 }

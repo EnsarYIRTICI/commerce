@@ -12,6 +12,7 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
@@ -23,6 +24,7 @@ import { Roles } from 'src/shared/decorators/role.decorator';
 import { ProductFileInterceptor } from 'src/shared/interceptor/product.file.interceptor';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { Category } from '@modules/product/category/category.entity';
+import { Request } from 'express';
 
 @ApiBearerAuth()
 @ApiTags('Product')
@@ -49,29 +51,32 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
-  // @Post()
-  // @UseInterceptors(ProductFileInterceptor)
-  // async create(@Body() createProductDto: CreateProductDto) {
-  //   try {
-  //     return await this.productService.create(createProductDto);
-  //   } catch (error) {
-  //     if (error instanceof QueryFailedError) {
-  //       console.log(error.message);
+  @Post()
+  @ApiBody({ type: CreateProductDto })
+  async create(
+    @Req() request: Request,
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    try {
+      return await this.productService.create(createProductDto);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        console.log(error.message);
 
-  //       throw new HttpException(
-  //         error.message,
-  //         HttpStatus.INTERNAL_SERVER_ERROR,
-  //       );
-  //     }
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
 
-  //     console.error(error);
+      console.error(error);
 
-  //     throw new HttpException(
-  //       errorMessages.INTERNAL_SERVER_ERROR,
-  //       HttpStatus.INTERNAL_SERVER_ERROR,
-  //     );
-  //   }
-  // }
+      throw new HttpException(
+        errorMessages.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
   @Put(':id')
   update(@Param('id') id: number, @Body() product: Product) {

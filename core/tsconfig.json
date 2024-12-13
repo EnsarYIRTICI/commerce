@@ -20,15 +20,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@modules/*": ["src/modules/*"], 
-      "@decorators/*": ["src/shared/decorators/*"], 
-      "@config/*": ["src/shared/config/*"],   
-      "@auth/*": ["src/modules/auth/*"],
-      "@common/*": ["src/shared/common/*"],   
-      "@interface/*": ["src/modules/cache/interface/*"],
-      "@utils/*": ["src/shared/utils/*"], 
-      "@services/*": ["src/services/*"],
-      "@middleware/*": ["src/shared/middleware/*"],
-      "@interceptor/*": ["src/shared/interceptor/*"],
+      "@shared/*": ["src/shared/*"], 
+
     }
   }
 }
