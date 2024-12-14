@@ -17,14 +17,14 @@ import { errorMessages } from 'src/shared/common/errorMessages';
 import { AddressService } from '@modules/address/address.service';
 
 import { Request } from 'express';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
-import { Address } from '@modules/address/address.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 
 import { v4 as uuidv4 } from 'uuid';
 import { OrderStatusService } from './order_status/order_status.service';
 import { Payment } from '@modules/payment/payment.entity';
 import { OrderItemService } from './order_item/order_item.service';
 import { SKU } from '@modules/sku/entites/sku.entity';
+import { Address } from '@modules/address/entities/address.entity';
 
 @Injectable()
 export class OrderService {

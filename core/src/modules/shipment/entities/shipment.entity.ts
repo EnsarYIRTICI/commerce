@@ -6,9 +6,9 @@ import {
   ManyToOne,
   OneToOne,
 } from 'typeorm';
-import { Order } from '../order/order.entity';
-import { Carrier } from './carrier/carrier.entity';
-import { ShipmentStatus } from './shipment-status/shipment-status.entity';
+import { Carrier } from './carrier.entity';
+import { ShipmentStatus } from './shipment-status.entity';
+import { Order } from '@modules/order/order.entity';
 
 @Entity()
 export class Shipment {

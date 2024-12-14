@@ -13,11 +13,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './shared/guard/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 
-import { Role } from '@modules/user/role/role.entity';
-import { OrderStatus } from '@modules/order/order_status/order_status.entity';
-import { Status } from '@modules/user/status/status.entity';
-import { Category } from '@modules/product/category/category.entity';
-import { User } from '@modules/user/user.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MinioService } from '@modules/storage/minio/minio.service';
 import { ProductModule } from '@modules/product/product.module';
@@ -27,16 +22,13 @@ import { UserModule } from '@modules/user/user.module';
 import { WishlistItemModule } from '@modules/wishlist/wishlist_item/wishlist_item.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
 import { PaymentModule } from '@modules/payment/payment.module';
-import { ActivityLog } from '@modules/activity_log/activity_log.entity';
-import { ActivityLogModule } from '@modules/activity_log/activity_log.module';
-import { Address } from '@modules/address/address.entity';
 import { AddressModule } from '@modules/address/address.module';
 import { CartItemModule } from '@modules/cart_item/cart_item.module';
 import { BlacklistService } from './modules/cache/blacklist/blacklist.service';
 import { SeedModule } from '@modules/seed/seed.module';
 import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
 import { UserCoreModule } from '@modules/user/user.core';
-import { UserFacadeModule } from '@modules/user-facade/user-facade.module';
+import { UserFacadeModule } from '@modules/customer/user-facade.module';
 import { SKUModule } from '@modules/sku/sku.module';
 import { TestGuard } from '@shared/guard/test.guard';
 import { AttributeModule } from '@modules/attribute/attribute.module';
@@ -56,18 +48,17 @@ import { AttributeModule } from '@modules/attribute/attribute.module';
     SeedModule,
     AuthModule,
     UserFacadeModule,
-    UserModule,
     ProductModule,
     SKUModule,
     OrderModule,
+    UserModule,
     ShipmentModule,
     PaymentModule,
     AddressModule,
     UserCoreModule,
-    AttributeModule,
     WishlistModule,
     CartItemModule,
-    ActivityLogModule,
+    AttributeModule,
     BlackListModule,
   ],
   providers: [

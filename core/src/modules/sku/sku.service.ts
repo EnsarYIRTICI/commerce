@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, QueryRunner, Repository } from 'typeorm';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { SKU } from './entites/sku.entity';
 import { CreateSkuDto } from './dto/create-sku.dto';
 import { ProductOption } from './entites/product-option.entity';
@@ -11,6 +11,11 @@ import { Attribute } from '@modules/attribute/entities/attribute.entity';
 import { ProductService } from '@modules/product/product.service';
 import { SlugUtil } from '@shared/utils/slug.util';
 import { SKUUtil } from '@shared/utils/sku.util';
+import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';
+import {
+  AttributeFO,
+  AttributeValueFOV,
+} from './interface/attribute.interface';
 
 @Injectable()
 export class SKUService {
@@ -31,6 +36,7 @@ export class SKUService {
 
   async create(createSkuDto: CreateSkuDto) {
     // Transaction başlat
+
     const queryRunner =
       this.skuRepository.manager.connection.createQueryRunner();
     await queryRunner.connect();
@@ -45,74 +51,119 @@ export class SKUService {
         throw new BadRequestException('Product not found.');
       }
 
-      // Attributes'i priority'ye göre sırala
-      const sortedAttributes = createSkuDto.attributes.sort(
-        (a, b) => a.priority - b.priority,
-      );
+      const validatedAttributes: AttributeFO[] = [];
 
-      // Doğrulama ve ilişkili verileri toplama
-      const validatedAttributes: Attribute[] = [];
-
-      for (const attribute of sortedAttributes) {
+      for (const attribute of createSkuDto.attributes) {
         const validatedAttribute =
           await this.attributeService.validateValueAttribute(
             attribute.attributeId,
             attribute.valueIds,
           );
-        validatedAttributes.push(validatedAttribute);
+
+        let attributeValueFOVs: AttributeValueFOV[] = [];
+
+        for (const attributeValue of validatedAttribute.values) {
+          let attributeValueX: AttributeValueFOV = {
+            ...attributeValue,
+            priority: attribute.valueIds.find(
+              (valueId) => attributeValue.id === valueId.valueId,
+            ).priority,
+          };
+
+          attributeValueFOVs.push(attributeValueX);
+        }
+
+        let attributeX: AttributeFO = {
+          ...validatedAttribute,
+          priority: attribute.priority,
+          attributeValueFOVs,
+        };
+
+        validatedAttributes.push(attributeX);
       }
+
+      console.log('Attributes ', validatedAttributes);
 
       const productOptions: ProductOption[] = [];
 
-      validatedAttributes.map(async (attribute, i) => {
+      for (const validatedAttribute of validatedAttributes) {
         const productOptionValues: ProductOptionValue[] = [];
 
-        for (const value of attribute.values) {
+        for (const value of validatedAttribute.attributeValueFOVs) {
           const optionValue = queryRunner.manager.create(ProductOptionValue, {
-            value,
+            attributeValue: value,
+            priority: value.priority,
           });
 
           productOptionValues.push(optionValue);
         }
 
         let option = queryRunner.manager.create(ProductOption, {
-          name: attribute,
-          priority: i + 1,
+          attribute: validatedAttribute,
+          priority: validatedAttribute.priority,
           values: productOptionValues,
         });
 
         option = await queryRunner.manager.save(option);
+        option = await queryRunner.manager.findOne(ProductOption, {
+          where: {
+            id: option.id,
+          },
+          relations: {
+            values: {
+              attributeValue: true,
+            },
+          },
+        });
         productOptions.push(option);
-      });
+      }
 
-      const optionValuesArrays = productOptions.map((option) => option.values); // Tüm OptionValue'ları alın
-      const combinations = this.skuUtil.cartesian(...optionValuesArrays); // Kombinasyonları oluşturun
+      console.log('Options ', productOptions);
+
+      const optionValuesArrays = productOptions.map((option) => option.values);
+      const combinations = this.skuUtil.cartesian(...optionValuesArrays);
+
+      console.log('Cartesian ', combinations);
 
       const skus: SKU[] = [];
 
       for (const combination of combinations) {
-        // Kombinasyon isimlendirme (örn: "Kırmızı L")
-        const name = combination.map((value) => value.value).join(' ');
+        console.log(combination);
+
+        const values = combination
+          .map((optionValue) => optionValue.attributeValue.value)
+          .join(' ');
+
+        const name = product.name + ' ' + values;
+
         const slug = this.slugUtil.create(name);
+
+        console.log('Values ', values);
+        console.log('Name ', name);
+        console.log('Slug ', slug);
 
         let sku = queryRunner.manager.create(SKU, {
           name,
           slug,
-          optionValues: combination, // Relation with ProductOptionValues
-          product, // Relation with Product
+          optionValues: combination,
+          product,
         });
 
-        sku = await queryRunner.manager.save(sku); // SKU'yu kaydet
+        sku = await queryRunner.manager.save(sku);
         skus.push(sku);
       }
 
       // İşlemi tamamla
       await queryRunner.commitTransaction();
 
+      console.log('Skus ', skus);
+
       return skus;
     } catch (error) {
       // Hata durumunda işlemi geri al
       await queryRunner.rollbackTransaction();
+
+      console.log(error.message);
 
       throw new BadRequestException(
         'An error occurred while creating SKUs.',
@@ -141,7 +192,11 @@ export class SKUService {
   }
 
   async findAll() {
-    return await this.skuRepository.find();
+    return await this.skuRepository.find({
+      relations: {
+        optionValues: true,
+      },
+    });
   }
 
   async findOne(id: number) {

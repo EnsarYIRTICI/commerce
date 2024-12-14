@@ -7,26 +7,26 @@ import { Price } from './price.entity';
 export class PriceService {
   constructor(
     @InjectRepository(Price)
-    private price_historyRepository: Repository<Price>,
+    private priceServiceRepository: Repository<Price>,
   ) {}
 
   findAll() {
-    return this.price_historyRepository.find();
+    return this.priceServiceRepository.find();
   }
 
   findOne(id: number) {
-    return this.price_historyRepository.findOne({ where: { id } });
+    return this.priceServiceRepository.findOne({ where: { id } });
   }
 
-  create(price_history: Price) {
-    return this.price_historyRepository.save(price_history);
+  create(price: Price) {
+    return this.priceServiceRepository.save(price);
   }
 
-  update(id: number, price_history: Price) {
-    return this.price_historyRepository.update(id, price_history);
+  update(id: number, price: Price) {
+    return this.priceServiceRepository.update(id, price);
   }
 
   delete(id: number) {
-    return this.price_historyRepository.delete(id);
+    return this.priceServiceRepository.delete(id);
   }
 }

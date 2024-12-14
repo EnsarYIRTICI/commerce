@@ -11,11 +11,10 @@ import { Role } from './role/role.entity';
 import { Status } from './status/status.entity';
 import { Wishlist } from '../wishlist/wishlist.entity';
 import { Order } from '../order/order.entity';
-import { Address } from '../address/address.entity';
-import { ActivityLog } from '../activity_log/activity_log.entity';
 import { Subscription } from '@modules/payment/subscription/subscription.entity';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { ProductReview } from '@modules/sku/product_review/product_review.entity';
+import { Address } from '@modules/address/entities/address.entity';
 
 @Entity()
 export class User {
@@ -79,9 +78,6 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
-
-  @OneToMany(() => ActivityLog, (activityLog) => activityLog.user)
-  activityLogs: ActivityLog[];
 
   @OneToMany(() => Subscription, (subscription) => subscription.user)
   subscriptions: Subscription[];

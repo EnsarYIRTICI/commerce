@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/cart_item/cart_item.service';
 import { Request } from 'express';

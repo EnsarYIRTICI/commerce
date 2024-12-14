@@ -1,9 +1,9 @@
 import { User } from '@modules/user/user.entity';
 import { PaymentCardDto } from '../dto/paymentCard.dto';
-import { Address } from '@modules/address/address.entity';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { Payment } from '../payment.entity';
 import { PaymentResult } from '../payment-system/payment.system';
+import { Address } from '@modules/address/entities/address.entity';
 
 export interface PayData {
   user: User;

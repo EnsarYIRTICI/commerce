@@ -7,7 +7,7 @@ import { Subscription } from '@modules/payment/subscription/subscription.entity'
 import { RoleModule } from './role/role.module';
 import { StatusModule } from './status/status.module';
 import { OrderItem } from '@modules/order/order_item/order_item.entity';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 
 @Module({
   imports: [StatusModule, RoleModule, TypeOrmModule.forFeature([User])],

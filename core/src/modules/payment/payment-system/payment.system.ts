@@ -1,8 +1,8 @@
 import { User } from '@modules/user/user.entity';
 import { PaymentCardDto } from '../dto/paymentCard.dto';
-import { Address } from '@modules/address/address.entity';
-import { CartItem } from '@modules/cart_item/cart_item.entity';
+import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { Payment } from '../payment.entity';
+import { PayData } from '../payment-strategy/payment.strategy';
 
 export interface PaymentResult {
   status: string;
@@ -13,6 +13,13 @@ export interface PaymentResult {
 
 export abstract class PaymentSystem {
   abstract test(): Promise<PaymentResult>;
-  abstract createCreditCardPayment(paymentRequest: any): Promise<PaymentResult>;
-  abstract createBkmPayment(paymentRequest: any): Promise<PaymentResult>;
+  abstract createCreditCardPayment(
+    payData: PayData,
+    paymentCard: PaymentCardDto,
+    amount: number,
+  ): Promise<PaymentResult>;
+  abstract createBkmPayment(
+    payData: PayData,
+    amount: number,
+  ): Promise<PaymentResult>;
 }

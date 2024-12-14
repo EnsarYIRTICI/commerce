@@ -9,11 +9,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
-import { Address } from './address.entity';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateAddressDto } from './dto/createAddress.dto';
 import { Request } from 'express';
 import { User } from '@modules/user/user.entity';
+import { Address } from './entities/address.entity';
 
 @ApiBearerAuth()
 @ApiTags('Address')

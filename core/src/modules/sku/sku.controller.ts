@@ -6,6 +6,8 @@ import {
   Body,
   Put,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { SKUService } from './sku.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -18,21 +20,13 @@ import { CreateSkuDto } from './dto/create-sku.dto';
 export class SKUController {
   constructor(private readonly skuService: SKUService) {}
 
-  // @Post('stok/increase')
-  // async increase(@Body() { id, quantity }: { id: number; quantity: number }) {
-  //   return await this.skuService.increaseStock(id, quantity);
-  // }
-
-  // @Post('stok/decrease')
-  // async decrease(@Body() { id, quantity }: { id: number; quantity: number }) {
-  //   return await this.skuService.decreaseStock(id, quantity);
-  // }
-
   @Post()
   async create(@Body() createSkuDto: CreateSkuDto) {
     try {
       return await this.skuService.create(createSkuDto);
-    } catch (error) {}
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get()

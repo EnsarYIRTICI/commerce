@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { CartItemService } from './cart_item.service';
-import { CartItem } from './cart_item.entity';
+import { CartItem } from './entities/cart_item.entity';
 import { Request } from 'express';
 import { User } from '@modules/user/user.entity';
 import { CreateCartItemDto } from './dto/create_cart_item.dto';

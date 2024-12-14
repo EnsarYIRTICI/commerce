@@ -13,7 +13,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateProductDto {
   @ApiProperty({
     description: 'Name of the product',
-    example: 'super-t-shirt',
+    example: 'super-t-shirt-2',
   })
   @IsString()
   @IsNotEmpty()

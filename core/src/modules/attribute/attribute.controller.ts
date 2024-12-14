@@ -18,14 +18,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class AttributeController {
   constructor(private readonly attributeService: AttributeService) {}
 
-  @Get('/values')
-  findValues() {
-    return this.attributeService.findValues();
-  }
-
   @Get()
-  findAll() {
-    return this.attributeService.findAll();
+  async findAll() {
+    return await this.attributeService.findAll();
   }
 
   @Get(':id')

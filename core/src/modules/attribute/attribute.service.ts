@@ -18,12 +18,15 @@ export class AttributeService {
     private readonly attributeTypeRepository: Repository<AttributeType>,
   ) {}
 
-  async validateValueAttribute(attributeId: number, valueIds: number[]) {
+  async validateValueAttribute(
+    attributeId: number,
+    valueIds: { priority: number; valueId: number }[],
+  ) {
     const valueObjArr: FindOptionsWhere<AttributeValue>[] = [];
 
-    valueIds.map((id) => {
+    valueIds.map((value) => {
       valueObjArr.push({
-        id,
+        id: value.valueId,
       });
     });
 
@@ -43,16 +46,13 @@ export class AttributeService {
     return attribute;
   }
 
-  async findValues() {
+  async findAll() {
     return await this.attributeRepository.find({
       relations: {
         values: true,
+        type: true,
       },
     });
-  }
-
-  findAll() {
-    return this.attributeRepository.find();
   }
 
   findOne(id: number) {

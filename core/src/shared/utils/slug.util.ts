@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SlugUtil {
-  create(name: string) {
+  create(name: string): string {
     return slugify(name, { lower: true, strict: true });
   }
 }

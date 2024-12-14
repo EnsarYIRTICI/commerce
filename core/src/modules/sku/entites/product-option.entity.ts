@@ -21,7 +21,7 @@ export class ProductOption {
   // Relationships for the entity
 
   @ManyToOne(() => Attribute, (entity) => entity.option)
-  name: Attribute;
+  attribute: Attribute;
 
   @OneToMany(() => ProductOptionValue, (value) => value.option, {
     cascade: true,

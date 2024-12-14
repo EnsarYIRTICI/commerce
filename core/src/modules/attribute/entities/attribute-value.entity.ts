@@ -21,7 +21,7 @@ export class AttributeValue {
 
   // Relationships for the entity
 
-  @OneToMany(() => ProductOptionValue, (entity) => entity.value)
+  @OneToMany(() => ProductOptionValue, (entity) => entity.attributeValue)
   optionValue: ProductOptionValue[];
 
   @ManyToOne(() => Attribute, (Attribute) => Attribute.values)

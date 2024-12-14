@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ShipmentService } from './shipment.service';
-import { Shipment } from './shipment.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Shipment } from './entities/shipment.entity';
 
 @ApiBearerAuth()
 @ApiTags('Shipment')

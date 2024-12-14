@@ -45,6 +45,7 @@ export class ProductService {
         categories: true,
         skus: {
           images: true,
+          optionValues: true,
         },
       },
     });

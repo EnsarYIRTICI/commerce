@@ -12,19 +12,8 @@ import {
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { OrderStatus } from '@modules/order/order_status/order_status.entity';
-import { Category } from '@modules/product/category/category.entity';
 
 import { SeedService } from './seed.service';
-import { Role } from '@modules/user/role/role.entity';
-import { Status } from '@modules/user/status/status.entity';
-import { rolesJson } from './common/roles';
-import { statusesJson } from './common/statuses';
-import { order_statusesJson } from './common/order_statuses';
-import { categoriesJson } from './common/categories';
-import { productAttributesJson } from './common/attributes/product_attributes';
-import { Attribute } from '@modules/attribute/entities/attribute.entity';
-import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';
 import { QueryFailedError } from 'typeorm';
 import { UserService } from '@modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -40,7 +29,7 @@ export class SeedController {
     private readonly userService: UserService,
   ) {}
 
-  @Get('/admin')
+  @Post('admin')
   async admin() {
     try {
       const registerDto = {
@@ -94,6 +83,38 @@ export class SeedController {
   }
 
   @ApiBearerAuth()
-  @Get('/category')
-  async seed() {}
+  @Post('category')
+  async category() {
+    await this.seedService.category();
+  }
+
+  @ApiBearerAuth()
+  @Post('product-attribute')
+  async product_attribute() {
+    await this.seedService.product_attribute();
+  }
+
+  @ApiBearerAuth()
+  @Post('attribute-type')
+  async attribute_type() {
+    await this.seedService.attribute_type();
+  }
+
+  @ApiBearerAuth()
+  @Post('role')
+  async role() {
+    await this.seedService.role();
+  }
+
+  @ApiBearerAuth()
+  @Post('status')
+  async status() {
+    await this.seedService.status();
+  }
+
+  @ApiBearerAuth()
+  @Post('order-status')
+  async order_status() {
+    await this.seedService.order_status();
+  }
 }

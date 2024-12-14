@@ -4,9 +4,10 @@ import { Wishlist } from './wishlist.entity';
 import { WishlistService } from './wishlist.service';
 import { WishlistController } from './wishlist.controller';
 import { WishlistItemModule } from './wishlist_item/wishlist_item.module';
+import { WishlistItemCoreModule } from './wishlist_item/wishlist_item.core';
 
 @Module({
-  imports: [WishlistItemModule, TypeOrmModule.forFeature([Wishlist])],
+  imports: [WishlistItemCoreModule, TypeOrmModule.forFeature([Wishlist])],
   providers: [WishlistService],
   exports: [WishlistService],
 })

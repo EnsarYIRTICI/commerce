@@ -1,3 +1,4 @@
+import { User } from '@modules/user/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,7 +6,6 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
-import { User } from '../user/user.entity';
 
 @Entity()
 export class Address {

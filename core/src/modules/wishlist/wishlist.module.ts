@@ -7,7 +7,7 @@ import { WishlistItemModule } from './wishlist_item/wishlist_item.module';
 import { WishlistCoreModule } from './wishlist.core';
 
 @Module({
-  imports: [WishlistCoreModule],
+  imports: [WishlistItemModule, WishlistCoreModule],
   providers: [],
   controllers: [WishlistController],
 })

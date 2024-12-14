@@ -15,7 +15,7 @@ export class ProductOptionValue {
   // Relationships for the entity
 
   @ManyToOne(() => AttributeValue, (entity) => entity.optionValue)
-  value: AttributeValue;
+  attributeValue: AttributeValue;
 
   @ManyToOne(() => ProductOption, (option) => option.values, {
     onDelete: 'CASCADE',
