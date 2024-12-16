@@ -39,7 +39,7 @@ export class OrderController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.orderService.findOne(id);
+    return this.orderService.findById(id);
   }
 
   @Put(':id')

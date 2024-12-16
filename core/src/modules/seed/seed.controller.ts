@@ -89,12 +89,6 @@ export class SeedController {
   }
 
   @ApiBearerAuth()
-  @Post('product-attribute')
-  async product_attribute() {
-    await this.seedService.product_attribute();
-  }
-
-  @ApiBearerAuth()
   @Post('attribute-type')
   async attribute_type() {
     await this.seedService.attribute_type();

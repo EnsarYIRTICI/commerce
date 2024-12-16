@@ -25,6 +25,12 @@ import { Payment } from '@modules/payment/payment.entity';
 import { OrderItemService } from './order_item/order_item.service';
 import { SKU } from '@modules/sku/entites/sku.entity';
 import { Address } from '@modules/address/entities/address.entity';
+import { UserOrderFacade } from '@modules/customer/facade/user-order.facade';
+import { PaymentProcessor } from '@modules/payment/payment.processor';
+import { PaymentService } from '@modules/payment/payment.service';
+import { SKUService } from '@modules/sku/service/sku.service';
+import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
+import { BankTransferPaymentStrategy } from '@modules/payment/payment-strategy/bank-transfer-payment.strategy';
 
 @Injectable()
 export class OrderService {
@@ -36,12 +42,12 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
   ) {}
 
-  findAll() {
-    return this.orderRepository.find();
+  async findAll() {
+    return await this.orderRepository.find();
   }
 
-  findOne(id: number) {
-    return this.orderRepository.findOne({ where: { id } });
+  async findById(id: number) {
+    return await this.orderRepository.findOne({ where: { id } });
   }
 
   async findAllByUser(user: User) {

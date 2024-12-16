@@ -17,7 +17,7 @@ export class CreateSkuDto {
   })
   @IsString()
   @IsNotEmpty()
-  slug: string;
+  productSlug: string;
 
   @ApiProperty({
     description: 'List of product options with attributes',

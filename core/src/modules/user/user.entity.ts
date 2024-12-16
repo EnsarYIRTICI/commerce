@@ -7,14 +7,14 @@ import {
   OneToOne,
 } from 'typeorm';
 
-import { Role } from './role/role.entity';
-import { Status } from './status/status.entity';
 import { Wishlist } from '../wishlist/wishlist.entity';
 import { Order } from '../order/order.entity';
 import { Subscription } from '@modules/payment/subscription/subscription.entity';
 import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
-import { ProductReview } from '@modules/sku/product_review/product_review.entity';
 import { Address } from '@modules/address/entities/address.entity';
+import { Role } from './entities/role.entity';
+import { Status } from './entities/status.entity';
+import { ProductReview } from '@modules/sku/product_review/entities/product_review.entity';
 
 @Entity()
 export class User {

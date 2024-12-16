@@ -39,6 +39,6 @@ export class Product {
   @JoinTable({ name: 'product_category_set' })
   categories: Category[];
 
-  @OneToMany(() => SKU, (entity) => entity.product)
+  @OneToMany(() => SKU, (entity) => entity.product, { cascade: true })
   skus: SKU[];
 }

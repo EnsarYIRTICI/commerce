@@ -13,10 +13,11 @@ import { WishlistItem } from '@modules/wishlist/wishlist_item/wishlist_item.enti
 import { OrderItem } from '@modules/order/order_item/order_item.entity';
 import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { ProductOptionValue } from './product-option-value.entity';
-import { ProductReview } from '../product_review/product_review.entity';
-import { ProductImage } from '../product_image/product_image.entity';
-import { Price } from '../price/price.entity';
-import { Stock } from '../stock/entities/stock.entity';
+
+import { Stock } from '../../inventory/entities/stock.entity';
+import { Price } from '../price/entities/price.entity';
+import { ProductImage } from '../product_image/entities/product_image.entity';
+import { ProductReview } from '../product_review/entities/product_review.entity';
 
 @Entity()
 export class SKU {

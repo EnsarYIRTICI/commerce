@@ -21,7 +21,6 @@ import { errorMessages } from 'src/shared/common/errorMessages';
 import { CreateProductDto } from './dto/create_product.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/shared/decorators/role.decorator';
-import { ProductFileInterceptor } from 'src/shared/interceptor/product.file.interceptor';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { Category } from '@modules/product/category/category.entity';
 import { Request } from 'express';

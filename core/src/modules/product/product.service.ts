@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { Product } from './product.entity';
@@ -21,6 +26,14 @@ export class ProductService {
   ) {}
 
   // CUSTOM
+
+  async validateBySlug(slug: string) {
+    const product = await this.findOneBySlug(slug);
+    if (!product) {
+      throw new BadRequestException('Product not found.');
+    }
+    return product;
+  }
 
   async findOneBySlug(slug: string) {
     return await this.productRepository.findOne({

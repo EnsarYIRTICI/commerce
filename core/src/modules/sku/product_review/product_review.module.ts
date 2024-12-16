@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductReview } from './product_review.entity';
-import { ProductReviewService } from './product_review.service';
-import { ProductReviewController } from './product_review.controller';
-import { ProductReviewCoreModule } from './product-review.core';
+import { ProductReview } from './entities/product_review.entity';
+import { ProductReviewService } from './service/product_review.service';
 
 @Module({
-  imports: [ProductReviewCoreModule],
-  providers: [],
-  controllers: [ProductReviewController],
+  imports: [TypeOrmModule.forFeature([ProductReview])],
+  providers: [ProductReviewService],
+  exports: [ProductReviewService],
 })
 export class ProductReviewModule {}

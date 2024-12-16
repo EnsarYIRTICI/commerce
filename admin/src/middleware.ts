@@ -26,6 +26,8 @@ export async function middleware(request: NextRequest) {
       try {
         const userData = await authUser(token.value);
 
+        console.log("User Data --> ", userData);
+
         let response;
 
         if (isAuthUrl(request)) {

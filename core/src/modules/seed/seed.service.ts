@@ -5,20 +5,22 @@ import { ModuleRef } from '@nestjs/core';
 import { IStaticEntity } from './interface/IStaticEntity';
 import { ITreeEntity } from './interface/ITreeEntity';
 import { Category } from '@modules/product/category/category.entity';
-import { categoriesJson } from './common/categories';
-import { Role } from '@modules/user/role/role.entity';
-import { rolesJson } from './common/roles';
+import { categoriesJson } from './common/category.json';
+import { Role } from '@modules/user/entities/role.entity';
+import { rolesJson } from './common/roles.json';
 import { OrderStatus } from '@modules/order/order_status/order_status.entity';
-import { order_statusesJson } from './common/order_statuses';
-import { statusesJson } from './common/statuses';
-import { Status } from '@modules/user/status/status.entity';
+import { order_statusesJson } from './common/order_status.json';
+import { statusesJson } from './common/status.json';
+import { Status } from '@modules/user/entities/status.entity';
 import { User } from '@modules/user/user.entity';
 import { RegisterDto } from '@modules/auth/dto/register.dto';
-import { productAttributesJson } from './common/attributes/product_attributes';
+import { productAttributesJson } from '../attribute/common/product_attributes';
 import { Attribute } from '@modules/attribute/entities/attribute.entity';
 import { AttributeType } from '@modules/attribute/entities/attribute-type.entity';
-import { attributeTypesJson } from './common/attribute-type';
+import { attributeTypesJson } from './common/attribute-type.json';
 import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';
+import { currencyJson } from './common/currency.json';
+import { Currency } from '@modules/sku/price/entities/currency.entity';
 
 @Injectable()
 export class SeedService {
@@ -97,48 +99,8 @@ export class SeedService {
     }
   }
 
-  async product_attribute() {
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      const attributeType = await queryRunner.manager.findOne(AttributeType, {
-        where: { name: 'product' },
-      });
-
-      if (!attributeType) {
-        throw new BadRequestException('Attribute Type Not Found');
-      }
-
-      for (const attributeData of productAttributesJson) {
-        const attribute = queryRunner.manager.create(Attribute, {
-          type: attributeType,
-          id: attributeData.id,
-          ...attributeData,
-        });
-        await queryRunner.manager.save(attribute);
-
-        const values = attributeData.values.map(async (attrValueData) => {
-          const attributeValue = queryRunner.manager.create(AttributeValue, {
-            attribute,
-            id: attrValueData.id,
-            ...attrValueData,
-          });
-          await queryRunner.manager.save(attributeValue);
-        });
-
-        await Promise.all(values);
-      }
-
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await queryRunner.release();
-    }
+  async currency() {
+    await this.base(Currency, currencyJson);
   }
 
   async attribute_type() {
