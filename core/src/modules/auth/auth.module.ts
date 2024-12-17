@@ -13,15 +13,11 @@ import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
 
 @Module({
   imports: [
+    JwtModule,
     BlackListModule,
     TypeOrmModule.forFeature([User, Role, Status]),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key',
-      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
-    }),
   ],
   providers: [AuthService],
   controllers: [AuthController],
-  exports: [JwtModule],
 })
 export class AuthModule {}

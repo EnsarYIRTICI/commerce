@@ -15,6 +15,15 @@ export class WarehouseService {
     private warehouseRepository: Repository<Warehouse>,
   ) {}
 
+  async validateWarehouseById(warehouseId: number) {
+    const warehouse = await this.findById(warehouseId);
+    if (!warehouse) {
+      throw new BadRequestException('Warehouse not found');
+    }
+
+    return warehouse;
+  }
+
   async findById(id: number): Promise<Warehouse> {
     return await this.warehouseRepository.findOne({
       where: { id },

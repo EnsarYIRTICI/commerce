@@ -19,17 +19,8 @@ export class CategoryService {
       },
     });
   }
-  async getCategoryTree() {
+  async findTree() {
     return await this.categoryTreeRepository.findTrees();
-  }
-
-  async getCategoryWithDescendants(categoryId: number) {
-    const category = await this.categoryTreeRepository.findOne({
-      where: {
-        id: categoryId,
-      },
-    });
-    return await this.categoryTreeRepository.findDescendantsTree(category);
   }
 
   findAll() {

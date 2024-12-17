@@ -17,10 +17,14 @@ import {
   AttributeValueFOV,
 } from '../interface/attribute.interface';
 import { UpdateSkuDto } from '../dto/update-sku.dto';
-import { SKUHandler } from './sku.handler';
+import { SKUHandler } from '../handler/sku.handler';
 import { PriceService } from '../price/service/price.service';
 import { StockService } from '@modules/inventory/service/stock.service';
 import { ProductImageService } from '../product_image/service/product_image.service';
+import { SKUTHandler } from '../handler/sku.t.handler';
+import { StockTService } from '@modules/inventory/service/stock.t.service';
+import { ProductImageTService } from '../product_image/service/product_image.t.service';
+import { PriceTService } from '../price/service/price.t.service';
 
 export class SKUService {
   constructor(
@@ -40,6 +44,10 @@ export class SKUService {
     private readonly priceService: PriceService,
     private readonly stockService: StockService,
     private readonly imageService: ProductImageService,
+
+    private readonly priceTService: PriceTService,
+    private readonly stockTService: StockTService,
+    private readonly imageTService: ProductImageTService,
   ) {}
 
   createHandler(sku: SKU) {
@@ -48,6 +56,16 @@ export class SKUService {
       this.priceService,
       this.stockService,
       this.imageService,
+      sku,
+    );
+  }
+
+  createTHandler(queryRunner: QueryRunner, sku: SKU) {
+    return new SKUTHandler(
+      this.priceTService,
+      this.stockTService,
+      this.imageTService,
+      queryRunner,
       sku,
     );
   }

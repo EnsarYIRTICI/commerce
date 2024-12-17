@@ -7,7 +7,7 @@ export interface IProduct {
   slug: string;
   description: string;
   categories: ICategory[];
-  variants: IProductVariant[];
+  skus: IProductVariant[];
   createdAt: string;
 }
 

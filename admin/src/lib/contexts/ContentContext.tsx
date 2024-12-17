@@ -11,7 +11,6 @@ import { IUser } from "../types/IUser";
 
 export interface ContentContextValue {
   user: IUser;
-  token: string;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
@@ -20,11 +19,9 @@ export const ContentContext = createContext<ContentContextValue | null>(null);
 
 export const ContentProvider = ({
   children,
-  token,
   user,
 }: Readonly<{
   children: React.ReactNode;
-  token: string;
   user: IUser;
 }>) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +29,6 @@ export const ContentProvider = ({
   return (
     <ContentContext.Provider
       value={{
-        token: token,
         user: user,
         isLoading,
         setIsLoading,

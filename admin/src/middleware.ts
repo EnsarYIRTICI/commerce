@@ -4,7 +4,6 @@ import { authUser } from "./lib/services/auth.service";
 import { errorMessages } from "./lib/constants/errorMessages";
 
 import {
-  cookie,
   isAuthUrl,
   next,
   redirectHome,
@@ -15,9 +14,6 @@ export async function middleware(request: NextRequest) {
   try {
     const token = request.cookies.get("token");
 
-    const pathname = request.nextUrl.pathname;
-    request.headers.set("x-url", pathname);
-
     if (!token && !isAuthUrl(request)) {
       return redirectLogin(request);
     }
@@ -26,7 +22,9 @@ export async function middleware(request: NextRequest) {
       try {
         const userData = await authUser(token.value);
 
-        console.log("User Data --> ", userData);
+        if (!userData) {
+          throw new Error("User not found");
+        }
 
         let response;
 
@@ -36,7 +34,10 @@ export async function middleware(request: NextRequest) {
           response = next(request);
         }
 
-        return cookie(response, token.value);
+        response.headers.set("x-url", request.nextUrl.pathname);
+        response.headers.set("x-user", JSON.stringify(userData));
+
+        return response;
       } catch (error) {
         console.error(error);
 

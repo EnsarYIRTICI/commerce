@@ -17,14 +17,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get('tree')
-  tree() {
-    return this.categoryService.getCategoryTree();
-  }
-
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  async findAll() {
+    return await this.categoryService.findTree();
   }
 
   @Get(':id')

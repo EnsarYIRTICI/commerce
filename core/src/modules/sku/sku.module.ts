@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SKUService } from './service/sku.service';
-import { SKUController } from './sku.controller';
+import { SKUController } from './controller/sku.controller';
 import { ProductReviewModule } from './product_review/product_review.module';
 import { ProductImageModule } from './product_image/product_image.module';
 import { SkuImageMiddleware } from '@shared/middleware/formdata.middleware';
@@ -24,11 +24,11 @@ import { InventoryModule } from '@modules/inventory/inventory.module';
 
 @Module({
   imports: [
-    FileModule,
-    InventoryModule,
     PriceModule,
-    ProductReviewModule,
     ProductImageModule,
+    InventoryModule,
+    FileModule,
+    ProductReviewModule,
     ProductCoreModule,
     AttributeCoreModule,
 

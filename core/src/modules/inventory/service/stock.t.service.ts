@@ -1,21 +1,15 @@
 import { SKU } from '@modules/sku/entites/sku.entity';
 import { Stock } from '@modules/inventory/entities/stock.entity';
-import { Warehouse } from '@modules/warehouse/entities/warehouse.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryRunner } from 'typeorm';
 import { WarehouseService } from '@modules/warehouse/service/warehouse.service';
 
 @Injectable()
-export class StockService {
-  constructor(
-    @InjectRepository(Stock)
-    private stockRepository: Repository<Stock>,
-
-    private readonly warehouseService: WarehouseService,
-  ) {}
+export class StockTService {
+  constructor(private readonly warehouseService: WarehouseService) {}
 
   async nonSave(
+    queryRunner: QueryRunner,
     sku: SKU,
     quantity: number,
     warehouseId: number,
@@ -23,12 +17,12 @@ export class StockService {
     const warehouse =
       await this.warehouseService.validateWarehouseById(warehouseId);
 
-    let stock = await this.stockRepository.findOne({
+    let stock = await queryRunner.manager.findOne(Stock, {
       where: { sku, warehouse },
     });
 
     if (!stock) {
-      stock = this.stockRepository.create({ sku, warehouse });
+      stock = queryRunner.manager.create(Stock, { sku, warehouse });
     }
 
     stock.quantity = quantity;
@@ -36,23 +30,29 @@ export class StockService {
     return stock;
   }
 
-  async save(sku: SKU, quantity: number, warehouseId: number): Promise<Stock> {
+  async save(
+    queryRunner: QueryRunner,
+    sku: SKU,
+    quantity: number,
+    warehouseId: number,
+  ): Promise<Stock> {
     const warehouse =
       await this.warehouseService.validateWarehouseById(warehouseId);
 
-    let stock = await this.stockRepository.findOne({
+    let stock = await queryRunner.manager.findOne(Stock, {
       where: { sku, warehouse },
     });
 
     if (!stock) {
-      stock = this.stockRepository.create({ sku, warehouse });
+      stock = queryRunner.manager.create(Stock, { sku, warehouse });
     }
 
     stock.quantity = quantity;
-    return await this.stockRepository.save(stock);
+    return await queryRunner.manager.save(Stock, stock);
   }
 
   async reduceStock(
+    queryRunner: QueryRunner,
     sku: SKU,
     quantity: number,
     warehouseId: number,
@@ -60,7 +60,7 @@ export class StockService {
     const warehouse =
       await this.warehouseService.validateWarehouseById(warehouseId);
 
-    const stock = await this.stockRepository.findOne({
+    const stock = await queryRunner.manager.findOne(Stock, {
       where: { sku, warehouse },
     });
 
@@ -69,6 +69,6 @@ export class StockService {
     }
 
     stock.quantity -= quantity;
-    await this.stockRepository.save(stock);
+    await queryRunner.manager.save(Stock, stock);
   }
 }

@@ -26,17 +26,4 @@ const next = (request: NextRequest) => {
   });
 };
 
-const cookie = (response: NextResponse, token: string) => {
-  const maxAge = 60 * 60 * 24 * 7;
-
-  response.cookies.set("token", token, {
-    httpOnly: true,
-    sameSite: "strict",
-    maxAge,
-    path: "/",
-  });
-
-  return response;
-};
-
-export { isAuthUrl, redirectHome, redirectLogin, next, cookie };
+export { isAuthUrl, redirectHome, redirectLogin, next };

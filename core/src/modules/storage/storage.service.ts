@@ -1,4 +1,5 @@
 export abstract class StorageService {
+  abstract testConnection(): Promise<void>;
   abstract isBucketExists(bucketName: string): Promise<boolean>;
   abstract createBucket(bucketName: string): Promise<void>;
   abstract uploadFile(

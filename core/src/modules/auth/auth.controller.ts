@@ -114,8 +114,6 @@ export class AuthController {
   async logout(@Req() request: Request) {
     const token = getToken(request);
 
-    const oneWeekInSeconds = 7 * 24 * 60 * 60;
-
     await this.blacklistService.addTokenTolist(token);
 
     return {

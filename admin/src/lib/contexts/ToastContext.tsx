@@ -17,7 +17,7 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
-export const ToastProvider = ({ children }: { children: ReactNode }) => {
+export const ToastProvider = ({ children }: { children?: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastProps[] | null>(null);
 
   const addToast = (message: string, type: ToastType, duration = 3000) => {

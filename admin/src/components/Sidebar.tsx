@@ -24,7 +24,7 @@ function Sidebar({
 }: Readonly<{
   children?: ReactNode;
 }>) {
-  const { user, token } = useContent();
+  const { user } = useContent();
   const { expanded, setExpanded } = useSidebarContext();
 
   const _changeSidebar = () => {

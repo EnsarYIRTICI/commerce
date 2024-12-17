@@ -47,18 +47,22 @@ export class SKUHandler {
   }
 
   async saveStock(dto: UpdateSkuStockDto) {
-    await this.stockService.save(this.sku, dto.stock, dto.warehouseId);
+    return await this.stockService.save(this.sku, dto.stock, dto.warehouseId);
   }
 
   async reduceStock(dto: UpdateSkuStockDto) {
-    await this.stockService.reduceStock(this.sku, dto.stock, dto.warehouseId);
+    return await this.stockService.reduceStock(
+      this.sku,
+      dto.stock,
+      dto.warehouseId,
+    );
   }
 
   async createPrice(dto: UpdateSkuPriceDto) {
-    await this.priceService.create(this.sku, dto.price, dto.currencyId);
+    return await this.priceService.create(this.sku, dto.price, dto.currencyId);
   }
 
   async createImage(dto: UpdateSkuImageDto) {
-    await this.imageService.create(this.sku, dto.image);
+    return await this.imageService.create(this.sku, dto.image);
   }
 }

@@ -10,7 +10,7 @@ const Thumbnail = ({
 }) => {
   const minio = "http://localhost:9000";
   const bucket = "product-images";
-  const file = image.name;
+  const file = image?.name;
 
   const imageUri = `${minio}/${bucket}/${file}_${size}`;
 

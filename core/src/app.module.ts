@@ -43,9 +43,14 @@ import { AttributeModule } from '@modules/attribute/attribute.module';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET || 'commerce-secret-key',
+      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
+    }),
 
-    SeedModule,
     AuthModule,
+    SeedModule,
     UserFacadeModule,
     ProductModule,
     SKUModule,
@@ -61,18 +66,11 @@ import { AttributeModule } from '@modules/attribute/attribute.module';
   ],
   providers: [
     AppService,
-    MinioService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
   controllers: [AppController],
 })
-export class AppModule {
-  constructor(private readonly minioService: MinioService) {}
-
-  async onModuleInit() {
-    await this.minioService.testConnection();
-  }
-}
+export class AppModule {}
