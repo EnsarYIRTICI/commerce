@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity';
 import { CreateAddressDto } from './dto/createAddress.dto';
-import { Address } from './entities/address.entity';
+import { UserAddress } from './entities/user-address.entity';
 
 @Injectable()
-export class AddressService {
+export class UserAddressService {
   constructor(
-    @InjectRepository(Address)
-    private addressRepository: Repository<Address>,
+    @InjectRepository(UserAddress)
+    private addressRepository: Repository<UserAddress>,
   ) {}
 
   async validateUserAddressById(user: User, addressId: number) {
@@ -44,7 +44,7 @@ export class AddressService {
     return await this.addressRepository.save(address);
   }
 
-  update(id: number, address: Address) {
+  update(id: number, address: UserAddress) {
     return this.addressRepository.update(id, address);
   }
 

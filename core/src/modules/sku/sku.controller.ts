@@ -46,9 +46,9 @@ export class SKUController {
 
       const skuHandler = this.skuService.createHandler(sku);
 
-      await skuHandler.updateBarcode(updateSkuDto.barcode);
-      await skuHandler.updateStock(updateSkuDto.stockDetails);
-      await skuHandler.changePrice(updateSkuDto.priceDetails);
+      await skuHandler.saveBarcode(updateSkuDto.barcode);
+      await skuHandler.saveStock(updateSkuDto.stockDetails);
+      await skuHandler.createPrice(updateSkuDto.priceDetails);
 
       return sku;
     } catch (error) {
@@ -58,13 +58,12 @@ export class SKUController {
 
   @Put('image')
   @UseInterceptors(SkuImageInterceptor)
-  async updateImage(
-    @Param('id') id: number,
-    @Body() updateSkuImageDto: UpdateSkuImageDto,
-  ) {
-    const sku = await this.skuService.findBySlug(updateSkuImageDto.slug);
+  async updateImage(@Param('id') id: number, @Body() dto: UpdateSkuImageDto) {
+    const sku = await this.skuService.findBySlug(dto.slug);
 
     const skuHandler = this.skuService.createHandler(sku);
+
+    await skuHandler.createImage(dto);
   }
 
   @Get(':id')

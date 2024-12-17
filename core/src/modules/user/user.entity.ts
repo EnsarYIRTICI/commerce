@@ -11,10 +11,10 @@ import { Wishlist } from '../wishlist/wishlist.entity';
 import { Order } from '../order/order.entity';
 import { Subscription } from '@modules/payment/subscription/subscription.entity';
 import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
-import { Address } from '@modules/address/entities/address.entity';
 import { Role } from './entities/role.entity';
 import { Status } from './entities/status.entity';
 import { ProductReview } from '@modules/sku/product_review/entities/product_review.entity';
+import { UserAddress } from './address/entities/user-address.entity';
 
 @Entity()
 export class User {
@@ -76,8 +76,8 @@ export class User {
   @OneToMany(() => ProductReview, (productReview) => productReview.user)
   reviews: ProductReview[];
 
-  @OneToMany(() => Address, (address) => address.user)
-  addresses: Address[];
+  @OneToMany(() => UserAddress, (address) => address.user)
+  addresses: UserAddress[];
 
   @OneToMany(() => Subscription, (subscription) => subscription.user)
   subscriptions: Subscription[];

@@ -3,13 +3,13 @@ import { PaymentCardDto } from '../dto/paymentCard.dto';
 import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { Payment } from '../payment.entity';
 import { PaymentResult } from '../payment-system/payment.system';
-import { Address } from '@modules/address/entities/address.entity';
+import { IAddress } from '@shared/interface/address';
 
 export interface PayData {
   user: User;
   ip: string;
-  billingAddress: Address;
-  shippingAddress: Address;
+  billingAddress: IAddress;
+  shippingAddress: IAddress;
   cartItems: CartItem[];
   date: Date;
 }

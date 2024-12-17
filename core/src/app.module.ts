@@ -22,7 +22,6 @@ import { UserModule } from '@modules/user/user.module';
 import { WishlistItemModule } from '@modules/wishlist/wishlist_item/wishlist_item.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
 import { PaymentModule } from '@modules/payment/payment.module';
-import { AddressModule } from '@modules/address/address.module';
 import { CartItemModule } from '@modules/cart_item/cart_item.module';
 import { BlacklistService } from './modules/cache/blacklist/blacklist.service';
 import { SeedModule } from '@modules/seed/seed.module';
@@ -54,7 +53,6 @@ import { AttributeModule } from '@modules/attribute/attribute.module';
     UserModule,
     ShipmentModule,
     PaymentModule,
-    AddressModule,
     UserCoreModule,
     WishlistModule,
     CartItemModule,

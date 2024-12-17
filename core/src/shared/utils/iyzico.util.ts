@@ -5,13 +5,13 @@ import { User } from '@modules/user/user.entity';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
 import { Injectable } from '@nestjs/common';
-import { Address } from '@modules/address/entities/address.entity';
+import { IAddress } from '@shared/interface/address';
 
 @Injectable()
 export class IyzicoUtil {
   constructor() {}
 
-  getBuyer = (ip: string, user: User, billingAddress: Address) => {
+  getBuyer = (ip: string, user: User, billingAddress: IAddress) => {
     return {
       id: user.id,
       name: user.name,
@@ -62,7 +62,7 @@ export class IyzicoUtil {
     };
   };
 
-  getBillingAddress = (billingAddress: Address) => {
+  getBillingAddress = (billingAddress: IAddress) => {
     return {
       contactName: billingAddress.name,
       city: billingAddress.city,
@@ -72,7 +72,7 @@ export class IyzicoUtil {
     };
   };
 
-  getShippingAddress = (shippingAddress: Address) => {
+  getShippingAddress = (shippingAddress: IAddress) => {
     return {
       contactName: shippingAddress.name,
       city: shippingAddress.city,

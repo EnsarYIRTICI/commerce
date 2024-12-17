@@ -4,17 +4,12 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-
 import fs from 'fs';
-
-import { min, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Request } from 'express';
-import { MinioService } from '@modules/storage/minio/minio.service';
-
-import { SharpUtil } from 'src/shared/utils/sharp.util';
-
 import { FileService } from '@modules/storage/file/file.service';
-import { StorageService } from '@modules/storage/storage.service';
+import { SharpUtil } from 'src/shared/utils/sharp.util';
+import { UpdateSkuImageDto } from '@modules/sku/dto/update-sku-image.dto';
 
 @Injectable()
 export class SkuImageInterceptor implements NestInterceptor {
@@ -30,56 +25,33 @@ export class SkuImageInterceptor implements NestInterceptor {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
 
-    const files = request.files;
-    const body = request.body;
+    const file: any = request.file;
+    const body: UpdateSkuImageDto = request.body;
 
-    // console.log('Interceptor: Files', files);
-    // console.log('Interceptor: Body', body);
+    if (file) {
+      const bucketName = 'product-images';
+      await this.fileService.init(bucketName);
 
-    const bucketName = 'product-images';
+      try {
+        const buffer = await fs.promises.readFile(file.filepath);
 
-    await this.fileService.init(bucketName);
+        const { processedImages, baseImageName } =
+          await this.sharpUtil.processImage(buffer);
 
-    if (body.variants && Array.isArray(body.variants)) {
-      for (const variant of body.variants) {
-        if (variant.filesId) {
-          const fileId = variant.filesId;
-          const filesArray = files[fileId];
-
-          if (filesArray && Array.isArray(filesArray)) {
-            const uploadedFilesUrls = [];
-
-            for (const file of filesArray) {
-              try {
-                const buffer = await fs.promises.readFile(file.filepath);
-
-                // console.log('Interceptor File Path: ', file.filepath);
-                // console.log('Interceptor Buffer Length', buffer.length);
-
-                const { processedImages, baseImageName } =
-                  await this.sharpUtil.processImage(buffer);
-
-                for (const image of processedImages) {
-                  await this.fileService.upload(
-                    image.buffer,
-                    image.buffer.length,
-                    image.name,
-                    file.mimetype,
-                  );
-                }
-
-                uploadedFilesUrls.push(baseImageName);
-              } catch (error) {
-                throw error;
-              }
-            }
-
-            variant.images = uploadedFilesUrls;
-          }
+        for (const image of processedImages) {
+          await this.fileService.upload(
+            image.buffer,
+            image.buffer.length,
+            image.name,
+            file.mimetype,
+          );
         }
+
+        body.image = baseImageName;
+      } catch (error) {
+        throw error;
       }
     }
-
     return next.handle();
   }
 }

@@ -212,18 +212,25 @@ export class SKUService {
   }
 
   async findById(id: number) {
-    return await this.skuRepository.findOne({ where: { id } });
-  }
-
-  async deleteById(id: number) {
-    return await this.skuRepository.delete(id);
+    return await this.skuRepository.findOne({
+      where: { id },
+      relations: {
+        optionValues: true,
+        stocks: true,
+      },
+    });
   }
 
   async findAll() {
     return await this.skuRepository.find({
       relations: {
         optionValues: true,
+        stocks: true,
       },
     });
+  }
+
+  async deleteById(id: number) {
+    return await this.skuRepository.delete(id);
   }
 }

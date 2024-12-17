@@ -1,4 +1,5 @@
 import { User } from '@modules/user/user.entity';
+import { IAddress } from '@shared/interface/address';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Address {
+export class UserAddress implements IAddress {
   // Fields for the entity
 
   @PrimaryGeneratedColumn()

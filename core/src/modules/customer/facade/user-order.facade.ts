@@ -12,7 +12,6 @@ import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/cart_item/cart_item.service';
 import { Request } from 'express';
 import { PaymentProcessor } from '@modules/payment/payment.processor';
-import { AddressService } from '@modules/address/address.service';
 import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { OrderService } from '@modules/order/order.service';
@@ -22,13 +21,14 @@ import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { BankTransferPaymentStrategy } from '@modules/payment/payment-strategy/bank-transfer-payment.strategy';
 import { SKUService } from '@modules/sku/service/sku.service';
+import { UserAddressService } from '@modules/user/address/address.service';
 
 @Injectable()
 export class UserOrderFacade {
   constructor(
     private readonly dataSource: DataSource,
     private readonly orderService: OrderService,
-    private readonly addressService: AddressService,
+    private readonly userAddressService: UserAddressService,
 
     private readonly paymentProcessor: PaymentProcessor,
     private readonly paymentService: PaymentService,
@@ -64,14 +64,15 @@ export class UserOrderFacade {
     try {
       const date = new Date();
 
-      const shippingAddress = await this.addressService.validateUserAddressById(
-        this.user,
-        shippingAddressId,
-      );
+      const shippingAddress =
+        await this.userAddressService.validateUserAddressById(
+          this.user,
+          shippingAddressId,
+        );
 
       const billingAddress =
         billingAddressId && billingAddressId !== shippingAddressId
-          ? await this.addressService.validateUserAddressById(
+          ? await this.userAddressService.validateUserAddressById(
               this.user,
               billingAddressId,
             )

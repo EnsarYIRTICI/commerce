@@ -1,22 +1,24 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import formidable from 'formidable';
+import formidable, { File } from 'formidable';
 
 @Injectable()
 export class SkuImageMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    const form = new formidable.IncomingForm();
+    const form = new formidable.IncomingForm({
+      maxFiles: 1,
+      keepExtensions: true,
+    });
 
     form.parse(req, (err, fields, files) => {
       if (err) {
         return res.status(400).send('Error in form data processing');
       }
 
-      req.body = JSON.parse(fields.data as unknown as string);
-      req.files = files as any;
+      const fileKey = Object.keys(files)[0];
+      req.file = files[fileKey] as any;
 
-      // console.log('Middleware Files: ', req.files);
-      // console.log('Middleware Body: ', req.body);
+      req.body = JSON.parse(fields.data as unknown as string);
 
       next();
     });

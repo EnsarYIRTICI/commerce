@@ -11,9 +11,7 @@ import { DataSource, QueryFailedError, QueryRunner, Repository } from 'typeorm';
 import { User } from '@modules/user/user.entity';
 
 import { errorMessages } from 'src/shared/common/errorMessages';
-import { AddressService } from '@modules/address/address.service';
 
-import { Address } from '@modules/address/entities/address.entity';
 import { UserOrderFacade } from '@modules/customer/facade/user-order.facade';
 import { PaymentProcessor } from '@modules/payment/payment.processor';
 import { PaymentService } from '@modules/payment/payment.service';
@@ -30,6 +28,7 @@ import { WishlistItemService } from '@modules/wishlist/wishlist_item/wishlist_it
 import { Wishlist } from '@modules/wishlist/wishlist.entity';
 import { UserReviewFacade } from './facade/user-review.facade';
 import { ProductReviewService } from '@modules/sku/product_review/service/product_review.service';
+import { UserAddressService } from '@modules/user/address/address.service';
 
 @Injectable()
 export class UserFacadeFactory {
@@ -37,7 +36,7 @@ export class UserFacadeFactory {
     private readonly dataSource: DataSource,
 
     private readonly orderService: OrderService,
-    private readonly addressService: AddressService,
+    private readonly userAddressService: UserAddressService,
     private readonly paymentProcessor: PaymentProcessor,
     private readonly paymentService: PaymentService,
     private readonly creditCardPaymentStrategy: CreditCardPaymentStrategy,
@@ -56,7 +55,7 @@ export class UserFacadeFactory {
     return new UserOrderFacade(
       this.dataSource,
       this.orderService,
-      this.addressService,
+      this.userAddressService,
       this.paymentProcessor,
       this.paymentService,
       this.creditCardPaymentStrategy,

@@ -40,33 +40,25 @@ export class SKUHandler {
     private readonly sku: SKU,
   ) {}
 
-  async updateBarcode(barcode: number) {
+  async saveBarcode(barcode: number) {
     this.sku.barcode = barcode;
 
     return await this.skuRepository.update(this.sku.id, this.sku);
   }
 
-  async changePrice(updateSkuPriceDto: UpdateSkuPriceDto) {
-    await this.priceService.create(
-      this.sku,
-      updateSkuPriceDto.price,
-      updateSkuPriceDto.currencyId,
-    );
+  async saveStock(dto: UpdateSkuStockDto) {
+    await this.stockService.save(this.sku, dto.stock, dto.warehouseId);
   }
 
-  async updateStock(updateSkuStockDto: UpdateSkuStockDto) {
-    await this.stockService.save(
-      this.sku,
-      updateSkuStockDto.stock,
-      updateSkuStockDto.warehouseId,
-    );
+  async reduceStock(dto: UpdateSkuStockDto) {
+    await this.stockService.reduceStock(this.sku, dto.stock, dto.warehouseId);
   }
 
-  async reduceStock(updateSkuStockDto: UpdateSkuStockDto) {
-    await this.stockService.reduceStock(
-      this.sku,
-      updateSkuStockDto.stock,
-      updateSkuStockDto.warehouseId,
-    );
+  async createPrice(dto: UpdateSkuPriceDto) {
+    await this.priceService.create(this.sku, dto.price, dto.currencyId);
+  }
+
+  async createImage(dto: UpdateSkuImageDto) {
+    await this.imageService.create(this.sku, dto.image);
   }
 }

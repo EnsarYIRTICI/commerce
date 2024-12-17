@@ -12,7 +12,6 @@ import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
 import { CartItemService } from '@modules/cart_item/cart_item.service';
 import { Request } from 'express';
 import { PaymentProcessor } from '@modules/payment/payment.processor';
-import { AddressService } from '@modules/address/address.service';
 import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { OrderService } from '@modules/order/order.service';

@@ -14,7 +14,6 @@ import { User } from '@modules/user/user.entity';
 import { OrderItem } from './order_item/order_item.entity';
 
 import { errorMessages } from 'src/shared/common/errorMessages';
-import { AddressService } from '@modules/address/address.service';
 
 import { Request } from 'express';
 import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
@@ -24,13 +23,13 @@ import { OrderStatusService } from './order_status/order_status.service';
 import { Payment } from '@modules/payment/payment.entity';
 import { OrderItemService } from './order_item/order_item.service';
 import { SKU } from '@modules/sku/entites/sku.entity';
-import { Address } from '@modules/address/entities/address.entity';
 import { UserOrderFacade } from '@modules/customer/facade/user-order.facade';
 import { PaymentProcessor } from '@modules/payment/payment.processor';
 import { PaymentService } from '@modules/payment/payment.service';
 import { SKUService } from '@modules/sku/service/sku.service';
 import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
 import { BankTransferPaymentStrategy } from '@modules/payment/payment-strategy/bank-transfer-payment.strategy';
+import { IAddress } from '@shared/interface/address';
 
 @Injectable()
 export class OrderService {
@@ -92,8 +91,8 @@ export class OrderService {
     }: {
       date: Date;
       user: User;
-      shippingAddress: Address;
-      billingAddress: Address;
+      shippingAddress: IAddress;
+      billingAddress: IAddress;
       payment: Payment;
       cartItems: CartItem[];
     },

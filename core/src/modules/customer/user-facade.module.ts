@@ -15,14 +15,14 @@ import { SKUModule } from '@modules/sku/sku.module';
 import { WishlistItemCoreModule } from '@modules/wishlist/wishlist_item/wishlist_item.core';
 import { WishlistCoreModule } from '@modules/wishlist/wishlist.core';
 import { OrderCoreModule } from '@modules/order/order.core';
-import { AddressCoreModule } from '@modules/address/address.core';
 import { PaymentCoreModule } from '@modules/payment/payment.core';
 import { UserFacadeFactory } from './user-facade.factory';
+import { UserAddressModule } from '@modules/user/address/user-address.module';
 
 @Module({
   imports: [
     PaymentCoreModule,
-    AddressCoreModule,
+    UserAddressModule,
     CartItemModule,
     ProductReviewModule,
     WishlistCoreModule,

@@ -8,18 +8,18 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
-import { AddressService } from './address.service';
+import { UserAddressService } from './address.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateAddressDto } from './dto/createAddress.dto';
 import { Request } from 'express';
 import { User } from '@modules/user/user.entity';
-import { Address } from './entities/address.entity';
+import { UserAddress } from './entities/user-address.entity';
 
 @ApiBearerAuth()
 @ApiTags('Address')
 @Controller('addresses')
 export class AddressController {
-  constructor(private readonly addressService: AddressService) {}
+  constructor(private readonly addressService: UserAddressService) {}
 
   @Get()
   findAll() {
@@ -42,7 +42,7 @@ export class AddressController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() address: Address) {
+  update(@Param('id') id: number, @Body() address: UserAddress) {
     return this.addressService.update(id, address);
   }
 
