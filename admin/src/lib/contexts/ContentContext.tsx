@@ -13,6 +13,11 @@ export interface ContentContextValue {
   user: IUser;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  localSettings: LocalSettings;
+}
+
+export interface LocalSettings {
+  sidebarState: string | undefined;
 }
 
 export const ContentContext = createContext<ContentContextValue | null>(null);
@@ -20,9 +25,11 @@ export const ContentContext = createContext<ContentContextValue | null>(null);
 export const ContentProvider = ({
   children,
   user,
+  localSettings,
 }: Readonly<{
   children: React.ReactNode;
   user: IUser;
+  localSettings: LocalSettings;
 }>) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,6 +39,7 @@ export const ContentProvider = ({
         user: user,
         isLoading,
         setIsLoading,
+        localSettings,
       }}
     >
       {children}

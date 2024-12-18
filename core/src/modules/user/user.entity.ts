@@ -10,10 +10,10 @@ import {
 import { Wishlist } from '../wishlist/wishlist.entity';
 import { Order } from '../order/order.entity';
 import { Subscription } from '@modules/payment/subscription/subscription.entity';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { Role } from './entities/role.entity';
 import { Status } from './entities/status.entity';
-import { ProductReview } from '@modules/sku/product_review/entities/product_review.entity';
+import { ProductReview } from '@modules/review/entities/product_review.entity';
 import { UserAddress } from './address/entities/user-address.entity';
 
 @Entity()

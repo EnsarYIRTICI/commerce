@@ -34,7 +34,7 @@ export default function page() {
     try {
       await authLogin(formData);
 
-      window.location.href = "/";
+      window.location.reload();
     } catch (error) {
       console.error("Login failed:", error);
 

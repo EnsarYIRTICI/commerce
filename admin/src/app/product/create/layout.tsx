@@ -10,15 +10,14 @@ export default async function layout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("token")?.value;
+  const token = cookies().get("token");
 
   let categories;
   let product_attributes;
 
   try {
-    categories = await findCategories(token!);
-    product_attributes = await findValues(token!);
+    categories = await findCategories(token?.value!);
+    product_attributes = await findValues(token?.value!);
   } catch (error) {
     console.log(error);
   }

@@ -5,7 +5,7 @@ import { ModuleRef } from '@nestjs/core';
 
 import { Category } from '@modules/product/category/category.entity';
 import { Role } from '@modules/user/entities/role.entity';
-import { OrderStatus } from '@modules/order/order_status/order_status.entity';
+import { OrderStatus } from '@modules/order/entities/order_status.entity';
 
 import { Status } from '@modules/user/entities/status.entity';
 import { User } from '@modules/user/user.entity';

@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
 import { User } from '@modules/user/user.entity';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { Injectable } from '@nestjs/common';
 import { IAddress } from '@shared/interface/address';
 

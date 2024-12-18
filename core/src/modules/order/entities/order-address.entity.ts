@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Order } from '../order.entity';
 
 @Entity()
-export class AddressDetail {
+export class OrderAddress {
   // Fields for the entity
 
   @PrimaryGeneratedColumn()

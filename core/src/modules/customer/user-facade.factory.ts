@@ -18,16 +18,16 @@ import { PaymentService } from '@modules/payment/payment.service';
 import { SKUService } from '@modules/sku/service/sku.service';
 import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
 import { BankTransferPaymentStrategy } from '@modules/payment/payment-strategy/bank-transfer-payment.strategy';
-import { OrderService } from '@modules/order/order.service';
+import { OrderService } from '@modules/order/service/order.service';
 import { UserCartFacade } from './facade/user-cart.facade';
 import { UserWishlistFacade } from './facade/user-wishlist.facade';
 import { UserWishlistItemFacade } from './facade/user-wishlist-item.facade';
-import { CartItemService } from '@modules/cart_item/cart_item.service';
+import { CartItemService } from '@modules/basket/cart_item.service';
 import { WishlistService } from '@modules/wishlist/wishlist.service';
 import { WishlistItemService } from '@modules/wishlist/wishlist_item/wishlist_item.service';
 import { Wishlist } from '@modules/wishlist/wishlist.entity';
 import { UserReviewFacade } from './facade/user-review.facade';
-import { ProductReviewService } from '@modules/sku/product_review/service/product_review.service';
+import { ProductReviewService } from '@modules/review/service/product_review.service';
 import { UserAddressService } from '@modules/user/address/address.service';
 
 @Injectable()

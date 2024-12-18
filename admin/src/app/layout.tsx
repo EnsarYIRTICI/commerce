@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import { Barcode, LayoutDashboard, Package2 } from "lucide-react";
 import { Sidebar, SidebarItem } from "@/components/Sidebar";
@@ -15,11 +15,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = headers().get("x-url");
-  const userDataStr = headers().get("x-user");
-  const user = JSON.parse(userDataStr!);
+  const user = JSON.parse(headers().get("x-user")!);
+
+  const sidebarState = cookies().get("sidebar-state")?.value;
+
+  const localSettings = {
+    sidebarState,
+  };
 
   return user ? (
-    <ContentProvider user={user}>{children}</ContentProvider>
+    <ContentProvider localSettings={localSettings} user={user}>
+      {children}
+    </ContentProvider>
   ) : (
     <AuthProvider>{children}</AuthProvider>
   );

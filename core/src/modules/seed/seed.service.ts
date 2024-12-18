@@ -8,7 +8,7 @@ import { Category } from '@modules/product/category/category.entity';
 import { categoriesJson } from './common/category.json';
 import { Role } from '@modules/user/entities/role.entity';
 import { rolesJson } from './common/roles.json';
-import { OrderStatus } from '@modules/order/order_status/order_status.entity';
+import { OrderStatus } from '@modules/order/entities/order_status.entity';
 import { order_statusesJson } from './common/order_status.json';
 import { statusesJson } from './common/status.json';
 import { Status } from '@modules/user/entities/status.entity';

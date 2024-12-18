@@ -7,9 +7,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
-import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
-import { CartItemService } from '@modules/cart_item/cart_item.service';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
+import { CreateCartItemDto } from '@modules/basket/dto/create_cart_item.dto';
+import { CartItemService } from '@modules/basket/cart_item.service';
 import { User } from '@modules/user/user.entity';
 import { SKUService } from '@modules/sku/service/sku.service';
 

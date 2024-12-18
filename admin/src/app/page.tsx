@@ -1,6 +1,7 @@
 "use client";
 
 import { Sidebar, SidebarItem } from "@/components/Sidebar";
+import { useContent } from "@/lib/contexts/ContentContext";
 import { SidebarProvider } from "@/lib/contexts/SidebarContext";
 import { sidebarNodes } from "@/nodes/sidebar.node";
 

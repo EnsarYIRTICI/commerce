@@ -1,6 +1,6 @@
 import { User } from '@modules/user/user.entity';
 import { PaymentCardDto } from '../dto/paymentCard.dto';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { Payment } from '../payment.entity';
 import { PaymentResult } from '../payment-system/payment.system';
 import { IAddress } from '@shared/interface/address';

@@ -7,21 +7,21 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
-import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
-import { CartItemService } from '@modules/cart_item/cart_item.service';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
+import { CreateCartItemDto } from '@modules/basket/dto/create_cart_item.dto';
+import { CartItemService } from '@modules/basket/cart_item.service';
 import { Request } from 'express';
 import { PaymentProcessor } from '@modules/payment/payment.processor';
 import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
-import { OrderService } from '@modules/order/order.service';
+import { OrderService } from '@modules/order/service/order.service';
 import { UserCartFacade } from './user-cart.facade';
 import { PaymentService } from '@modules/payment/payment.service';
 import { PaymentCardDto } from '@modules/payment/dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { CreateReviewDto } from '../dto/create-review.dto';
 import { SKUService } from '@modules/sku/service/sku.service';
-import { ProductReviewService } from '@modules/sku/product_review/service/product_review.service';
+import { ProductReviewService } from '@modules/review/service/product_review.service';
 
 @Injectable()
 export class UserReviewFacade {

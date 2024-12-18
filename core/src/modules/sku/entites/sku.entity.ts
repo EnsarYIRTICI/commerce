@@ -10,14 +10,14 @@ import {
 } from 'typeorm';
 import { Product } from '@modules/product/product.entity';
 import { WishlistItem } from '@modules/wishlist/wishlist_item/wishlist_item.entity';
-import { OrderItem } from '@modules/order/order_item/order_item.entity';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { OrderItem } from '@modules/order/entities/order_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { ProductOptionValue } from './product-option-value.entity';
 
 import { Stock } from '../../inventory/entities/stock.entity';
 import { Price } from '../price/entities/price.entity';
 import { ProductImage } from '../product_image/entities/product_image.entity';
-import { ProductReview } from '../product_review/entities/product_review.entity';
+import { ProductReview } from '../../review/entities/product_review.entity';
 
 @Entity()
 export class SKU {

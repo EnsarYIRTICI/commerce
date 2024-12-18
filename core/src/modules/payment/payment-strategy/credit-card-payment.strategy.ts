@@ -3,7 +3,7 @@ import Iyzipay, { PaymentRequestData } from 'iyzipay';
 import { Payment } from '../payment.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { PaymentCardDto } from '../dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
 import { IyzicoService } from '../payment-system/iyzico/iyzico.service';

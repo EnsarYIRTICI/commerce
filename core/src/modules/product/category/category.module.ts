@@ -4,11 +4,11 @@ import { Category } from './category.entity';
 import { CategoryService } from './category.service';
 import { CategoryController } from './category.controller';
 import { TreeRepository } from 'typeorm';
-import { CategoryCoreModule } from './category.core';
 
 @Module({
-  imports: [CategoryCoreModule],
-  providers: [],
+  imports: [TypeOrmModule.forFeature([Category, TreeRepository])],
+  providers: [CategoryService],
+  exports: [CategoryService],
   controllers: [CategoryController],
 })
 export class CategoryModule {}

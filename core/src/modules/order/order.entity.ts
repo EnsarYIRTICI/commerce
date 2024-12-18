@@ -8,10 +8,10 @@ import {
   OneToOne,
 } from 'typeorm';
 import { User } from '../user/user.entity';
-import { OrderStatus } from './order_status/order_status.entity';
+import { OrderStatus } from './entities/order_status.entity';
 import { Payment } from '@modules/payment/payment.entity';
-import { OrderItem } from './order_item/order_item.entity';
-import { AddressDetail } from './address_detail/address_detail.entity';
+import { OrderItem } from './entities/order_item.entity';
+import { OrderAddress } from './entities/order-address.entity';
 import { Shipment } from '@modules/shipment/entities/shipment.entity';
 
 @Entity()
@@ -46,11 +46,11 @@ export class Order {
   @OneToOne(() => Shipment, (entity) => entity.order)
   shipment: Shipment;
 
-  @ManyToOne(() => AddressDetail, { cascade: true })
+  @ManyToOne(() => OrderAddress, { cascade: true })
   @JoinColumn({ name: 'shippingAddressId' })
-  shippingAddress: AddressDetail;
+  shippingAddress: OrderAddress;
 
-  @ManyToOne(() => AddressDetail, { cascade: true })
+  @ManyToOne(() => OrderAddress, { cascade: true })
   @JoinColumn({ name: 'billingAddressId' })
-  billingAddress: AddressDetail;
+  billingAddress: OrderAddress;
 }

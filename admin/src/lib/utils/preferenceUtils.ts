@@ -1,14 +1,16 @@
-const getSidebar = () => {
-  return localStorage.getItem("sidebar");
+import { getCookie, setCookie } from "cookies-next";
+
+const getSidebarState = () => {
+  return getCookie("sidebar-state");
 };
 
-const changeSidebar = () => {
-  const state = getSidebar();
+const setSidebarState = () => {
+  const state = getSidebarState();
   const newState = state === "enabled" ? "disabled" : "enabled";
 
-  localStorage.setItem("sidebar", newState);
+  setCookie("sidebar-state", newState);
 
   return newState;
 };
 
-export { changeSidebar, getSidebar };
+export { setSidebarState, getSidebarState };

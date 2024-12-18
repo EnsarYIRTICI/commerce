@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PayData, PaymentStrategy } from './payment-strategy/payment.strategy';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { User } from '@modules/user/user.entity';
 
 @Injectable()

@@ -9,14 +9,14 @@ import {
   useState,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { AuthContextValue, useAuth } from "@/lib/contexts/AuthContext";
 import { navigate } from "@/lib/utils/navigateUtils";
 import {
   SidebarProvider,
   useSidebarContext,
 } from "@/lib/contexts/SidebarContext";
-import { changeSidebar, getSidebar } from "@/lib/utils/preferenceUtils";
+import { setSidebarState, getSidebarState } from "@/lib/utils/preferenceUtils";
 import { useContent } from "@/lib/contexts/ContentContext";
 
 function Sidebar({
@@ -28,7 +28,7 @@ function Sidebar({
   const { expanded, setExpanded } = useSidebarContext();
 
   const _changeSidebar = () => {
-    if (changeSidebar() === "enabled") {
+    if (setSidebarState() === "enabled") {
       setExpanded(true);
 
       return;
@@ -36,20 +36,6 @@ function Sidebar({
 
     setExpanded(false);
   };
-
-  const _getSidebar = () => {
-    if (getSidebar() === "enabled") {
-      setExpanded(true);
-
-      return;
-    }
-
-    setExpanded(false);
-  };
-
-  useEffect(() => {
-    _getSidebar();
-  }, []);
 
   return (
     <aside className="h-screen md:block hidden">

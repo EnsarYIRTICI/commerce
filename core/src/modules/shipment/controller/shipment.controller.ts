@@ -7,9 +7,9 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { ShipmentService } from './shipment.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Shipment } from './entities/shipment.entity';
+import { Shipment } from '../entities/shipment.entity';
+import { ShipmentService } from '../service/shipment.service';
 
 @ApiBearerAuth()
 @ApiTags('Shipment')

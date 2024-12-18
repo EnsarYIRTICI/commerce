@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, createContext, ReactNode, useState } from "react";
+import { useContent } from "./ContentContext";
 
 export interface SidebarContextProps {
   expanded: boolean;
@@ -14,7 +15,11 @@ export function SidebarProvider({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const [expanded, setExpanded] = useState(false);
+  const { localSettings } = useContent();
+
+  const [expanded, setExpanded] = useState(
+    localSettings.sidebarState === "enabled" ? true : false
+  );
 
   return (
     <SideBarContext.Provider value={{ expanded, setExpanded }}>

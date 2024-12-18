@@ -7,21 +7,21 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, QueryRunner, Repository } from 'typeorm';
-import { Order } from './order.entity';
-import { CreateOrderDto } from './dto/createOrder.dto';
+import { Order } from '../order.entity';
+import { CreateOrderDto } from '../dto/createOrder.dto';
 import { User } from '@modules/user/user.entity';
 
-import { OrderItem } from './order_item/order_item.entity';
+import { OrderItem } from '../entities/order_item.entity';
 
 import { errorMessages } from 'src/shared/common/errorMessages';
 
 import { Request } from 'express';
-import { CartItem } from '@modules/cart_item/entities/cart_item.entity';
+import { CartItem } from '@modules/basket/entities/cart_item.entity';
 
 import { v4 as uuidv4 } from 'uuid';
-import { OrderStatusService } from './order_status/order_status.service';
+import { OrderStatusService } from './order_status.service';
 import { Payment } from '@modules/payment/payment.entity';
-import { OrderItemService } from './order_item/order_item.service';
+import { OrderItemService } from './order_item.service';
 import { SKU } from '@modules/sku/entites/sku.entity';
 import { UserOrderFacade } from '@modules/customer/facade/user-order.facade';
 import { PaymentProcessor } from '@modules/payment/payment.processor';

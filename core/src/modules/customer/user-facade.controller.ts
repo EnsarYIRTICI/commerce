@@ -8,7 +8,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { CreateCartItemDto } from '@modules/cart_item/dto/create_cart_item.dto';
+import { CreateCartItemDto } from '@modules/basket/dto/create_cart_item.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateOrderDto } from '@modules/order/dto/createOrder.dto';
@@ -30,7 +30,9 @@ export class UserFacadeController {
   async getOrders(@Req() request: Request) {
     try {
       const user: User = request['user'];
+
       const facade = this.userFacadeFactory.createOrderFacade(user);
+
       return await facade.getOrders();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,15 +47,19 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
+
       const userCartFacade = this.userFacadeFactory.createCartFacade(user);
-      const { cartItems, totalAmount } = await userCartFacade.getItems();
       const orderFacade = this.userFacadeFactory.createOrderFacade(user);
+
+      const { cartItems, totalAmount } = await userCartFacade.getItems();
+
       const order = await orderFacade.createOrder(
         request.ip,
         createOrderDto,
         cartItems,
         totalAmount,
       );
+
       await userCartFacade.clearItems();
       return order;
     } catch (error) {
@@ -65,8 +71,10 @@ export class UserFacadeController {
   async getWishlists(@Req() request: Request) {
     try {
       const user: User = request['user'];
+
       const userWishlistFacade =
         this.userFacadeFactory.createWishlistFacade(user);
+
       return await userWishlistFacade.getLists();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -81,8 +89,10 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
+
       const userWishlistFacade =
         this.userFacadeFactory.createWishlistFacade(user);
+
       return await userWishlistFacade.createList(createWishlistDto.name);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,11 +106,14 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
+
       const userWishlistFacade =
         this.userFacadeFactory.createWishlistFacade(user);
+
       const wishlist = await userWishlistFacade.getListById(wishlistId);
       const userWishlistItemFacade =
         this.userFacadeFactory.createWishlistItemFacade(wishlist);
+
       return await userWishlistItemFacade.getItems();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -115,11 +128,13 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
+
       const userWishlistFacade =
         this.userFacadeFactory.createWishlistFacade(user);
       const wishlist = await userWishlistFacade.getListById(
         createWishlistItemDto.wishlistId,
       );
+
       const userWishlistItemFacade =
         this.userFacadeFactory.createWishlistItemFacade(wishlist);
       return await userWishlistItemFacade.addItem(createWishlistItemDto.slug);
@@ -132,9 +147,10 @@ export class UserFacadeController {
   async getCartItems(@Req() request: Request) {
     try {
       const user: User = request['user'];
+
       const userCartFacade = this.userFacadeFactory.createCartFacade(user);
-      const { cartItems, totalAmount } = await userCartFacade.getItems();
-      return { totalAmount, cartItems };
+
+      return await userCartFacade.getItems();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -148,7 +164,9 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
+
       const userCartFacade = this.userFacadeFactory.createCartFacade(user);
+
       return await userCartFacade.addItem(createCartItemDto.slug);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -159,7 +177,9 @@ export class UserFacadeController {
   async getReviews(@Req() request: Request) {
     try {
       const user: User = request['user'];
+
       const userReviewFacade = this.userFacadeFactory.createReviewFacade(user);
+
       return await userReviewFacade.getReviews();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -174,7 +194,9 @@ export class UserFacadeController {
   ) {
     try {
       const user: User = request['user'];
+
       const userReviewFacade = this.userFacadeFactory.createReviewFacade(user);
+
       return await userReviewFacade.createReview(createReviewDto);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

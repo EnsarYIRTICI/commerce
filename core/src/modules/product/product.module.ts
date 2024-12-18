@@ -13,13 +13,14 @@ import { Category } from '@modules/product/category/category.entity';
 import { CategoryService } from '@modules/product/category/category.service';
 import { CategoryModule } from './category/category.module';
 
-import { ProductCoreModule } from './product.core';
 import { WarehouseModule } from '../warehouse/warehouse.module';
 import { SKUModule } from '../sku/sku.module';
+import { SlugUtil } from '@shared/utils/slug.util';
 
 @Module({
-  imports: [ProductCoreModule, CategoryModule],
-  providers: [],
+  imports: [CategoryModule, TypeOrmModule.forFeature([Product])],
+  providers: [ProductService, SlugUtil],
+  exports: [ProductService],
   controllers: [ProductController],
 })
 export class ProductModule {}

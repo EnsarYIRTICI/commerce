@@ -7,12 +7,11 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SKUService } from './service/sku.service';
 import { SKUController } from './controller/sku.controller';
-import { ProductReviewModule } from './product_review/product_review.module';
+import { ProductReviewModule } from '../review/product_review.module';
 import { ProductImageModule } from './product_image/product_image.module';
 import { SkuImageMiddleware } from '@shared/middleware/formdata.middleware';
 import { FileModule } from '@modules/storage/file/file.module';
 import { SharpUtil } from '@shared/utils/sharp.util';
-import { ProductCoreModule } from '@modules/product/product.core';
 import { AttributeCoreModule } from '@modules/attribute/attribute.core';
 import { SKU } from './entites/sku.entity';
 import { ProductOption } from './entites/product-option.entity';
@@ -21,6 +20,7 @@ import { SKUUtil } from '@shared/utils/sku.util';
 import { SlugUtil } from '@shared/utils/slug.util';
 import { PriceModule } from './price/price.module';
 import { InventoryModule } from '@modules/inventory/inventory.module';
+import { ProductModule } from '@modules/product/product.module';
 
 @Module({
   imports: [
@@ -28,8 +28,8 @@ import { InventoryModule } from '@modules/inventory/inventory.module';
     ProductImageModule,
     InventoryModule,
     FileModule,
+    ProductModule,
     ProductReviewModule,
-    ProductCoreModule,
     AttributeCoreModule,
 
     TypeOrmModule.forFeature([SKU, ProductOption, ProductOptionValue]),
