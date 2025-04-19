@@ -34,15 +34,6 @@ export class SKUController {
     return await this.skuService.findAll();
   }
 
-  @Post()
-  async create(@Body() createSkuDto: CreateSkuDto) {
-    try {
-      return await this.skuService.create(createSkuDto);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
   @Put()
   async update(@Param('id') id: number, @Body() updateSkuDto: UpdateSkuDto) {
     const queryRunner = this.dataSource.createQueryRunner();

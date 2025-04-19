@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateSkuDto } from '@modules/sku/dto/create-sku.dto';
 
 export class CreateProductDto {
   @ApiProperty({
@@ -34,4 +35,8 @@ export class CreateProductDto {
   @IsArray()
   @IsInt({ each: true })
   categories: number[];
+
+  @ValidateNested()
+  @Type(() => CreateSkuDto)
+  options: CreateSkuDto;
 }

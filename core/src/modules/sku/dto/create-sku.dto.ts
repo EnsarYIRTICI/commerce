@@ -9,16 +9,9 @@ import {
 import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateProductOptionDto } from './create-product-option.dto';
+import { Product } from '@modules/product/product.entity';
 
 export class CreateSkuDto {
-  @ApiProperty({
-    description: 'Name of the product',
-    example: 'super-t-shirt-2',
-  })
-  @IsString()
-  @IsNotEmpty()
-  productSlug: string;
-
   @ApiProperty({
     description: 'List of product options with attributes',
     type: [CreateProductOptionDto],

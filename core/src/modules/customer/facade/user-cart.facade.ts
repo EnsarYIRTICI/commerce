@@ -9,14 +9,14 @@ import { Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
 import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { CreateCartItemDto } from '@modules/basket/dto/create_cart_item.dto';
-import { CartItemService } from '@modules/basket/cart_item.service';
 import { User } from '@modules/user/user.entity';
 import { SKUService } from '@modules/sku/service/sku.service';
+import { BasketService } from '@modules/basket/service/basket.service';
 
 @Injectable()
 export class UserCartFacade {
   constructor(
-    private readonly cartItemService: CartItemService,
+    private readonly basketService: BasketService,
     private readonly skuService: SKUService,
     private readonly user: User,
   ) {}
@@ -34,7 +34,7 @@ export class UserCartFacade {
 
     let totalAmount = 0;
 
-    const cartItems = await this.cartItemService.findAllByUser(this.user);
+    const cartItems = await this.basketService.findAllByUser(this.user);
 
     // for (const item of cartItems) {
     //   totalAmount += item.quantity * item.productVariant.price;
@@ -60,21 +60,21 @@ export class UserCartFacade {
     //   );
     // }
 
-    let cart_item = await this.cartItemService.validate(
+    let cart_item = await this.basketService.validate(
       this.user,
       productVariant,
     );
 
     if (!cart_item) {
-      return await this.cartItemService.create(this.user, productVariant);
+      return await this.basketService.create(this.user, productVariant);
     } else {
-      return await this.cartItemService.raiseOfQuantity(cart_item);
+      return await this.basketService.raiseOfQuantity(cart_item);
     }
   }
 
   async clearItems() {
     this.isInit();
 
-    await this.cartItemService.clearByUser(this.user);
+    await this.basketService.clearByUser(this.user);
   }
 }

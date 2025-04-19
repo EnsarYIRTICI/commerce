@@ -23,11 +23,17 @@ export default async function RootLayout({
     sidebarState,
   };
 
-  return user ? (
-    <ContentProvider localSettings={localSettings} user={user}>
-      {children}
-    </ContentProvider>
-  ) : (
-    <AuthProvider>{children}</AuthProvider>
+  return (
+    <html lang="en">
+      <body className={`h-screen w-screen overflow-hidden flex`}>
+        {user ? (
+          <ContentProvider localSettings={localSettings} user={user}>
+            {children}
+          </ContentProvider>
+        ) : (
+          <AuthProvider>{children}</AuthProvider>
+        )}
+      </body>
+    </html>
   );
 }

@@ -8,18 +8,15 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
-import { CartItemService } from './cart_item.service';
-import { CartItem } from './entities/cart_item.entity';
-import { Request } from 'express';
-import { User } from '@modules/user/user.entity';
-import { CreateCartItemDto } from './dto/create_cart_item.dto';
+import { BasketService } from '../service/basket.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { CartItem } from '../entities/cart_item.entity';
 
 @ApiBearerAuth()
-@ApiTags('Cart Item')
-@Controller('cart_items')
-export class CartItemController {
-  constructor(private readonly cart_itemService: CartItemService) {}
+@ApiTags('Basket')
+@Controller('basket-items')
+export class BasketController {
+  constructor(private readonly cart_itemService: BasketService) {}
 
   @Get()
   findAll() {

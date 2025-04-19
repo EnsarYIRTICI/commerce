@@ -8,8 +8,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { ServiceNotInitializedException } from 'src/shared/exceptions/service-not-initialized.exception';
 import { CartItem } from '@modules/basket/entities/cart_item.entity';
-import { CreateCartItemDto } from '@modules/basket/dto/create_cart_item.dto';
-import { CartItemService } from '@modules/basket/cart_item.service';
 import { Request } from 'express';
 import { PaymentProcessor } from '@modules/payment/payment.processor';
 import { CreditCardPaymentStrategy } from '@modules/payment/payment-strategy/credit-card-payment.strategy';

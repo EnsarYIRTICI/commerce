@@ -9,7 +9,7 @@ import { UserFacadeController } from './user-facade.controller';
 import { WishlistItemModule } from '@modules/wishlist/wishlist_item/wishlist_item.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
 import { OrderModule } from '@modules/order/order.module';
-import { CartItemModule } from '@modules/basket/cart_item.module';
+import { BasketModule } from '@modules/basket/basket.module';
 import { ProductReviewModule } from '@modules/review/product_review.module';
 import { SKUModule } from '@modules/sku/sku.module';
 import { WishlistItemCoreModule } from '@modules/wishlist/wishlist_item/wishlist_item.core';
@@ -22,7 +22,7 @@ import { UserAddressModule } from '@modules/user/address/user-address.module';
   imports: [
     PaymentCoreModule,
     UserAddressModule,
-    CartItemModule,
+    BasketModule,
     ProductReviewModule,
     WishlistCoreModule,
     WishlistItemCoreModule,

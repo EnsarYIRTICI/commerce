@@ -8,7 +8,7 @@ import { ProductOption } from '../entites/product-option.entity';
 import { ProductOptionValue } from '../entites/product-option-value.entity';
 import { AttributeService } from '@modules/attribute/attribute.service';
 import { Attribute } from '@modules/attribute/entities/attribute.entity';
-import { ProductService } from '@modules/product/product.service';
+import { ProductService } from '@modules/product/service/product.service';
 import { SlugUtil } from '@shared/utils/slug.util';
 import { SKUUtil } from '@shared/utils/sku.util';
 import { AttributeValue } from '@modules/attribute/entities/attribute-value.entity';

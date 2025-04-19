@@ -22,13 +22,13 @@ import { OrderService } from '@modules/order/service/order.service';
 import { UserCartFacade } from './facade/user-cart.facade';
 import { UserWishlistFacade } from './facade/user-wishlist.facade';
 import { UserWishlistItemFacade } from './facade/user-wishlist-item.facade';
-import { CartItemService } from '@modules/basket/cart_item.service';
 import { WishlistService } from '@modules/wishlist/wishlist.service';
 import { WishlistItemService } from '@modules/wishlist/wishlist_item/wishlist_item.service';
 import { Wishlist } from '@modules/wishlist/wishlist.entity';
 import { UserReviewFacade } from './facade/user-review.facade';
 import { ProductReviewService } from '@modules/review/service/product_review.service';
 import { UserAddressService } from '@modules/user/address/address.service';
+import { BasketService } from '@modules/basket/service/basket.service';
 
 @Injectable()
 export class UserFacadeFactory {
@@ -42,7 +42,7 @@ export class UserFacadeFactory {
     private readonly creditCardPaymentStrategy: CreditCardPaymentStrategy,
     private readonly bankTransferPaymentStrategy: BankTransferPaymentStrategy,
 
-    private readonly cartItemService: CartItemService,
+    private readonly basketService: BasketService,
     private readonly skuService: SKUService,
 
     private readonly wishlistService: WishlistService,
@@ -75,7 +75,7 @@ export class UserFacadeFactory {
   }
 
   createCartFacade(user: User) {
-    return new UserCartFacade(this.cartItemService, this.skuService, user);
+    return new UserCartFacade(this.basketService, this.skuService, user);
   }
 
   createWishlistFacade(user: User) {

@@ -1,15 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CartItem } from './entities/cart_item.entity';
+import { CartItem } from '../entities/cart_item.entity';
 import { User } from '@modules/user/user.entity';
-import { CreateCartItemDto } from './dto/create_cart_item.dto';
-import { ProductService } from '@modules/product/product.service';
+import { CreateCartItemDto } from '../dto/create_cart_item.dto';
+import { ProductService } from '@modules/product/service/product.service';
 import { UserService } from '@modules/user/user.service';
 import { SKU } from '@modules/sku/entites/sku.entity';
 
 @Injectable()
-export class CartItemService {
+export class BasketService {
   constructor(
     @InjectRepository(CartItem)
     private cart_itemRepository: Repository<CartItem>,

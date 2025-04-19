@@ -28,7 +28,6 @@ import { ProductModule } from '@modules/product/product.module';
     ProductImageModule,
     InventoryModule,
     FileModule,
-    ProductModule,
     ProductReviewModule,
     AttributeCoreModule,
 

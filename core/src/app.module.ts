@@ -20,7 +20,6 @@ import { UserModule } from '@modules/user/user.module';
 import { WishlistItemModule } from '@modules/wishlist/wishlist_item/wishlist_item.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
 import { PaymentModule } from '@modules/payment/payment.module';
-import { CartItemModule } from '@modules/basket/cart_item.module';
 import { BlacklistService } from './modules/cache/blacklist/blacklist.service';
 import { SeedModule } from '@modules/seed/seed.module';
 import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
@@ -30,6 +29,7 @@ import { SKUModule } from '@modules/sku/sku.module';
 import { TestGuard } from '@shared/guard/test.guard';
 import { AttributeModule } from '@modules/attribute/attribute.module';
 import { ShipmentModule } from '@modules/shipment/shipment.module';
+import { BasketModule } from '@modules/basket/basket.module';
 
 @Module({
   imports: [
@@ -59,7 +59,7 @@ import { ShipmentModule } from '@modules/shipment/shipment.module';
     PaymentModule,
     UserCoreModule,
     WishlistModule,
-    CartItemModule,
+    BasketModule,
     AttributeModule,
     BlackListModule,
   ],

@@ -6,8 +6,7 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { ProductService } from './product.service';
-import { ProductController } from './product.controller';
+import { ProductService } from './service/product.service';
 import { MinioService } from '@modules/storage/minio/minio.service';
 import { Category } from '@modules/product/category/category.entity';
 import { CategoryService } from '@modules/product/category/category.service';
@@ -16,9 +15,10 @@ import { CategoryModule } from './category/category.module';
 import { WarehouseModule } from '../warehouse/warehouse.module';
 import { SKUModule } from '../sku/sku.module';
 import { SlugUtil } from '@shared/utils/slug.util';
+import { ProductController } from './controller/product.controller';
 
 @Module({
-  imports: [CategoryModule, TypeOrmModule.forFeature([Product])],
+  imports: [SKUModule, CategoryModule, TypeOrmModule.forFeature([Product])],
   providers: [ProductService, SlugUtil],
   exports: [ProductService],
   controllers: [ProductController],

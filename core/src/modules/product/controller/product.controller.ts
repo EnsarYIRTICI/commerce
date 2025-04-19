@@ -14,16 +14,16 @@ import {
   ParseIntPipe,
   Req,
 } from '@nestjs/common';
-import { ProductService } from './product.service';
-import { Product } from './product.entity';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { errorMessages } from 'src/shared/common/errorMessages';
-import { CreateProductDto } from './dto/create_product.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/shared/decorators/role.decorator';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { Category } from '@modules/product/category/category.entity';
 import { Request } from 'express';
+import { ProductService } from '../service/product.service';
+import { CreateProductDto } from '../dto/create_product.dto';
+import { Product } from '../product.entity';
 
 @ApiBearerAuth()
 @ApiTags('Product')
