@@ -7,7 +7,6 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { ProductService } from './service/product.service';
-import { MinioService } from '@modules/storage/minio/minio.service';
 import { Category } from '@modules/product/category/category.entity';
 import { CategoryService } from '@modules/product/category/category.service';
 import { CategoryModule } from './category/category.module';

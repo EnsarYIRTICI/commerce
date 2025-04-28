@@ -7,9 +7,9 @@ import {
 import fs from 'fs';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
-import { FileService } from '@modules/storage/file/file.service';
 import { SharpUtil } from 'src/shared/utils/sharp.util';
 import { UpdateSkuImageDto } from '@modules/sku/dto/update-sku-image.dto';
+import { FileService } from '@modules/file/file.service';
 
 @Injectable()
 export class SkuImageInterceptor implements NestInterceptor {

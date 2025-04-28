@@ -13,16 +13,15 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './shared/guard/auth.guard';
 
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { MinioService } from '@modules/storage/minio/minio.service';
 import { ProductModule } from '@modules/product/product.module';
 import { OrderModule } from '@modules/order/order.module';
 import { UserModule } from '@modules/user/user.module';
 import { WishlistItemModule } from '@modules/wishlist/wishlist_item/wishlist_item.module';
 import { WishlistModule } from '@modules/wishlist/wishlist.module';
 import { PaymentModule } from '@modules/payment/payment.module';
-import { BlacklistService } from './modules/cache/blacklist/blacklist.service';
+import { BlacklistService } from './modules/auth/blacklist/blacklist.service';
 import { SeedModule } from '@modules/seed/seed.module';
-import { BlackListModule } from '@modules/cache/blacklist/blacklist.module';
+import { BlackListModule } from '@modules/auth/blacklist/blacklist.module';
 import { UserCoreModule } from '@modules/user/user.core';
 import { UserFacadeModule } from '@modules/customer/user-facade.module';
 import { SKUModule } from '@modules/sku/sku.module';
@@ -30,6 +29,7 @@ import { TestGuard } from '@shared/guard/test.guard';
 import { AttributeModule } from '@modules/attribute/attribute.module';
 import { ShipmentModule } from '@modules/shipment/shipment.module';
 import { BasketModule } from '@modules/basket/basket.module';
+import { InfrastructureModule } from '@modules/infrastructure/infrastructure.module';
 
 @Module({
   imports: [
@@ -47,7 +47,7 @@ import { BasketModule } from '@modules/basket/basket.module';
       secret: process.env.JWT_SECRET || 'commerce-secret-key',
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
     }),
-
+    InfrastructureModule,
     AuthModule,
     SeedModule,
     UserFacadeModule,

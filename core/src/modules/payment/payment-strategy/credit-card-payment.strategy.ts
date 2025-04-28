@@ -6,11 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CartItem } from '@modules/basket/entities/cart_item.entity';
 import { PaymentCardDto } from '../dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
-import { IyzicoService } from '../payment-system/iyzico/iyzico.service';
 
 import { PayData, PaymentStrategy } from './payment.strategy';
-
-import { PaymentSystem } from '../payment-system/payment.system';
+import { PaymentSystem } from '@modules/infrastructure/payment/payment.system';
 
 @Injectable()
 export class CreditCardPaymentStrategy implements PaymentStrategy {

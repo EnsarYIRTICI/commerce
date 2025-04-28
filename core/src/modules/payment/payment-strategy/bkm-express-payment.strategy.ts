@@ -4,13 +4,11 @@ import Iyzipay, { PaymentRequestData } from 'iyzipay';
 
 import { PaymentCardDto } from '../dto/paymentCard.dto';
 import { User } from '@modules/user/user.entity';
-import { IyzicoService } from '../payment-system/iyzico/iyzico.service';
 import { Payment } from '../payment.entity';
 import { PayData, PaymentStrategy } from './payment.strategy';
 
 import { v4 as uuidv4 } from 'uuid';
-
-import { PaymentSystem } from '../payment-system/payment.system';
+import { PaymentSystem } from '@modules/infrastructure/payment/payment.system';
 
 @Injectable()
 export class BKMExpressPaymentStrategy implements PaymentStrategy {

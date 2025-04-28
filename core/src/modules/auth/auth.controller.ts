@@ -15,12 +15,12 @@ import { errorMessages } from 'src/shared/common/errorMessages';
 import { successMessages } from 'src/shared/common/successMessages';
 import { RegisterDto } from './dto/register.dto';
 import { Roles } from 'src/shared/decorators/role.decorator';
-import { RedisService } from '@modules/cache/redis/redis.service';
+import { RedisService } from '@modules/infrastructure/cache/redis/redis.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Response, Request } from 'express';
 import { getToken } from 'src/shared/utils/request.util';
-import { BlacklistService } from '@modules/cache/blacklist/blacklist.service';
+import { BlacklistService } from '@modules/auth/blacklist/blacklist.service';
 
 @ApiTags('Auth')
 @Controller('auth')

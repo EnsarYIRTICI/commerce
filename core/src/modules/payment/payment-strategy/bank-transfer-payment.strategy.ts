@@ -4,8 +4,7 @@ import Iyzipay, { PaymentRequestData } from 'iyzipay';
 import { PaymentCardDto } from '../dto/paymentCard.dto';
 
 import { PayData, PaymentStrategy } from './payment.strategy';
-
-import { PaymentSystem } from '../payment-system/payment.system';
+import { PaymentSystem } from '@modules/infrastructure/payment/payment.system';
 
 @Injectable()
 export class BankTransferPaymentStrategy implements PaymentStrategy {

@@ -6,18 +6,12 @@ import { BKMExpressPaymentStrategy } from './payment-strategy/bkm-express-paymen
 import { BankTransferPaymentStrategy } from './payment-strategy/bank-transfer-payment.strategy';
 import { PaymentService } from './payment.service';
 import { PaymentProcessor } from './payment.processor';
-import { IyzicoService } from './payment-system/iyzico/iyzico.service';
-import { PaymentSystem } from './payment-system/payment.system';
 import { IyzicoUtil } from '@shared/utils/iyzico.util';
+import { InfrastructureModule } from '@modules/infrastructure/infrastructure.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment])],
+  imports: [InfrastructureModule, TypeOrmModule.forFeature([Payment])],
   providers: [
-    IyzicoUtil,
-    {
-      provide: PaymentSystem,
-      useClass: IyzicoService,
-    },
     CreditCardPaymentStrategy,
     BankTransferPaymentStrategy,
     BKMExpressPaymentStrategy,

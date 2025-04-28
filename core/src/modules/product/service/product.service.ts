@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryFailedError, QueryRunner, Repository } from 'typeorm';
 import { Product } from '../product.entity';
-import { MinioService } from '@modules/storage/minio/minio.service';
 import { CreateProductDto } from '../dto/create_product.dto';
 import { Category } from '@modules/product/category/category.entity';
 import { CategoryService } from '@modules/product/category/category.service';
