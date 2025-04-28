@@ -3,7 +3,7 @@ import "./globals.css";
 import { cookies, headers } from "next/headers";
 
 import { Barcode, LayoutDashboard, Package2 } from "lucide-react";
-import { Sidebar, SidebarItem } from "@/shared/Sidebar";
+import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
 import { AuthProvider } from "@/lib/contexts/AuthContext";
 import { SidebarProvider } from "@/lib/contexts/SidebarContext";
 import { ToastProvider } from "@/lib/contexts/ToastContext";
@@ -26,13 +26,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`h-screen w-screen overflow-hidden flex`}>
-        {user ? (
-          <ContentProvider localSettings={localSettings} user={user}>
-            {children}
-          </ContentProvider>
-        ) : (
-          <AuthProvider>{children}</AuthProvider>
-        )}
+        <ContentProvider localSettings={localSettings} user={user}>
+          {children}
+        </ContentProvider>
       </body>
     </html>
   );

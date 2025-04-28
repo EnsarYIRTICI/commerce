@@ -9,8 +9,8 @@ import { IOrder } from "@/lib/types/IOrder";
 
 import Thumbnail from "@/components/Thumbnail";
 import { SidebarProvider } from "@/lib/contexts/SidebarContext";
-import { Sidebar, SidebarItem } from "@/shared/Sidebar";
-import { sidebarNodes } from "@/nodes/sidebar.node";
+import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
+import { sidebarNodes } from "@/app/admin/nodes/sidebar.node";
 
 export default function page() {
   const { isLoading, setIsLoading } = useContent();

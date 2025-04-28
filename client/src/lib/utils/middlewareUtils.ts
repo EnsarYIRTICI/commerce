@@ -1,29 +1,76 @@
 import { NextRequest, NextResponse } from "next/server";
-import { IUser } from "../types/IUser";
 
-const isAuthUrl = (request: NextRequest) => {
-  const authUrl = ["/login"];
-  return authUrl.includes(request.nextUrl.pathname);
-};
+class MiddlewareService {
+  protected request: NextRequest;
 
-const redirectHome = (request: NextRequest) => {
-  const url = request.nextUrl.clone();
-  url.pathname = "/";
-  return NextResponse.redirect(url);
-};
+  constructor(request: NextRequest) {
+    this.request = request;
+  }
 
-const redirectLogin = (request: NextRequest) => {
-  const url = request.nextUrl.clone();
-  url.pathname = "/login";
-  return NextResponse.redirect(url);
-};
+  nextRes = () => {
+    return NextResponse.next({
+      request: {
+        headers: this.request.headers,
+      },
+    });
+  };
 
-const next = (request: NextRequest) => {
-  return NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
-};
+  xUser = (response: NextResponse, userData: any) => {
+    response.headers.set("x-user", JSON.stringify(userData));
+    return response;
+  };
 
-export { isAuthUrl, redirectHome, redirectLogin, next };
+  xUrl = (response: NextResponse) => {
+    response.headers.set("x-url", this.request.nextUrl.pathname);
+    return response;
+  };
+}
+class MiddlewareCustomerService extends MiddlewareService {
+  private authUrl = ["/login", "/register"];
+
+  constructor(request: NextRequest) {
+    super(request);
+  }
+
+  isAuthUrl = () => {
+    return this.authUrl.includes(this.request.nextUrl.pathname);
+  };
+
+  toHomeRes = () => {
+    const url = this.request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  };
+
+  toLoginRes = () => {
+    const url = this.request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  };
+}
+
+class MiddlewareAdminService extends MiddlewareService {
+  private authUrl = ["/admin/login"];
+
+  constructor(request: NextRequest) {
+    super(request);
+  }
+
+  isAuthUrl = () => {
+    return this.authUrl.includes(this.request.nextUrl.pathname);
+  };
+
+  toHomeRes = () => {
+    const url = this.request.nextUrl.clone();
+    url.pathname = "/admin";
+    return NextResponse.redirect(url);
+  };
+
+  toLoginRes = () => {
+    const url = this.request.nextUrl.clone();
+    url.pathname = "/admin/login";
+    return NextResponse.redirect(url);
+  };
+}
+
+export { MiddlewareAdminService, MiddlewareCustomerService };

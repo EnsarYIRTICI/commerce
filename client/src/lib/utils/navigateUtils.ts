@@ -2,14 +2,14 @@ export const navigate = (path: string) => {
   window.location.href = path;
 };
 
-export const navigateProductPage = () => {
-  navigate("/product");
+export const navigateAdminProductPage = () => {
+  navigate("/admin/product");
 };
 
-export const navigateProductDetail = (slug: string) => {
-  navigate("/product/detail/" + slug);
+export const navigateAdminProductDetail = (slug: string) => {
+  navigate("/admin/product/detail/" + slug);
 };
 
-export const navigateProductCreatePage = () => {
-  navigate("/product/create");
+export const navigateAdminProductCreatePage = () => {
+  navigate("/admin/product/create");
 };

@@ -2,8 +2,8 @@ import React from "react";
 
 import { ToastProvider } from "@/lib/contexts/ToastContext";
 import { SidebarProvider } from "@/lib/contexts/SidebarContext";
-import { Sidebar, SidebarItem } from "@/shared/Sidebar";
-import { sidebarNodes } from "@/nodes/sidebar.node";
+import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
+import { sidebarNodes } from "@/app/admin/nodes/sidebar.node";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (

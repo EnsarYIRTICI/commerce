@@ -4,42 +4,72 @@ import { authUser } from "./lib/services/auth.service";
 import { errorMessages } from "./lib/constants/errorMessages";
 
 import {
-  isAuthUrl,
-  next,
-  redirectHome,
-  redirectLogin,
+  MiddlewareAdminService,
+  MiddlewareCustomerService,
 } from "./lib/utils/middlewareUtils";
 
 export async function middleware(request: NextRequest) {
   try {
     const token = request.cookies.get("token");
+    const pathname = request.nextUrl.pathname;
 
-    if (token) {
-      const userData = await authUser(token.value);
+    if (pathname.startsWith("/admin")) {
+      const { isAuthUrl, toHomeRes, toLoginRes, nextRes, xUser, xUrl } =
+        new MiddlewareAdminService(request);
 
-      if (!userData) {
-        throw new Error("User not found");
+      if (token) {
+        const userData = await authUser(token.value);
+
+        if (!userData) {
+          throw new Error("User not found");
+        }
+
+        let response;
+
+        if (isAuthUrl()) {
+          response = toHomeRes();
+        } else {
+          response = nextRes();
+        }
+
+        response = xUrl(response);
+        response = xUser(response, userData);
+
+        return response;
       }
 
-      let response;
-
-      if (isAuthUrl(request)) {
-        response = redirectHome(request);
-      } else {
-        response = next(request);
+      if (isAuthUrl()) {
+        return nextRes();
       }
 
-      response.headers.set("x-url", request.nextUrl.pathname);
-      response.headers.set("x-user", JSON.stringify(userData));
+      return toLoginRes();
+    } else {
+      const { isAuthUrl, toHomeRes, toLoginRes, nextRes, xUrl, xUser } =
+        new MiddlewareCustomerService(request);
 
-      return response;
+      if (token) {
+        const userData = await authUser(token.value);
+
+        if (!userData) {
+          throw new Error("User not found");
+        }
+
+        let response;
+
+        if (isAuthUrl()) {
+          response = toHomeRes();
+        } else {
+          response = nextRes();
+        }
+
+        response = xUrl(response);
+        response = xUser(response, userData);
+
+        return response;
+      }
+
+      return nextRes();
     }
-
-    if (isAuthUrl(request)) {
-      return next(request);
-    }
-
-    return redirectLogin(request);
   } catch (error) {
     console.error(error);
 

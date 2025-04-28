@@ -8,8 +8,8 @@ import { IoAdd } from "react-icons/io5";
 import { Search } from "lucide-react";
 
 import {
-  navigateProductCreatePage,
-  navigateProductDetail,
+  navigateAdminProductCreatePage,
+  navigateAdminProductDetail,
 } from "@/lib/utils/navigateUtils";
 import { findProducts } from "@/lib/services/product.service";
 import { useAuth } from "@/lib/contexts/AuthContext";
@@ -20,8 +20,8 @@ import { ToastType } from "@/lib/enum/toast_type.enum";
 import { useContent } from "@/lib/contexts/ContentContext";
 import Thumbnail from "@/components/Thumbnail";
 import { SidebarProvider } from "@/lib/contexts/SidebarContext";
-import { Sidebar, SidebarItem } from "@/shared/Sidebar";
-import { sidebarNodes } from "@/nodes/sidebar.node";
+import { Sidebar, SidebarItem } from "@/app/admin/components/Sidebar";
+import { sidebarNodes } from "@/app/admin/nodes/sidebar.node";
 
 export default function page() {
   const { addToast } = useToast();
@@ -74,7 +74,7 @@ export default function page() {
           <h1 className="text-3xl font-bold">Products</h1>
 
           <button
-            onClick={navigateProductCreatePage}
+            onClick={navigateAdminProductCreatePage}
             className="btn btn-outline btn-md"
           >
             <IoAdd className="mr-2" size={20} />
@@ -118,7 +118,7 @@ export default function page() {
                     product={product}
                     index={index}
                     onClick={() => {
-                      navigateProductDetail(product.slug);
+                      navigateAdminProductDetail(product.slug);
                     }}
                   />
                 ))}

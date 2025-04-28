@@ -15,7 +15,7 @@ import { LuArrowRight } from "react-icons/lu";
 import { IoAddCircle } from "react-icons/io5";
 
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { navigateProductPage } from "@/lib/utils/navigateUtils";
+import { navigateAdminProductPage } from "@/lib/utils/navigateUtils";
 import { useAuth } from "@/lib/contexts/AuthContext";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
@@ -103,15 +103,15 @@ export default function page() {
   const steps = [
     {
       text: "Product Information",
-      schema: () => true,
+      schema: () => validateProducts(),
     },
     {
       text: "Variant Information",
-      schema: () => true,
+      schema: () => validateProducts(),
     },
     {
       text: "Review",
-      schema: () => true,
+      schema: () => _finish(),
     },
   ];
 
@@ -325,7 +325,10 @@ export default function page() {
         }}
       >
         <div className=" md:w-[32rem] md:ml-[24rem] ml-[0rem] py-[1.5rem] px-[1.25rem] w-full flex items-center justify-between ">
-          <UnderlineButton disabled={loading} onClick={navigateProductPage}>
+          <UnderlineButton
+            disabled={loading}
+            onClick={navigateAdminProductPage}
+          >
             <span>Cancel</span>
           </UnderlineButton>
 

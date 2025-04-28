@@ -12,13 +12,6 @@ import {
   Flowbite,
 } from "flowbite-react";
 
-import { LuArrowRight } from "react-icons/lu";
-import { IoAddCircle } from "react-icons/io5";
-
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { navigateProductPage } from "@/lib/utils/navigateUtils";
-import { useAuth } from "@/lib/contexts/AuthContext";
-
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon, CircleMinus, PencilIcon, Plus } from "lucide-react";
 import { Dropdown } from "@/components/Dropdown";

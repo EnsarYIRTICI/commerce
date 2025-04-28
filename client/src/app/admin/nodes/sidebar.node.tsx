@@ -5,18 +5,18 @@ export const sidebarNodes = [
     key: "0-0",
     text: "Dashboard",
     icon: <LayoutDashboard />,
-    path: "/",
+    path: "/admin",
   },
   {
     key: "1-0",
     text: "Product",
     icon: <Barcode />,
-    path: "/product",
+    path: "/admin/product",
   },
   {
     key: "2-0",
     text: "Order",
     icon: <Package2 />,
-    path: "/order",
+    path: "/admin/order",
   },
 ];
